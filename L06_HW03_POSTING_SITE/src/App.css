@@ -189,30 +189,32 @@
 
 /* Стили для страницы контактов */
 .contact-page {
-  padding: 0 2rem;
+  padding: 0;
+  margin-top: -70px; /* Компенсируем отступ от фиксированного header */
 }
 
 .contact-intro {
-  margin: 2rem 0 3rem;
+  background: #ff6b6b;
+  color: white;
+  padding: 100px 2rem 3rem;
   text-align: center;
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 3rem;
 }
 
 .contact-intro h2 {
-  color: #ff6b6b;
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
 .contact-intro p {
-  color: #666;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  opacity: 0.9;
 }
 
 .contact-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 2rem;
@@ -221,8 +223,8 @@
 .sidebar {
   background: white;
   padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .sidebar img {
@@ -242,8 +244,8 @@
 .sidebar nav a {
   text-decoration: none;
   color: #333;
-  padding: 0.8rem 1.2rem;
-  border-radius: 6px;
+  padding: 1rem;
+  border-radius: 8px;
   background: #f8f8f8;
   transition: all 0.3s ease;
   text-align: center;
@@ -259,7 +261,18 @@
 .main-content {
   background: white;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   min-height: 400px;
+}
+
+.main-content h3 {
+  color: #ff6b6b;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.main-content p {
+  color: #666;
+  line-height: 1.6;
 }
