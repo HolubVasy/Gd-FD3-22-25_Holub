@@ -1,23 +1,22 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 
 const Contact = () => {
   return (
     <div className="contact-page">
       <div className="contact-intro">
-        <h2>Наши контакты</h2>
-        <p>Узнайте больше о нашем сайте и условиях использования</p>
+        <h2>Добро пожаловать на страницу контактов</h2>
+        <p>Здесь вы можете узнать больше о нашем проекте и условиях использования</p>
+        <div className="contact-links">
+          <Link to="/contact/about">О нас</Link>
+          <Link to="/contact/terms">Условия использования</Link>
+        </div>
       </div>
       <div className="contact-content">
         <div className="sidebar">
           <img 
-            src="https://images.dog.ceo/breeds/chow/n02112137_10654.jpg" 
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/01_Chow_Chow.jpg/1280px-01_Chow_Chow.jpg" 
             alt="Чау-чау" 
-            style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
           />
-          <nav>
-            <Link to="/contact/about">О нас</Link>
-            <Link to="/contact/terms">Условия использования</Link>
-          </nav>
         </div>
         <div className="main-content">
           <Outlet />
