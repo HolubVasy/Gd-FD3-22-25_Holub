@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Start from './pages/Start';
@@ -20,6 +20,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Start />} />
               <Route path="/contact" element={<Contact />}>
+                <Route index element={<Navigate to="/contact/about" replace />} />
                 <Route path="about" element={<About />} />
                 <Route path="terms" element={<Terms />} />
               </Route>
