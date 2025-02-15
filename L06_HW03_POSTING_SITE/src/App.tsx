@@ -16,16 +16,18 @@ function App() {
       <div className="app">
         <Header />
         <main className="content">
-          <Routes>
-            <Route path="/" element={<Start />} />
-            <Route path="/contact" element={<Contact />}>
-              <Route path="about" element={<About />} />
-              <Route path="terms" element={<Terms />} />
-            </Route>
-            <Route path="/posts" element={<Posts />} />
-            <Route path="/post/:id" element={<Post />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div className="scrollable-content">
+            <Routes>
+              <Route path="/" element={<Start />} />
+              <Route path="/contact" element={<Contact />}>
+                <Route path="about" element={<About />} />
+                <Route path="terms" element={<Terms />} />
+              </Route>
+              <Route path="/posts" element={<Posts />} />
+              <Route path="/post/:id" element={<Post />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
         </main>
         <Footer />
       </div>
