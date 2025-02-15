@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
-const Contact: React.FC = () => {
+const Contact = () => {
   return (
     <div className="contact-page">
       <div className="contact-intro">
@@ -10,7 +9,11 @@ const Contact: React.FC = () => {
       </div>
       <div className="contact-content">
         <div className="sidebar">
-          <img src="https://placekitten.com/200/200" alt="Чау-чау" />
+          <img 
+            src="https://images.dog.ceo/breeds/chow/n02112137_10654.jpg" 
+            alt="Чау-чау" 
+            style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+          />
           <nav>
             <Link to="/contact/about">О нас</Link>
             <Link to="/contact/terms">Условия использования</Link>
@@ -24,4 +27,4 @@ const Contact: React.FC = () => {
   );
 };
 
-export default Contact;
+export default Contact; 

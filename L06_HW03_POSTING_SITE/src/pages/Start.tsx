@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Start: React.FC = () => {
+const Start = () => {
   return (
     <div className="start-page">
       <h1>Добро пожаловать в мир Чау-чау!</h1>
@@ -11,4 +10,4 @@ const Start: React.FC = () => {
   );
 };
 
-export default Start;
+export default Start; 

@@ -1,6 +1,4 @@
-import React from 'react';
-
-const Terms: React.FC = () => {
+const Terms = () => {
   return (
     <div className="terms-page">
       <h3>Условия использования</h3>
@@ -9,4 +7,4 @@ const Terms: React.FC = () => {
   );
 };
 
-export default Terms;
+export default Terms; 

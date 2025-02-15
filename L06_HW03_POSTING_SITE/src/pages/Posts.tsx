@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Posts: React.FC = () => {
+const Posts = () => {
   const [postIds, setPostIds] = useState<number[]>([]);
 
   useEffect(() => {
@@ -27,4 +27,4 @@ const Posts: React.FC = () => {
   );
 };
 
-export default Posts;
+export default Posts; 

@@ -1,7 +1,6 @@
-import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 
-const Post: React.FC = () => {
+const Post = () => {
   const { id } = useParams<{ id: string }>();
 
   if (!/^\d+$/.test(id || '')) {
@@ -16,4 +15,4 @@ const Post: React.FC = () => {
   );
 };
 
-export default Post;
+export default Post; 
