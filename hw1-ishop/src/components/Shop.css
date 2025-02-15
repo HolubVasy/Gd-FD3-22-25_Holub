@@ -1,0 +1,28 @@
+.shop {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.products-table th,
+.products-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.products-table th {
+  background-color: #f4f4f4;
+}
+
+.product-image {
+  max-width: 200px;
+  height: 150px;
+  object-fit: cover;
+} 
