@@ -113,17 +113,18 @@
   left: 0;
   right: 0;
   background: #ff6b6b;
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   z-index: 1000;
+  height: 40px;
 }
 
 .header .logo {
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
@@ -136,9 +137,10 @@
   color: white;
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 4px;
   transition: background-color 0.3s;
+  font-size: 0.9rem;
 }
 
 .header nav a:hover {
@@ -147,7 +149,7 @@
 
 /* Основной контент */
 .content {
-  margin-top: 70px;
+  margin-top: 40px;
   flex: 1;
   padding: 2rem;
   max-width: 1200px;
@@ -190,34 +192,39 @@
 /* Стили для страницы контактов */
 .contact-page {
   padding: 0;
-  margin-top: -70px; /* Компенсируем отступ от фиксированного header */
+  margin-top: 0;
 }
 
 .contact-intro {
-  background: #ff6b6b;
-  color: white;
-  padding: 100px 2rem 3rem;
+  background: #f8f9fa;
+  color: #333;
+  padding: 4rem 2rem;
   text-align: center;
-  margin-bottom: 3rem;
+  position: relative;
+  border-bottom: 1px solid #eee;
 }
 
 .contact-intro h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  color: #ff6b6b;
 }
 
 .contact-intro p {
   font-size: 1.2rem;
-  opacity: 0.9;
+  color: #666;
 }
 
 .contact-content {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  margin: 3rem auto;
+  padding: 2rem;
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 .sidebar {
@@ -275,4 +282,5 @@
 .main-content p {
   color: #666;
   line-height: 1.6;
+  font-size: 1.1rem;
 }
