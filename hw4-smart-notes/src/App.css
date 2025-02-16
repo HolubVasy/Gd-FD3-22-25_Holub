@@ -36,3 +36,97 @@
     transform: rotate(360deg);
   }
 }
+
+.app {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+}
+
+.notes-section,
+.tags-section {
+  flex: 1;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.note,
+.tag {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+button {
+  margin: 5px;
+  padding: 5px 10px;
+}
+
+.note-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.note-buttons button {
+  padding: 5px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.view-btn:hover {
+  background: #e0e0e0;
+}
+
+.edit-btn:hover {
+  background: #e8f0fe;
+}
+
+.delete-btn:hover {
+  background: #fee8e8;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+.section-header button {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filters input,
+.filters select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+
+input[type="text"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 15px;
+}
