@@ -1,26 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Shop.css';
-import { ShopProps, Product } from '../types';
+import { ShopContext } from '../../contexts/ShopContext';
+import { Product } from '../../models/Product';
 
-// Вариант 1: используя function declaration
-function Shop({ name, products }: ShopProps) {
+const Shop: React.FC = () => {
+  const { name, products } = useContext(ShopContext);
+
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = 'https://placehold.co/200x150?text=Image+Not+Found';
   };
 
-  // Подсчет общей стоимости всех товаров
+  // Counting the total value of all products
   let totalValue = 0;
   products.forEach(product => {
     totalValue += product.price * product.stock;
   });
 
-  // Подсчет количества товаров с малым запасом (меньше 10)
+  // Counting the number of products with low stock (less than 10)
   let lowStockCount = 0;
   products.forEach(product => {
     if (product.stock < 10) lowStockCount++;
   });
 
-  // Создание массива категорий товаров
+  // Creating an array of product categories
   const categories: string[] = [];
   products.forEach(product => {
     if (!categories.includes(product.name)) {
@@ -28,7 +30,7 @@ function Shop({ name, products }: ShopProps) {
     }
   });
 
-  // Создаем массив строк таблицы
+  // Creating an array of table rows
   const tableRows: JSX.Element[] = [];
   products.forEach((product: Product) => {
     tableRows.push(
@@ -52,20 +54,20 @@ function Shop({ name, products }: ShopProps) {
     <div className="shop">
       <h1>{name}</h1>
       
-      {/* Статистика магазина */}
+      {/* Shop statistics */}
       <div className="shop-stats">
-        <p>Общая стоимость товаров: ${totalValue.toFixed(2)}</p>
-        <p>Товаров с малым запасом: {lowStockCount}</p>
-        <p>Категории товаров: {categories.join(', ')}</p>
+        <p>Total value of products: ${totalValue.toFixed(2)}</p>
+        <p>Products with low stock: {lowStockCount}</p>
+        <p>Product categories: {categories.join(', ')}</p>
       </div>
 
       <table className="products-table">
         <thead>
           <tr>
-            <th>Фото</th>
-            <th>Название</th>
-            <th>Цена</th>
-            <th>Остаток</th>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
           </tr>
         </thead>
         <tbody>
@@ -74,6 +76,6 @@ function Shop({ name, products }: ShopProps) {
       </table>
     </div>
   );
-}
+};
 
 export default Shop; 

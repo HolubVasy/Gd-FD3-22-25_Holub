@@ -1,4 +1,4 @@
-// Класс для товара
+// Class for product
 export class Product {
   constructor(
     public id: number,
@@ -8,26 +8,20 @@ export class Product {
     public stock: number
   ) {}
 
-  // Метод для проверки наличия товара
+  // Method to check if the product is in stock
   isInStock(): boolean {
     return this.stock > 0;
   }
 
-  // Метод для форматирования цены
+  // Method to format the price
   getFormattedPrice(): string {
     return `$${this.price.toFixed(2)}`;
   }
 
-  // Метод для получения статуса наличия
+  // Method to get the stock status
   getStockStatus(): string {
     if (this.stock > 10) return "Много";
     if (this.stock > 0) return "Мало";
     return "Нет в наличии";
   }
-}
-
-// Тип для пропсов компонента Shop
-export type ShopProps = {
-  name: string;
-  products: Product[];
-}; 
+} 
