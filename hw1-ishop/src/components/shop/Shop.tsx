@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import './Shop.css';
-import { ShopContext } from '../../contexts/ShopContext';
+import { ShopProps } from '../../types/Shop/ShopProps';
 import { Product } from '../../models/Product';
 
-const Shop: React.FC = () => {
-  const { name, products } = useContext(ShopContext);
-
+const Shop: React.FC<ShopProps> = ({ name, products }) => {
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = 'https://placehold.co/200x150?text=Image+Not+Found';
   };
