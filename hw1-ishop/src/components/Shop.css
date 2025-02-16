@@ -4,6 +4,17 @@
   margin: 0 auto;
 }
 
+.shop-stats {
+  background-color: #f5f5f5;
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+
+.shop-stats p {
+  margin: 5px 0;
+}
+
 .products-table {
   width: 100%;
   border-collapse: collapse;
