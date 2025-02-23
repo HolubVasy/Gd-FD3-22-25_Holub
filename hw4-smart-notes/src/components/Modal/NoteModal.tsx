@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-responsive-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { NoteModalProps } from '../../models/props/NoteModalProps';

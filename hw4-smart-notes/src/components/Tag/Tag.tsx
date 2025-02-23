@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Tag } from '../../models/Tag';
 import { TagProps } from '../../models/props/TagProps';
 import TagModal from '../Modal/TagModal';
 

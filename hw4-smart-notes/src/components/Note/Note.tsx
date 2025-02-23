@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Note } from '../../models/Note';
 import { NoteProps } from '../../models/props/NoteProps';
 import NoteModal from '../Modal/NoteModal';
 
