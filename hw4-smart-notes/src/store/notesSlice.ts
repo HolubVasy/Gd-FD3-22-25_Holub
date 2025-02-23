@@ -9,11 +9,11 @@ const notesSlice = createSlice({
   name: 'notes',
   initialState,
   reducers: {
-    addNote: (state, action: PayloadAction<{ text: string; tagId: string | null }>) => {
+    addNote: (state, action: PayloadAction<{ title: string; text: string; tagId: string | null }>) => {
       const newNote: Note = {
         id: uuidv4(),
         tagId: action.payload.tagId,
-        title: action.payload.text.slice(0, 10) + (action.payload.text.length > 10 ? '...' : ''),
+        title: action.payload.title,
         text: action.payload.text,
         created: new Date(),
         updated: new Date(),
@@ -28,9 +28,9 @@ const notesSlice = createSlice({
         if (note.id === action.payload.id) {
           return {
             ...note,
+            title: action.payload.title,
             text: action.payload.text,
             tagId: action.payload.tagId,
-            title: action.payload.text.slice(0, 10) + (action.payload.text.length > 10 ? '...' : ''),
             updated: new Date()
           };
         }
