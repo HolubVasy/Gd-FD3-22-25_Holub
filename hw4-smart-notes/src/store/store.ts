@@ -3,6 +3,13 @@ import notesReducer from './notesSlice';
 import tagsReducer from './tagsSlice';
 import { loadState, saveState } from '../data/localStorage';
 import { v4 as uuidv4 } from 'uuid';
+import { Note } from '../models/Note';
+import { Tag } from '../models/Tag';
+
+interface AppState {
+  notes: Note[];
+  tags: Tag[];
+}
 
 const tagIds = {
   physics: uuidv4(),
@@ -12,7 +19,7 @@ const tagIds = {
   neuroscience: uuidv4()
 };
 
-const createNote = (text: string, tagId: string, title: string) => ({
+const createNote = (text: string, tagId: string, title: string): Note => ({
   id: uuidv4(),
   tagId,
   title,
@@ -21,7 +28,7 @@ const createNote = (text: string, tagId: string, title: string) => ({
   updated: new Date()
 });
 
-const initialNotes = [
+const initialNotes: Note[] = [
   createNote(
     "Light takes 8 minutes and 20 seconds to travel from the Sun to Earth, covering a distance of about 93 million miles (150 million kilometers).",
     tagIds.physics,
@@ -74,7 +81,7 @@ const initialNotes = [
   )
 ];
 
-const initialTags = [
+const initialTags: Tag[] = [
   { id: tagIds.physics, name: 'Physics', count: 2 },
   { id: tagIds.biology, name: 'Biology', count: 2 },
   { id: tagIds.astronomy, name: 'Astronomy', count: 2 },
@@ -82,10 +89,10 @@ const initialTags = [
   { id: tagIds.neuroscience, name: 'Neuroscience', count: 2 }
 ];
 
-const savedNotes = loadState('notes');
-const savedTags = loadState('tags');
+const savedNotes = loadState('notes') as Note[] | undefined;
+const savedTags = loadState('tags') as Tag[] | undefined;
 
-const preloadedState = {
+const preloadedState: AppState = {
   notes: savedNotes || initialNotes,
   tags: savedTags || initialTags,
 };
@@ -102,10 +109,12 @@ let saveTimeout: NodeJS.Timeout;
 store.subscribe(() => {
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(() => {
-    const state = store.getState();
+    const state = store.getState() as AppState;
     saveState('notes', state.notes);
     saveState('tags', state.tags);
-  }, 1000); 
+  }, 1000);
 });
 
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 export default store;
