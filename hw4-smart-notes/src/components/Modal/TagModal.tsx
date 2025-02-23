@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-responsive-modal';
 import { useDispatch } from 'react-redux';
-import { Tag } from '../../models/Tag';
 import { TagModalProps } from '../../models/props/TagModalProps';
 import { addTag } from '../../store/tagsSlice';
 import 'react-responsive-modal/styles.css';

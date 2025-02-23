@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import NotesSection from './Notes/NotesSection';
 import TagsSection from './Tags/TagsSection';
 
-const MainContent: React.FC = () => {
+function MainContent() {
   const [isNoteModalOpen, setNoteModalOpen] = useState(false);
   const [isTagModalOpen, setTagModalOpen] = useState(false);
   const [noteFilter, setNoteFilter] = useState('');
@@ -17,16 +17,14 @@ const MainContent: React.FC = () => {
         selectedTag={selectedTag}
         setSelectedTag={setSelectedTag}
         isModalOpen={isNoteModalOpen}
-        setModalOpen={setNoteModalOpen}
-      />
+        setModalOpen={setNoteModalOpen} />
       <TagsSection
         tagFilter={tagFilter}
         setTagFilter={setTagFilter}
         isModalOpen={isTagModalOpen}
-        setModalOpen={setTagModalOpen}
-      />
+        setModalOpen={setTagModalOpen} />
     </div>
   );
-};
+}
 
 export default MainContent; 

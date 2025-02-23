@@ -1,42 +1,37 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import TagComponent from '../Tag/Tag';
 import TagModal from '../Modal/TagModal';
 import { TagsSectionProps } from '../../models/props/TagsSectionProps';
 import { Tag } from '../../models/Tag';
+import { SearchBarProps } from '../../models/props/SearchBarProps';
+import { TagsListProps } from '../../models/props/TagsListProps';
 
-const SearchBar: React.FC<{
-  value: string;
-  onChange: (value: string) => void;
-}> = ({ value, onChange }) => (
-  <input
-    type="text"
-    placeholder="Search by the keyword"
-    value={value}
-    onChange={(e) => onChange(e.target.value)}
-  />
-);
+function SearchBar({ value, onChange }: SearchBarProps) {
+  return (
+    <input
+      type="text"
+      placeholder="Search by the keyword"
+      value={value}
+      onChange={(e) => onChange(e.target.value)} />
+  );
+}
 
-const TagsList: React.FC<{
-  tags: Tag[];
-}> = ({ tags }) => (
-  <>
-    {tags.map((tag) => (
-      <TagComponent key={tag.id} tag={tag} />
-    ))}
-  </>
-);
+function TagsList({ tags }: TagsListProps) {
+  return (
+    <>
+      {tags.map((tag) => (
+        <TagComponent key={tag.id} tag={tag} />
+      ))}
+    </>
+  );
+}
 
-const TagsSection: React.FC<TagsSectionProps> = ({
-  tagFilter,
-  setTagFilter,
-  isModalOpen,
-  setModalOpen
-}) => {
+function TagsSection({
+  tagFilter, setTagFilter, isModalOpen, setModalOpen
+}: TagsSectionProps) {
   const tags = useSelector((state: any) => state.tags);
 
-  const filteredTags = tags.filter((tag: Tag) =>
-    tagFilter === '' || tag.name.toLowerCase().includes(tagFilter.toLowerCase())
+  const filteredTags = tags.filter((tag: Tag) => tagFilter === '' || tag.name.toLowerCase().includes(tagFilter.toLowerCase())
   );
 
   return (
@@ -50,6 +45,6 @@ const TagsSection: React.FC<TagsSectionProps> = ({
       <TagModal open={isModalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
-};
+}
 
 export default TagsSection; 

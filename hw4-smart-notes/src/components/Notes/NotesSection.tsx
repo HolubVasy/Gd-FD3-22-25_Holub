@@ -4,8 +4,9 @@ import NoteComponent from '../Note/Note';
 import NoteModal from '../Modal/NoteModal';
 import { NotesSectionProps } from '../../models/props/NotesSectionProps';
 import { Note } from '../../models/Note';
-import { Tag } from '../../models/Tag';
 import { SearchBarProps } from '../../models/props/SearchBarProps';
+import { TagFilterProps } from '../../models/props/TagFilterProps';
+import { NotesListProps } from '../../models/props/NotesListProps';
 
 function SearchBar({ value, onChange }: SearchBarProps) {
   return (
@@ -17,32 +18,29 @@ function SearchBar({ value, onChange }: SearchBarProps) {
   );
 }
 
-const TagFilter: React.FC<{
-  value: string | null;
-  onChange: (value: string | null) => void;
-  tags: Tag[];
-}> = ({ value, onChange, tags }) => (
-  <select 
-    value={value || ''} 
-    onChange={(e: ChangeEvent<HTMLSelectElement>) => 
-      onChange(e.target.value === '' ? null : e.target.value)}
-  >
-    <option value="">All Tags</option>
-    {tags.map((tag) => (
-      <option key={tag.id} value={tag.id}>{tag.name}</option>
-    ))}
-  </select>
-);
+function TagFilter({ value, onChange, tags }: TagFilterProps) {
+  return (
+    <select
+      value={value || ''}
+      onChange={(e: ChangeEvent<HTMLSelectElement>) => onChange(e.target.value === '' ? null : e.target.value)}
+    >
+      <option value="">All Tags</option>
+      {tags.map((tag) => (
+        <option key={tag.id} value={tag.id}>{tag.name}</option>
+      ))}
+    </select>
+  );
+}
 
-const NotesList: React.FC<{
-  notes: Note[];
-}> = ({ notes }) => (
-  <>
-    {notes.map((note) => (
-      <NoteComponent key={note.id} note={note} />
-    ))}
-  </>
-);
+function NotesList({ notes }: NotesListProps) {
+  return (
+    <>
+      {notes.map((note) => (
+        <NoteComponent key={note.id} note={note} />
+      ))}
+    </>
+  );
+}
 
 function NotesSection({
   noteFilter, setNoteFilter, selectedTag, setSelectedTag, isModalOpen, setModalOpen

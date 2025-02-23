@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-responsive-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { Note } from '../../models/Note';
-import { Tag } from '../../models/Tag';
 import { NoteModalProps } from '../../models/props/NoteModalProps';
 import 'react-responsive-modal/styles.css';
 import { EditModeProps } from '../../models/props/EditModeProps';
