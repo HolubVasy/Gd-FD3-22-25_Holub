@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import TagComponent from './Tag';
+import TagComponent from '../Tag/Tag';
 import TagModal from '../Modal/TagModal';
 
 interface TagsSectionProps {

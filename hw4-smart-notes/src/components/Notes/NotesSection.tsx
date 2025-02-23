@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
-import NoteComponent from './Note';
+import NoteComponent from '../Note/Note';
 import NoteModal from '../Modal/NoteModal';
 
 interface NotesSectionProps {
