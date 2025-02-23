@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import NotesSection from './Notes/NotesSection';
 import TagsSection from './Tags/TagsSection';
 
-function MainContent() {
+export default function MainContent() {
   const [isNoteModalOpen, setNoteModalOpen] = useState(false);
   const [isTagModalOpen, setTagModalOpen] = useState(false);
   const [noteFilter, setNoteFilter] = useState('');
@@ -26,5 +26,3 @@ function MainContent() {
     </div>
   );
 }
-
-export default MainContent; 

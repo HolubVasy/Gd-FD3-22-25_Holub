@@ -27,7 +27,7 @@ function TagsList({ tags }: TagsListProps) {
   );
 }
 
-function TagsSection({
+export default function TagsSection({
   tagFilter, setTagFilter, isModalOpen, setModalOpen
 }: TagsSectionProps) {
   const tags = useSelector((state: any) => state.tags);
@@ -47,5 +47,3 @@ function TagsSection({
     </div>
   );
 }
-
-export default TagsSection; 

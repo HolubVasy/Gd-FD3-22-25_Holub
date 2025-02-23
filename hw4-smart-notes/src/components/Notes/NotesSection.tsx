@@ -42,7 +42,7 @@ function NotesList({ notes }: NotesListProps) {
   );
 }
 
-function NotesSection({
+export default function NotesSection({
   noteFilter, setNoteFilter, selectedTag, setSelectedTag, isModalOpen, setModalOpen
 }: NotesSectionProps) {
   const notes = useSelector((state: any) => state.notes);
@@ -74,5 +74,3 @@ function NotesSection({
     </div>
   );
 }
-
-export default NotesSection; 

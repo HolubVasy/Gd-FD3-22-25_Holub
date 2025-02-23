@@ -33,7 +33,7 @@ function EditMode({ name, mode, onNameChange, onSave, onClose }: TagEditModeProp
   );
 }
 
-function TagModal({ open, onClose, tag, mode = 'add' }: TagModalProps) {
+export default  function TagModal({ open, onClose, tag, mode = 'add' }: TagModalProps) {
   const dispatch = useDispatch();
   const [name, setName] = useState(tag?.name || '');
 
@@ -68,5 +68,3 @@ function TagModal({ open, onClose, tag, mode = 'add' }: TagModalProps) {
     </Modal>
   );
 }
-
-export default TagModal; 

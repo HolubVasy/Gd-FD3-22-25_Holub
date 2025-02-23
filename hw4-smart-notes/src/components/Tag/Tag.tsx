@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TagProps } from '../../models/props/TagProps';
 import TagModal from '../Modal/TagModal';
 
-function TagComponent({ tag }: TagProps) {
+export default function TagComponent({ tag }: TagProps) {
   const dispatch = useDispatch();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const notes = useSelector((state: any) => state.notes);
@@ -38,5 +38,3 @@ function TagComponent({ tag }: TagProps) {
     </div>
   );
 }
-
-export default TagComponent;

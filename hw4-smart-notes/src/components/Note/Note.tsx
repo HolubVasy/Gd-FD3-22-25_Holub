@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { NoteProps } from '../../models/props/NoteProps';
 import NoteModal from '../Modal/NoteModal';
 
-function NoteComponent({ note }: NoteProps) {
+export default  function NoteComponent({ note }: NoteProps) {
   const dispatch = useDispatch();
   const [isViewModalOpen, setViewModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -43,5 +43,3 @@ function NoteComponent({ note }: NoteProps) {
     </div>
   );
 }
-
-export default NoteComponent;
