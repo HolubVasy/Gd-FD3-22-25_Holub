@@ -1,8 +1,7 @@
-// src/store/store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import notesReducer from './notesSlice';
 import tagsReducer from './tagsSlice';
-import { loadState, saveState } from '../utils/localStorage';
+import { loadState, saveState } from '../data/localStorage';
 import { v4 as uuidv4 } from 'uuid';
 
 const tagIds = {
@@ -83,7 +82,6 @@ const initialTags = [
   { id: tagIds.neuroscience, name: 'Neuroscience', count: 2 }
 ];
 
-// Load saved state or use initial state
 const savedNotes = loadState('notes');
 const savedTags = loadState('tags');
 
@@ -100,11 +98,6 @@ const store = configureStore({
   preloadedState,
 });
 
-// Remove immediate save of preloaded state
-// saveState('notes', preloadedState.notes);
-// saveState('tags', preloadedState.tags);
-
-// Debounce the save state function
 let saveTimeout: NodeJS.Timeout;
 store.subscribe(() => {
   clearTimeout(saveTimeout);
@@ -112,7 +105,7 @@ store.subscribe(() => {
     const state = store.getState();
     saveState('notes', state.notes);
     saveState('tags', state.tags);
-  }, 1000); // Save after 1 second of inactivity
+  }, 1000); 
 });
 
 export default store;

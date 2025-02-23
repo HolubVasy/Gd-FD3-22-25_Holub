@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-responsive-modal';
 import { useDispatch } from 'react-redux';
-import { Note } from '../../types/Note';
+import { Note } from '../../models/Note';
+import { NoteModalProps } from '../../models/props/NoteModalProps';
 import 'react-responsive-modal/styles.css';
-
-interface NoteModalProps {
-  open: boolean;
-  onClose: () => void;
-  note?: Note;
-  mode?: 'view' | 'edit' | 'add';
-}
 
 const NoteModal: React.FC<NoteModalProps> = ({ open, onClose, note, mode = 'add' }) => {
   const dispatch = useDispatch();

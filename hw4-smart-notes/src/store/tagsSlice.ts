@@ -1,11 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Tag } from '../types/Tag';
+import { Tag } from '../models/Tag';
+import { EditTagPayload } from '../models/payloads/EditTagPayload';
 import { v4 as uuidv4 } from 'uuid';
-
-interface EditTagPayload {
-  id: string;
-  name: string;
-}
 
 const initialState: Tag[] = [];
 

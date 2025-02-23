@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
 import NoteComponent from '../Note/Note';
 import NoteModal from '../Modal/NoteModal';
-import { NotesSectionProps } from '../../types/props/NotesSectionProps';
+import { NotesSectionProps } from '../../models/props/NotesSectionProps';
 
 const NotesSection: React.FC<NotesSectionProps> = ({
   noteFilter,
