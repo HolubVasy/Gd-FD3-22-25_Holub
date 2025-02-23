@@ -5,6 +5,7 @@ import { NoteModalProps } from '../../models/props/NoteModalProps';
 import 'react-responsive-modal/styles.css';
 import { EditModeProps } from '../../models/props/EditModeProps';
 import { ViewModeProps } from '../../models/props/ViewModeProps';
+import { editNote, addNote } from '../../store/notesSlice';
 
 function ViewMode({ note, onClose }: ViewModeProps) {
   return (
@@ -91,24 +92,18 @@ function NoteModal({ open, onClose, note, mode = 'add' }: NoteModalProps) {
 
   const handleSave = () => {
     if (mode === 'edit' && note) {
-      dispatch({
-        type: 'notes/editNote',
-        payload: {
-          id: note.id,
-          title,
-          text: description,
-          tagId
-        }
-      });
+      dispatch(editNote({
+        id: note.id,
+        title: title.trim(),
+        text: description.trim(),
+        tagId
+      }));
     } else if (mode === 'add') {
-      dispatch({
-        type: 'notes/addNote',
-        payload: {
-          title,
-          text: description,
-          tagId: tagId || null
-        }
-      });
+      dispatch(addNote({
+        title: title.trim(),
+        text: description.trim(),
+        tagId: tagId || null
+      }));
     }
     onClose();
   };
