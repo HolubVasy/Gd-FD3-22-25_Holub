@@ -1,9 +1,6 @@
-import React, { useState, ChangeEvent } from 'react';
-import { useSelector } from 'react-redux';
-import NoteComponent from './Note/Note';
-import TagComponent from './Tag/Tag';
-import NoteModal from './Modal/NoteModal';
-import TagModal from './Modal/TagModal';
+import React, { useState } from 'react';
+import NotesSection from './Notes/NotesSection';
+import TagsSection from './Tags/TagsSection';
 
 const MainContent: React.FC = () => {
   const [isNoteModalOpen, setNoteModalOpen] = useState(false);
@@ -12,67 +9,22 @@ const MainContent: React.FC = () => {
   const [tagFilter, setTagFilter] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  const notes = useSelector((state: any) => state.notes);
-  const tags = useSelector((state: any) => state.tags);
-
-  const filteredNotes = notes.filter((note: any) => {
-    const matchesFilter = noteFilter === '' || 
-      note.title?.toLowerCase().includes(noteFilter.toLowerCase()) ||
-      note.text.toLowerCase().includes(noteFilter.toLowerCase());
-    const matchesTag = selectedTag === null || note.tagId === selectedTag;
-    return matchesFilter && matchesTag;
-  });
-
-  const filteredTags = tags.filter((tag: any) =>
-    tagFilter === '' || tag.name.toLowerCase().includes(tagFilter.toLowerCase())
-  );
-
   return (
     <div className="app">
-      <div className="notes-section">
-        <div className="section-header">
-          <h2>Notes ({filteredNotes.length})</h2>
-          <button onClick={() => setNoteModalOpen(true)}>Add Note</button>
-        </div>
-        <div className="filters">
-          <input
-            type="text"
-            placeholder="Search by the keyword"
-            value={noteFilter}
-            onChange={(e) => setNoteFilter(e.target.value)}
-          />
-          <select 
-            value={selectedTag || ''} 
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => 
-              setSelectedTag(e.target.value === '' ? null : e.target.value)}
-          >
-            <option value="">Select tag</option>
-            {tags.map((tag: any) => (
-              <option key={tag.id} value={tag.id}>{tag.name}</option>
-            ))}
-          </select>
-        </div>
-        {filteredNotes.map((note: any) => (
-          <NoteComponent key={note.id} note={note} />
-        ))}
-      </div>
-      <div className="tags-section">
-        <div className="section-header">
-          <h2>Tags ({tags.length})</h2>
-          <button onClick={() => setTagModalOpen(true)}>Add Tag</button>
-        </div>
-        <input
-          type="text"
-          placeholder="Search by the keyword"
-          value={tagFilter}
-          onChange={(e) => setTagFilter(e.target.value)}
-        />
-        {filteredTags.map((tag: any) => (
-          <TagComponent key={tag.id} tag={tag} />
-        ))}
-      </div>
-      <NoteModal open={isNoteModalOpen} onClose={() => setNoteModalOpen(false)} />
-      <TagModal open={isTagModalOpen} onClose={() => setTagModalOpen(false)} />
+      <NotesSection
+        noteFilter={noteFilter}
+        setNoteFilter={setNoteFilter}
+        selectedTag={selectedTag}
+        setSelectedTag={setSelectedTag}
+        isModalOpen={isNoteModalOpen}
+        setModalOpen={setNoteModalOpen}
+      />
+      <TagsSection
+        tagFilter={tagFilter}
+        setTagFilter={setTagFilter}
+        isModalOpen={isTagModalOpen}
+        setModalOpen={setTagModalOpen}
+      />
     </div>
   );
 };
