@@ -5,9 +5,6 @@ import tagsReducer from './tagsSlice';
 import { loadState, saveState } from '../utils/localStorage';
 import { v4 as uuidv4 } from 'uuid';
 
-// Clear localStorage to force new data
-localStorage.clear();
-
 const tagIds = {
   physics: uuidv4(),
   biology: uuidv4(),
@@ -86,9 +83,13 @@ const initialTags = [
   { id: tagIds.neuroscience, name: 'Neuroscience', count: 2 }
 ];
 
+// Load saved state or use initial state
+const savedNotes = loadState('notes');
+const savedTags = loadState('tags');
+
 const preloadedState = {
-  notes: loadState('notes') || initialNotes,
-  tags: loadState('tags') || initialTags,
+  notes: savedNotes || initialNotes,
+  tags: savedTags || initialTags,
 };
 
 const store = configureStore({
@@ -99,13 +100,19 @@ const store = configureStore({
   preloadedState,
 });
 
-// Save initial state immediately
-saveState('notes', preloadedState.notes);
-saveState('tags', preloadedState.tags);
+// Remove immediate save of preloaded state
+// saveState('notes', preloadedState.notes);
+// saveState('tags', preloadedState.tags);
 
+// Debounce the save state function
+let saveTimeout: NodeJS.Timeout;
 store.subscribe(() => {
-  saveState('notes', store.getState().notes);
-  saveState('tags', store.getState().tags);
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => {
+    const state = store.getState();
+    saveState('notes', state.notes);
+    saveState('tags', state.tags);
+  }, 1000); // Save after 1 second of inactivity
 });
 
 export default store;

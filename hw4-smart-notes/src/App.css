@@ -242,3 +242,32 @@ input[type="text"] {
   width: 100%;
   margin-bottom: 12px;
 }
+
+.tag-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.tag-actions .action-btn {
+  padding: 2px 8px;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.tag-actions .action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tag-actions .action-btn.delete-btn:not(:disabled):hover {
+  background: #fee8e8;
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.tag-actions .action-btn:not(:disabled):hover {
+  background: #e9ecef;
+}

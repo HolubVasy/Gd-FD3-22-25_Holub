@@ -32,9 +32,22 @@ const tagsSlice = createSlice({
         return tag;
       });
     },
-    // Add other reducers for rename, delete, etc.
+    deleteTag: (state, action: PayloadAction<string>) => {
+      return state.filter(tag => tag.id !== action.payload);
+    },
+    updateTagCount: (state, action: PayloadAction<string>) => {
+      return state.map(tag => {
+        if (tag.id === action.payload) {
+          return {
+            ...tag,
+            count: tag.count + 1
+          };
+        }
+        return tag;
+      });
+    }
   },
 });
 
-export const { addTag, editTag } = tagsSlice.actions;
+export const { addTag, editTag, deleteTag, updateTagCount } = tagsSlice.actions;
 export default tagsSlice.reducer;
