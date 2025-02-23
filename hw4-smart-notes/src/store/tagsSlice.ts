@@ -21,4 +21,4 @@ const tagsSlice = createSlice({
 });
 
 export const { addTag } = tagsSlice.actions;
-export default tagsSlice.reducer; 
+export default tagsSlice.reducer;

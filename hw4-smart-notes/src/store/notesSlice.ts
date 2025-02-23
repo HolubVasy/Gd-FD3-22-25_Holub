@@ -2,6 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Note } from '../types/Note';
 import { v4 as uuidv4 } from 'uuid';
 
+interface EditNotePayload {
+  id: string;
+  text: string;
+  tagId: string | null;
+}
+
 const initialState: Note[] = [];
 
 const notesSlice = createSlice({
@@ -19,9 +25,25 @@ const notesSlice = createSlice({
       };
       state.push(newNote);
     },
-    // Add other reducers for edit, delete, etc.
+    deleteNote: (state, action: PayloadAction<string>) => {
+      return state.filter(note => note.id !== action.payload);
+    },
+    editNote: (state, action: PayloadAction<EditNotePayload>) => {
+      return state.map(note => {
+        if (note.id === action.payload.id) {
+          return {
+            ...note,
+            text: action.payload.text,
+            tagId: action.payload.tagId,
+            title: action.payload.text.slice(0, 10) + (action.payload.text.length > 10 ? '...' : ''),
+            updated: new Date()
+          };
+        }
+        return note;
+      });
+    }
   },
 });
 
-export const { addNote } = notesSlice.actions;
-export default notesSlice.reducer; 
+export const { addNote, deleteNote, editNote } = notesSlice.actions;
+export default notesSlice.reducer;

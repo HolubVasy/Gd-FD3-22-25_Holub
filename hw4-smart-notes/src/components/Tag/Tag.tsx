@@ -9,6 +9,7 @@ const TagComponent: React.FC<TagProps> = ({ tag }) => {
   return (
     <div className="tag">
       <span>{tag.name} ({tag.count})</span>
+      {/* Add buttons for edit, delete */}
     </div>
   );
 };
