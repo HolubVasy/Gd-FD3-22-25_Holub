@@ -41,7 +41,7 @@ const NotesSection: React.FC<NotesSectionProps> = ({
           onChange={(e: ChangeEvent<HTMLSelectElement>) => 
             setSelectedTag(e.target.value === '' ? null : e.target.value)}
         >
-          <option value="">Select tag</option>
+          <option value="">All Tags</option>
           {tags.map((tag: any) => (
             <option key={tag.id} value={tag.id}>{tag.name}</option>
           ))}

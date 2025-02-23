@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-responsive-modal';
 import { useDispatch } from 'react-redux';
 import { Tag } from '../../models/Tag';
@@ -9,6 +9,10 @@ import 'react-responsive-modal/styles.css';
 const TagModal: React.FC<TagModalProps> = ({ open, onClose, tag, mode = 'add' }) => {
   const dispatch = useDispatch();
   const [name, setName] = useState(tag?.name || '');
+
+  useEffect(() => {
+    setName(tag?.name || '');
+  }, [tag]);
 
   const handleSave = () => {
     if (mode === 'edit' && tag) {
