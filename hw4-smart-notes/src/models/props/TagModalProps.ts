@@ -5,4 +5,4 @@ export interface TagModalProps {
   onClose: () => void;
   tag?: Tag;
   mode?: 'edit' | 'add';
-} 
+}

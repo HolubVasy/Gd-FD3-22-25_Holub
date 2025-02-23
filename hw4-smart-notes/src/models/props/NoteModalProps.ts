@@ -5,4 +5,4 @@ export interface NoteModalProps {
   onClose: () => void;
   note?: Note;
   mode?: 'view' | 'edit' | 'add';
-} 
+}

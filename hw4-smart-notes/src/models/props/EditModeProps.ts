@@ -11,4 +11,4 @@ export interface EditModeProps {
   onTagChange: (value: string) => void;
   onSave: () => void;
   onClose: () => void;
-} 
+}

@@ -30,7 +30,7 @@ const createNote = (text: string, tagId: string, title: string): Note => ({
 
 const initialNotes: Note[] = [
   createNote(
-    "Light takes 8 minutes and 20 seconds to travel from the Sun to Earth, covering a distance of about 93 million miles (150 million kilometers).",
+    "Light takes 8 minutes and 20 seconds to travel from the Sun to Earth...",
     tagIds.physics,
     "Light takes..."
   ),
