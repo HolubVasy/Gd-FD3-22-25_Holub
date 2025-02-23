@@ -2,13 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import TagComponent from '../Tag/Tag';
 import TagModal from '../Modal/TagModal';
-
-interface TagsSectionProps {
-  tagFilter: string;
-  setTagFilter: (filter: string) => void;
-  isModalOpen: boolean;
-  setModalOpen: (isOpen: boolean) => void;
-}
+import { TagsSectionProps } from '../../types/props/TagsSectionProps';
 
 const TagsSection: React.FC<TagsSectionProps> = ({
   tagFilter,

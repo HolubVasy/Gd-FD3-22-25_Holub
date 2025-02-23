@@ -2,15 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
 import NoteComponent from '../Note/Note';
 import NoteModal from '../Modal/NoteModal';
-
-interface NotesSectionProps {
-  noteFilter: string;
-  setNoteFilter: (filter: string) => void;
-  selectedTag: string | null;
-  setSelectedTag: (tagId: string | null) => void;
-  isModalOpen: boolean;
-  setModalOpen: (isOpen: boolean) => void;
-}
+import { NotesSectionProps } from '../../types/props/NotesSectionProps';
 
 const NotesSection: React.FC<NotesSectionProps> = ({
   noteFilter,
