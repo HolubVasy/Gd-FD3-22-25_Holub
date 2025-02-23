@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Header: React.FC = () => {
+export default function Header() {
   return (
     <header className="header">
       <div className="logo">🐕 ЧауЧау Блог</div>
@@ -12,6 +11,4 @@ const Header: React.FC = () => {
       </nav>
     </header>
   );
-};
-
-export default Header;
+}
