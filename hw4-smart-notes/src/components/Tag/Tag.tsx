@@ -15,11 +15,7 @@ const TagComponent: React.FC<TagProps> = ({ tag }) => {
   const hasRelatedNotes = notes.some((note: any) => note.tagId === tag.id);
 
   const handleDelete = () => {
-    if (hasRelatedNotes) {
-      alert('Cannot delete tag that has related notes');
-      return;
-    }
-    if (window.confirm('Are you sure you want to delete this tag?')) {
+    if (!hasRelatedNotes) {
       dispatch({ type: 'tags/deleteTag', payload: tag.id });
     }
   };
