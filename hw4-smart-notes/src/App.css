@@ -191,3 +191,54 @@ input[type="text"] {
   color: white;
   border-color: #0056b3;
 }
+
+.tag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 4px 0;
+  transition: background-color 0.2s ease;
+}
+
+.tag:hover {
+  background: #e9ecef;
+}
+
+.tag span {
+  font-size: 14px;
+  color: #212529;
+}
+
+.edit-btn {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  color: #212529;
+  padding: 2px 8px;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 2px;
+}
+
+.edit-btn:hover {
+  background: #e9ecef;
+}
+
+.tags-section {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.tags-section input[type="text"] {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 6px 12px;
+  width: 100%;
+  margin-bottom: 12px;
+}

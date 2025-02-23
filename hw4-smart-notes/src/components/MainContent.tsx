@@ -9,6 +9,7 @@ const MainContent: React.FC = () => {
   const [isNoteModalOpen, setNoteModalOpen] = useState(false);
   const [isTagModalOpen, setTagModalOpen] = useState(false);
   const [noteFilter, setNoteFilter] = useState('');
+  const [tagFilter, setTagFilter] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const notes = useSelector((state: any) => state.notes);
@@ -21,6 +22,10 @@ const MainContent: React.FC = () => {
     const matchesTag = selectedTag === null || note.tagId === selectedTag;
     return matchesFilter && matchesTag;
   });
+
+  const filteredTags = tags.filter((tag: any) =>
+    tagFilter === '' || tag.name.toLowerCase().includes(tagFilter.toLowerCase())
+  );
 
   return (
     <div className="app">
@@ -59,8 +64,10 @@ const MainContent: React.FC = () => {
         <input
           type="text"
           placeholder="Search by the keyword"
+          value={tagFilter}
+          onChange={(e) => setTagFilter(e.target.value)}
         />
-        {tags.map((tag: any) => (
+        {filteredTags.map((tag: any) => (
           <TagComponent key={tag.id} tag={tag} />
         ))}
       </div>
