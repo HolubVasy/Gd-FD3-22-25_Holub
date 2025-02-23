@@ -4,11 +4,11 @@ import { Tag } from '../../models/Tag';
 import { TagProps } from '../../models/props/TagProps';
 import TagModal from '../Modal/TagModal';
 
-const TagComponent: React.FC<TagProps> = ({ tag }) => {
+function TagComponent({ tag }) {
   const dispatch = useDispatch();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const notes = useSelector((state: any) => state.notes);
-  
+
   const hasRelatedNotes = notes.some((note: any) => note.tagId === tag.id);
 
   const handleDelete = () => {
@@ -22,8 +22,8 @@ const TagComponent: React.FC<TagProps> = ({ tag }) => {
       <span>{tag.name} ({tag.count})</span>
       <div className="tag-actions">
         <button className="action-btn" onClick={() => setEditModalOpen(true)}>edit</button>
-        <button 
-          className="action-btn delete-btn" 
+        <button
+          className="action-btn delete-btn"
           onClick={handleDelete}
           disabled={hasRelatedNotes}
           title={hasRelatedNotes ? "Cannot delete tag with related notes" : "Delete tag"}
@@ -31,14 +31,13 @@ const TagComponent: React.FC<TagProps> = ({ tag }) => {
           delete
         </button>
       </div>
-      <TagModal 
-        open={isEditModalOpen} 
+      <TagModal
+        open={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
         tag={tag}
-        mode="edit"
-      />
+        mode="edit" />
     </div>
   );
-};
+}
 
 export default TagComponent;

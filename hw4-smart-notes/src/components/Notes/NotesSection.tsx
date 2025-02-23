@@ -5,18 +5,17 @@ import NoteModal from '../Modal/NoteModal';
 import { NotesSectionProps } from '../../models/props/NotesSectionProps';
 import { Note } from '../../models/Note';
 import { Tag } from '../../models/Tag';
+import { SearchBarProps } from '../../models/props/SearchBarProps';
 
-const SearchBar: React.FC<{
-  value: string;
-  onChange: (value: string) => void;
-}> = ({ value, onChange }) => (
-  <input
-    type="text"
-    placeholder="Search by the keyword"
-    value={value}
-    onChange={(e) => onChange(e.target.value)}
-  />
-);
+function SearchBar({ value, onChange }: SearchBarProps) {
+  return (
+    <input
+      type="text"
+      placeholder="Search by the keyword"
+      value={value}
+      onChange={(e) => onChange(e.target.value)} />
+  );
+}
 
 const TagFilter: React.FC<{
   value: string | null;
@@ -45,19 +44,14 @@ const NotesList: React.FC<{
   </>
 );
 
-const NotesSection: React.FC<NotesSectionProps> = ({
-  noteFilter,
-  setNoteFilter,
-  selectedTag,
-  setSelectedTag,
-  isModalOpen,
-  setModalOpen
-}) => {
+function NotesSection({
+  noteFilter, setNoteFilter, selectedTag, setSelectedTag, isModalOpen, setModalOpen
+}: NotesSectionProps) {
   const notes = useSelector((state: any) => state.notes);
   const tags = useSelector((state: any) => state.tags);
 
   const filteredNotes = notes.filter((note: Note) => {
-    const matchesFilter = noteFilter === '' || 
+    const matchesFilter = noteFilter === '' ||
       note.title?.toLowerCase().includes(noteFilter.toLowerCase()) ||
       note.text.toLowerCase().includes(noteFilter.toLowerCase());
     const matchesTag = selectedTag === null || note.tagId === selectedTag;
@@ -72,16 +66,15 @@ const NotesSection: React.FC<NotesSectionProps> = ({
       </div>
       <div className="filters">
         <SearchBar value={noteFilter} onChange={setNoteFilter} />
-        <TagFilter 
-          value={selectedTag} 
+        <TagFilter
+          value={selectedTag}
           onChange={setSelectedTag}
-          tags={tags}
-        />
+          tags={tags} />
       </div>
       <NotesList notes={filteredNotes} />
       <NoteModal open={isModalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
-};
+}
 
 export default NotesSection; 

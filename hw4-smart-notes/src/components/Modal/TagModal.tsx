@@ -5,46 +5,36 @@ import { Tag } from '../../models/Tag';
 import { TagModalProps } from '../../models/props/TagModalProps';
 import { addTag } from '../../store/tagsSlice';
 import 'react-responsive-modal/styles.css';
+import { TagEditModeProps } from '../../models/props/TagEditModeProps';
 
-const EditMode: React.FC<{
-  name: string;
-  mode: 'edit' | 'add';
-  onNameChange: (value: string) => void;
-  onSave: () => void;
-  onClose: () => void;
-}> = ({
-  name,
-  mode,
-  onNameChange,
-  onSave,
-  onClose
-}) => (
-  <div className="modal-content">
-    <h2>{mode === 'edit' ? 'Edit Tag' : 'Add Tag'}</h2>
-    <div className="form-group">
-      <label>Name</label>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => onNameChange(e.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && onSave()}
-        placeholder="Enter tag name"
-        autoFocus
-      />
+function EditMode({ name, mode, onNameChange, onSave, onClose }: TagEditModeProps) {
+  return (
+    <div className="modal-content">
+      <h2>{mode === 'edit' ? 'Edit Tag' : 'Add Tag'}</h2>
+      <div className="form-group">
+        <label>Name</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => onNameChange(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && onSave()}
+          placeholder="Enter tag name"
+          autoFocus />
+      </div>
+      <div className="modal-actions">
+        <button onClick={onClose}>Cancel</button>
+        <button
+          onClick={onSave}
+          disabled={!name.trim()}
+        >
+          Save
+        </button>
+      </div>
     </div>
-    <div className="modal-actions">
-      <button onClick={onClose}>Cancel</button>
-      <button 
-        onClick={onSave}
-        disabled={!name.trim()}
-      >
-        Save
-      </button>
-    </div>
-  </div>
-);
+  );
+}
 
-const TagModal: React.FC<TagModalProps> = ({ open, onClose, tag, mode = 'add' }) => {
+function TagModal({ open, onClose, tag, mode = 'add' }: TagModalProps) {
   const dispatch = useDispatch();
   const [name, setName] = useState(tag?.name || '');
 
@@ -75,10 +65,9 @@ const TagModal: React.FC<TagModalProps> = ({ open, onClose, tag, mode = 'add' })
         mode={mode}
         onNameChange={setName}
         onSave={handleSave}
-        onClose={onClose}
-      />
+        onClose={onClose} />
     </Modal>
   );
-};
+}
 
 export default TagModal; 

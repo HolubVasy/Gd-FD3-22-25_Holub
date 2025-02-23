@@ -2,91 +2,85 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-responsive-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Note } from '../../models/Note';
+import { Tag } from '../../models/Tag';
 import { NoteModalProps } from '../../models/props/NoteModalProps';
 import 'react-responsive-modal/styles.css';
+import { EditModeProps } from '../../models/props/EditModeProps';
+import { ViewModeProps } from '../../models/props/ViewModeProps';
 
-const ViewMode: React.FC<{ note: Note; onClose: () => void }> = ({ note, onClose }) => (
-  <div className="modal-content">
-    <h2>{note?.title}</h2>
-    <p>{note?.text}</p>
-    <div className="modal-actions">
-      <button onClick={onClose}>Close</button>
+function ViewMode({ note, onClose }: ViewModeProps) {
+  return (
+    <div className="modal-content">
+      <h2>{note?.title}</h2>
+      <p>{note?.text}</p>
+      <div className="modal-actions">
+        <button onClick={onClose}>Close</button>
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
-const EditMode: React.FC<{
-  title: string;
-  description: string;
-  tagId: string;
-  mode: 'edit' | 'add';
-  tags: any[];
-  onTitleChange: (value: string) => void;
-  onDescriptionChange: (value: string) => void;
-  onTagChange: (value: string) => void;
-  onSave: () => void;
-  onClose: () => void;
-}> = ({
-  title,
-  description,
-  tagId,
-  mode,
-  tags,
-  onTitleChange,
-  onDescriptionChange,
-  onTagChange,
-  onSave,
+function EditMode({
+  title, 
+  description, 
+  tagId, 
+  mode, 
+  tags, 
+  onTitleChange, 
+  onDescriptionChange, 
+  onTagChange, 
+  onSave, 
   onClose
-}) => (
-  <div className="modal-content">
-    <h2>{mode === 'edit' ? 'Edit Note' : 'Add Note'}</h2>
-    <div className="form-group">
-      <label>Title</label>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => onTitleChange(e.target.value)}
-        placeholder="Enter title"
-        autoFocus
-      />
+}: EditModeProps) {
+  return (
+    <div className="modal-content">
+      <h2>{mode === 'edit' ? 'Edit Note' : 'Add Note'}</h2>
+      <div className="form-group">
+        <label>Title</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => onTitleChange(e.target.value)}
+          placeholder="Enter title"
+          autoFocus />
+      </div>
+      <div className="form-group">
+        <label>Description</label>
+        <textarea
+          value={description}
+          onChange={(e) => onDescriptionChange(e.target.value)}
+          placeholder="Enter description"
+          rows={5} />
+      </div>
+      <div className="form-group">
+        <label>Tag</label>
+        <select
+          value={tagId}
+          onChange={(e) => onTagChange(e.target.value)}
+        >
+          <option value="">Select Tag</option>
+          {tags.map((tag) => (
+            <option key={tag.id} value={tag.id}>{tag.name}</option>
+          ))}
+        </select>
+      </div>
+      <div className="modal-actions">
+        <button onClick={onClose}>Cancel</button>
+        <button
+          onClick={onSave}
+          disabled={!title.trim() || !description.trim()}
+        >
+          Save
+        </button>
+      </div>
     </div>
-    <div className="form-group">
-      <label>Description</label>
-      <textarea
-        value={description}
-        onChange={(e) => onDescriptionChange(e.target.value)}
-        placeholder="Enter description"
-        rows={5}
-      />
-    </div>
-    <div className="form-group">
-      <label>Tag</label>
-      <select 
-        value={tagId} 
-        onChange={(e) => onTagChange(e.target.value)}
-      >
-        <option value="">Select Tag</option>
-        {tags.map((tag) => (
-          <option key={tag.id} value={tag.id}>{tag.name}</option>
-        ))}
-      </select>
-    </div>
-    <div className="modal-actions">
-      <button onClick={onClose}>Cancel</button>
-      <button 
-        onClick={onSave}
-        disabled={!title.trim() || !description.trim()}
-      >
-        Save
-      </button>
-    </div>
-  </div>
-);
+  );
+}
 
-const NoteModal: React.FC<NoteModalProps> = ({ open, onClose, note, mode = 'add' }) => {
+function NoteModal({ open, onClose, note, mode = 'add' }: NoteModalProps) {
   const dispatch = useDispatch();
   const tags = useSelector((state: any) => state.tags);
-  
+
   const [title, setTitle] = useState(note?.title || '');
   const [description, setDescription] = useState(note?.text || '');
   const [tagId, setTagId] = useState(note?.tagId || '');
@@ -99,14 +93,14 @@ const NoteModal: React.FC<NoteModalProps> = ({ open, onClose, note, mode = 'add'
 
   const handleSave = () => {
     if (mode === 'edit' && note) {
-      dispatch({ 
-        type: 'notes/editNote', 
-        payload: { 
-          id: note.id, 
+      dispatch({
+        type: 'notes/editNote',
+        payload: {
+          id: note.id,
           title,
-          text: description, 
-          tagId 
-        } 
+          text: description,
+          tagId
+        }
       });
     } else if (mode === 'add') {
       dispatch({
@@ -136,11 +130,10 @@ const NoteModal: React.FC<NoteModalProps> = ({ open, onClose, note, mode = 'add'
           onDescriptionChange={setDescription}
           onTagChange={setTagId}
           onSave={handleSave}
-          onClose={onClose}
-        />
+          onClose={onClose} />
       )}
     </Modal>
   );
-};
+}
 
 export default NoteModal; 

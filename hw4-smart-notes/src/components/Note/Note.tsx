@@ -4,7 +4,7 @@ import { Note } from '../../models/Note';
 import { NoteProps } from '../../models/props/NoteProps';
 import NoteModal from '../Modal/NoteModal';
 
-const NoteComponent: React.FC<NoteProps> = ({ note }) => {
+function NoteComponent({ note }: NoteProps) {
   const dispatch = useDispatch();
   const [isViewModalOpen, setViewModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -31,20 +31,18 @@ const NoteComponent: React.FC<NoteProps> = ({ note }) => {
         <button className="action-btn" onClick={handleEdit}>edit</button>
         <button className="action-btn" onClick={handleDelete}>delete</button>
       </div>
-      <NoteModal 
-        open={isViewModalOpen} 
-        onClose={() => setViewModalOpen(false)} 
+      <NoteModal
+        open={isViewModalOpen}
+        onClose={() => setViewModalOpen(false)}
         note={note}
-        mode="view"
-      />
-      <NoteModal 
-        open={isEditModalOpen} 
-        onClose={() => setEditModalOpen(false)} 
+        mode="view" />
+      <NoteModal
+        open={isEditModalOpen}
+        onClose={() => setEditModalOpen(false)}
         note={note}
-        mode="edit"
-      />
+        mode="edit" />
     </div>
   );
-};
+}
 
 export default NoteComponent;
