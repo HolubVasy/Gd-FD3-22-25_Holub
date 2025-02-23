@@ -5,4 +5,4 @@ export interface Note {
   text: string;
   created: Date;
   updated: Date;
-} 
+}

@@ -5,4 +5,4 @@ export interface NotesSectionProps {
   setSelectedTag: (tagId: string | null) => void;
   isModalOpen: boolean;
   setModalOpen: (isOpen: boolean) => void;
-} 
+}

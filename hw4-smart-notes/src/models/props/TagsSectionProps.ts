@@ -3,4 +3,4 @@ export interface TagsSectionProps {
   setTagFilter: (filter: string) => void;
   isModalOpen: boolean;
   setModalOpen: (isOpen: boolean) => void;
-} 
+}
