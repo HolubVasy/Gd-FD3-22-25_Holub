@@ -18,9 +18,7 @@ const NoteComponent: React.FC<NoteProps> = ({ note }) => {
   };
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this note?')) {
-      dispatch({ type: 'notes/deleteNote', payload: note.id });
-    }
+    dispatch({ type: 'notes/deleteNote', payload: note.id });
   };
 
   return (

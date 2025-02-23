@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Note } from '../models/Note';
-import { EditNotePayload } from '../models/payloads/EditNotePayload';
+import { EditNotePayload } from '../models/EditNotePayload';
 import { v4 as uuidv4 } from 'uuid';
 
 const initialState: Note[] = [];
