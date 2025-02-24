@@ -1,71 +1,60 @@
 import React from 'react';
-import './Shop.css';
-import { ShopProps } from '../../types/Shop/ShopProps';
-import { Product } from '../../models/Product';
 
-const Shop: React.FC<ShopProps> = ({ name, products }) => {
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = 'https://placehold.co/200x150?text=Image+Not+Found';
-  };
+export type Product = {
+  id: number;
+  name: string;
+  price: number;
+  url: string;
+  stock: number;
+};
 
-  // Counting the total value of all products
-  let totalValue = 0;
-  products.forEach(product => {
-    totalValue += product.price * product.stock;
-  });
+type ShopProps = {
+  name: string;
+  products: Product[];
+};
 
-  // Counting the number of products with low stock (less than 10)
-  let lowStockCount = 0;
-  products.forEach(product => {
-    if (product.stock < 10) lowStockCount++;
-  });
+export default function Shop({ name, products }: ShopProps) {
+  const totalValue = products.reduce((sum, product) => 
+    sum + (product.price * product.stock), 0
+  );
 
-  // Creating an array of product categories
-  const categories: string[] = [];
-  products.forEach(product => {
-    if (!categories.includes(product.name)) {
-      categories.push(product.name);
-    }
-  });
+  const lowStockCount = products.filter(product => product.stock < 10).length;
 
-  // Creating an array of table rows
   const tableRows: JSX.Element[] = [];
-  products.forEach((product: Product) => {
+  products.forEach(product => {
     tableRows.push(
       <tr key={product.id}>
-        <td>
-          <img 
-            src={product.image} 
-            alt={product.name} 
-            className="product-image"
-            onError={handleImageError}
-          />
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{product.name}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>${product.price.toFixed(2)}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{product.stock}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+          <img src={product.url} alt={product.name} style={{ width: '50px', height: '50px' }} />
         </td>
-        <td>{product.name}</td>
-        <td>{product.getFormattedPrice()}</td>
-        <td>{product.getStockStatus()}</td>
       </tr>
     );
   });
 
   return (
-    <div className="shop">
+    <div>
       <h1>{name}</h1>
       
-      {/* Shop statistics */}
-      <div className="shop-stats">
-        <p>Total value of products: ${totalValue.toFixed(2)}</p>
-        <p>Products with low stock: {lowStockCount}</p>
-        <p>Product categories: {categories.join(', ')}</p>
+      <div>
+        <p>Total value: ${totalValue.toFixed(2)}</p>
+        <p>Low stock items: {lowStockCount}</p>
       </div>
 
-      <table className="products-table">
+      <table style={{ 
+        width: '100%', 
+        borderSpacing: '0',
+        border: '1px solid #ddd',
+        borderCollapse: 'collapse'
+      }}>
         <thead>
           <tr>
-            <th>Photo</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Stock</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Name</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Price</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Stock</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Image</th>
           </tr>
         </thead>
         <tbody>
@@ -74,6 +63,4 @@ const Shop: React.FC<ShopProps> = ({ name, products }) => {
       </table>
     </div>
   );
-};
-
-export default Shop; 
+}

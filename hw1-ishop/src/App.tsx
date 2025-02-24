@@ -1,13 +1,13 @@
 import React from 'react';
 import Shop from './components/shop/Shop';
-import { shopData } from './data/Shop/shopData';
+import { shopData } from './shopData';
 
-const App: React.FC = () => {
+function App() {
   return (
     <div className="App">
       <Shop name={shopData.name} products={shopData.products} />
     </div>
   );
-};
+}
 
 export default App; 
