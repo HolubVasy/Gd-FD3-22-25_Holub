@@ -1,4 +1,3 @@
-   // src/App.tsx
    import React from 'react';
    import AttendanceTable from './components/AttendanceTable/AttendanceTable';
 
