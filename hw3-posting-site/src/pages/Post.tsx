@@ -2,7 +2,6 @@ import { useParams, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import { posts } from './postsData';
 
-// Добавим резервное изображение
 const fallbackImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/01_Chow_Chow.jpg/1280px-01_Chow_Chow.jpg";
 
 const Post = () => {

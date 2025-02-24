@@ -1,4 +1,3 @@
-/* Сброс стилей */
 * {
   margin: 0;
   padding: 0;
@@ -10,7 +9,7 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
+  overflow-x: hidden;
 }
 
 #root {
@@ -107,7 +106,6 @@ body {
   background: #f0f0f0;
 }
 
-/* Структура приложения */
 .app {
   min-height: 100vh;
   display: flex;
@@ -115,7 +113,6 @@ body {
   width: 100%;
 }
 
-/* Стили для header */
 .header {
   position: fixed;
   top: 0;
@@ -159,21 +156,19 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Основной контент */
 .content {
   flex: 1;
-  margin-top: 60px; /* Высота header */
+  margin-top: 60px; 
   padding: 2rem;
-  padding-bottom: calc(60px + 2rem); /* Высота footer + отступ */
+  padding-bottom: calc(60px + 2rem);
 }
 
-/* Стили для списка постов */
 .posts-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
   padding: 2rem;
-  margin-bottom: 80px; /* Отступ для футера */
+  margin-bottom: 80px;
 }
 
 .post-preview {
@@ -210,13 +205,12 @@ body {
   line-height: 1.5;
 }
 
-/* Footer */
 .footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  width: 100vw; /* Используем viewport width */
+  width: 100vw;
   background: #333;
   color: white;
   text-align: center;
@@ -229,7 +223,6 @@ body {
   margin: 0;
 }
 
-/* Стили для страницы контактов */
 .contact-page {
   padding: 0;
   margin-top: 0;
@@ -294,7 +287,6 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Стили для страницы условий использования */
 .terms-page {
   max-width: 800px;
   margin: 0 auto;
