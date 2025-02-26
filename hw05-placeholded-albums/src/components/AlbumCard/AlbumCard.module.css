@@ -1,0 +1,41 @@
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.imageContainer {
+  aspect-ratio: 1;
+  background-color: #f8f9fa;
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e9ecef;
+  color: #6c757d;
+}
+
+.title {
+  padding: 1rem;
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+} 
