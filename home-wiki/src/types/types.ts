@@ -42,8 +42,42 @@ export type SearchState = {
   currentSearch: string;
 };
 
+export type Tag = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  usageCount: number;
+};
+
+export type TagState = {
+  tags: Tag[];
+  loading: boolean;
+  error: string | null;
+  searchQuery: string;
+};
+
+export type Category = {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+  articleCount: number;
+};
+
+export type CategoryState = {
+  categories: Category[];
+  loading: boolean;
+  error: string | null;
+  searchQuery: string;
+  selectedCategory: Category | null;
+};
+
 export type RootState = {
   auth: AuthState;
   articles: ArticleState;
   search: SearchState;
+  tags: TagState;
+  categories: CategoryState;
 }; 
