@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { categoryService } from '../services/categoryService';
-import { Category } from '../types/types';
+import { Category } from '../types/models';
 import {
   setCategories,
   addCategory,

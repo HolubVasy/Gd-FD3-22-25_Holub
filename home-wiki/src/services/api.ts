@@ -15,7 +15,7 @@ import {
   QueryDocumentSnapshot,
   Query,
 } from 'firebase/firestore';
-import { Article } from '../types/types';
+import { Article } from '../types/models';
 
 const ARTICLES_COLLECTION = 'articles';
 const PAGE_SIZE = 10;

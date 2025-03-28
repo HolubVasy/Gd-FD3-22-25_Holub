@@ -14,7 +14,7 @@ import {
   setError, 
   logout as logoutAction
 } from '../redux/slices/authSlice';
-import { User } from '../types/types';
+import { User } from '../types/models';
 import { toast } from 'react-toastify';
 
 export const useAuth = () => {

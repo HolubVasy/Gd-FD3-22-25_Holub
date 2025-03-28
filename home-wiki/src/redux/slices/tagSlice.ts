@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TagState, Tag } from '../../types/types';
+import { TagState, Tag } from '../../types/models';
 
 const initialState: TagState = {
   tags: [],

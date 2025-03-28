@@ -17,7 +17,7 @@ import {
   Edit as EditIcon,
   Search as SearchIcon,
 } from '@mui/icons-material';
-import { Category } from '../../types/types';
+import { Category } from '../../types/models';
 import CategoryEditDialog from './CategoryEditDialog';
 
 const CategoryList: React.FC = () => {

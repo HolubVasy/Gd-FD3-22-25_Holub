@@ -8,7 +8,7 @@ import {
   Button,
   Box,
 } from '@mui/material';
-import { Category } from '../../types/types';
+import { Category } from '../../types/models';
 
 interface CategoryEditDialogProps {
   open: boolean;
