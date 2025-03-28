@@ -1,10 +1,9 @@
-// src/pages/Article/ArticleDetails.tsx
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Typography, CircularProgress } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { ArticleService } from '../../api/ArticleService';
-import { setCurrentArticle } from '../../redux/slices/articleSlice';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { ArticleService } from '../api/ArticleService';
+import { setCurrentArticle } from '../redux/slices/articleSlice';
 
 const ArticleDetails: React.FC = () => {
   const { id } = useParams();

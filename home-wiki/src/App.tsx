@@ -4,15 +4,20 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 
-import Home from './pages/Home';
-import About from './pages/About';
-import Articles from './pages/Articles';
+import Home from './pages/home';
+import About from './pages/about';
+import Articles from './pages/Article/Articles';
 import ArticleDetails from './pages/Article/ArticleDetails';
-import Categories from './pages/Categories';
+import Categories from './pages/Category/Categories';
+import CategoryDetails from './pages/Category/CategoryDetails';
+import Tags from './pages/Tag/Tags';
+import TagDetails from './pages/Tag/TagDetails';
 import Profile from './pages/Profile';
-// Removed problematic imports due to errors
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import PrivateRoute from './components/PrivateRoute';
 
-function App() {
+const App: React.FC = () => {
   return (
     <Provider store={store}>
       <Router>
@@ -22,7 +27,9 @@ function App() {
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:id" element={<ArticleDetails />} />
           <Route path="/categories" element={<Categories />} />
-
+          <Route path="/categories/:id" element={<CategoryDetails />} />
+          <Route path="/tags" element={<Tags />} />
+          <Route path="/tags/:id" element={<TagDetails />} />
           <Route
             path="/profile"
             element={
@@ -31,15 +38,12 @@ function App() {
               </PrivateRoute>
             }
           />
-
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-          {/* можно добавить 404 */}
         </Routes>
       </Router>
     </Provider>
   );
-}
+};
 
 export default App;

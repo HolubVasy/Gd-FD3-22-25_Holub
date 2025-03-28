@@ -1,47 +1,49 @@
+// src/pages/Categories.tsx
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Box, Button, TextField } from '@mui/material';
-import { useCategories } from '../../hooks/useCategories';
-import { Category } from '../../types/models';
+import { Container, Typography, CircularProgress, List, ListItem, ListItemText } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Category } from '../types/models';
+import { CategoryService } from '../api/CategoryService';
 
 const Categories: React.FC = () => {
-  const { categories: list, loading, error, createCategory, fetchCategories } = useCategories();
-  const [newCategoryName, setNewCategoryName] = useState('');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    setLoading(true);
+    CategoryService.getCategories()
+      .then((data) => setCategories(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const handleCreate = () => {
-    createCategory(newCategoryName);
-    setNewCategoryName('');
-  };
-
+  if (loading) {
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
+  }
+  if (error) {
+    return (
+      <Container>
+        <Typography color="error">{error}</Typography>
+      </Container>
+    );
+  }
   return (
     <Container>
       <Typography variant="h4" sx={{ mt: 2 }}>
         Категории
       </Typography>
-      {loading && <div>Loading...</div>}
-      {error && <Typography color="error">{error}</Typography>}
-
-      <Box sx={{ mt: 2 }}>
-        <TextField
-          label="Новая категория"
-          value={newCategoryName}
-          onChange={(e) => setNewCategoryName(e.target.value)}
-        />
-        <Button variant="contained" onClick={handleCreate} sx={{ ml: 2 }}>
-          Создать
-        </Button>
-      </Box>
-
-      <Box sx={{ mt: 2 }}>
-        {list.map((cat: Category) => (
-          <Typography key={cat.id} variant="body1">
-            {cat.name}
-          </Typography>
+      <List>
+        {categories.map((cat) => (
+          <ListItem key={cat.id} button component={Link} to={`/categories/${cat.id}`}>
+            <ListItemText primary={cat.name} />
+          </ListItem>
         ))}
-      </Box>
+      </List>
     </Container>
   );
 };

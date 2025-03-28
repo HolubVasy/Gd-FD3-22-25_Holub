@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, TextField, CircularProgress, Box } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { fetchArticles } from '../../redux/slices/articleSlice';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { fetchArticles } from '../redux/slices/articleSlice';
 import { Link } from 'react-router-dom';
 
 const Articles: React.FC = () => {
@@ -10,7 +10,7 @@ const Articles: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    dispatch(fetchArticles());
+    dispatch(fetchArticles({}));
   }, [dispatch]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,11 +22,11 @@ const Articles: React.FC = () => {
   return (
     <Container>
       <Typography variant="h4" sx={{ mt: 2 }}>
-        Articles List
+        Список статей
       </Typography>
 
       <TextField
-        label="Search by name"
+        label="Поиск по названию"
         value={searchTerm}
         onChange={handleSearchChange}
         sx={{ mt: 2, mb: 2 }}

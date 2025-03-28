@@ -9,7 +9,7 @@ const About: React.FC = () => {
         О нашем приложении
       </Typography>
       <Typography variant="body1" sx={{ mt: 2 }}>
-        Домашнее вики.
+        Здесь можно рассказать о проекте, кто автор, какая цель и т.д.
       </Typography>
     </Container>
   );
