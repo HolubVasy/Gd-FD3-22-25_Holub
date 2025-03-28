@@ -15,7 +15,7 @@ const AuthService = {
 
   async logout(): Promise<void> {
     await axiosClient.post('/auth/logout');
-  }
+  },
 };
 
 export default AuthService;

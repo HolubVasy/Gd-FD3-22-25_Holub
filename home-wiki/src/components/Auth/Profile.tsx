@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  TextField, 
-  Button, 
-  Paper, 
-  Avatar, 
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Avatar,
   CircularProgress,
-  Divider
+  Divider,
 } from '@mui/material';
-import { useAuth } from '../../hooks/useAuth';
-import { storage } from '../../services/firebase';
+import { useAuth } from '#/hooks/useAuth';
+import { storage } from '#/services/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const Profile: React.FC = () => {
   const { user, isAuthenticated, loading, updateUserProfile, logout } = useAuth();
-  
+
   const [displayName, setDisplayName] = useState('');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -44,20 +44,20 @@ const Profile: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     let photoURL = user?.photoURL;
-    
+
     if (avatarFile) {
       try {
         setUploadingImage(true);
-        
+
         // Create a unique file name
         const fileName = `avatars/${user?.id}_${new Date().getTime()}`;
         const storageRef = ref(storage, fileName);
-        
+
         // Upload the file
         await uploadBytes(storageRef, avatarFile);
-        
+
         // Get download URL
         photoURL = await getDownloadURL(storageRef);
       } catch (error) {
@@ -66,7 +66,7 @@ const Profile: React.FC = () => {
         setUploadingImage(false);
       }
     }
-    
+
     await updateUserProfile(displayName, photoURL || undefined);
     setFormChanged(false);
   };
@@ -86,14 +86,14 @@ const Profile: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'flex-start',
         minHeight: 'calc(100vh - 64px)',
-        p: 2
+        p: 2,
       }}
     >
       <Paper elevation={3} sx={{ maxWidth: 600, width: '100%', p: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom align="center">
           Profile
         </Typography>
-        
+
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
           <Avatar
             src={avatarPreview || user?.photoURL || ''}
@@ -101,7 +101,7 @@ const Profile: React.FC = () => {
             sx={{ width: 100, height: 100 }}
           />
         </Box>
-        
+
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Box sx={{ textAlign: 'center', mb: 3 }}>
             <input
@@ -117,7 +117,7 @@ const Profile: React.FC = () => {
               </Button>
             </label>
           </Box>
-          
+
           <TextField
             label="Email"
             type="email"
@@ -126,7 +126,7 @@ const Profile: React.FC = () => {
             value={user?.email || ''}
             disabled
           />
-          
+
           <TextField
             label="Display Name"
             type="text"
@@ -136,7 +136,7 @@ const Profile: React.FC = () => {
             onChange={handleDisplayNameChange}
             required
           />
-          
+
           <Button
             type="submit"
             variant="contained"
@@ -146,19 +146,14 @@ const Profile: React.FC = () => {
             disabled={loading || uploadingImage || !formChanged}
             sx={{ mt: 3 }}
           >
-            {(loading || uploadingImage) ? <CircularProgress size={24} /> : 'Update Profile'}
+            {loading || uploadingImage ? <CircularProgress size={24} /> : 'Update Profile'}
           </Button>
         </Box>
-        
+
         <Divider sx={{ my: 4 }} />
-        
+
         <Box sx={{ textAlign: 'center' }}>
-          <Button 
-            variant="outlined" 
-            color="secondary" 
-            onClick={logout}
-            disabled={loading}
-          >
+          <Button variant="outlined" color="secondary" onClick={logout} disabled={loading}>
             Logout
           </Button>
         </Box>
@@ -167,4 +162,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile; 
+export default Profile;

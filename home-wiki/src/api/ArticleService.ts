@@ -1,8 +1,6 @@
 import axiosClient from './axiosClient';
 import { Article, PagedList } from '../types/models';
 
-
-
 export const ArticleService = {
   async getArticles(pageNumber = 1, pageSize = 10): Promise<PagedList<Article>> {
     const response = await axiosClient.get<PagedList<Article>>('/Article/paged', {

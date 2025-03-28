@@ -15,4 +15,4 @@ const PrivateRoute: React.FC = () => {
   return <Outlet />;
 };
 
-export default PrivateRoute; 
+export default PrivateRoute;

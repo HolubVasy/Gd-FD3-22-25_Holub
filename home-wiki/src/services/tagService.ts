@@ -1,4 +1,4 @@
-import { Tag } from '../types/models';
+import { Tag } from '#/types/models';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -14,7 +14,9 @@ export const tagService = {
 
   // Search tags by keyword
   async searchTags(keyword: string): Promise<Tag[]> {
-    const response = await fetch(`${API_BASE_URL}/tags/search?keyword=${encodeURIComponent(keyword)}`);
+    const response = await fetch(
+      `${API_BASE_URL}/tags/search?keyword=${encodeURIComponent(keyword)}`
+    );
     if (!response.ok) {
       throw new Error('Failed to search tags');
     }
@@ -70,4 +72,4 @@ export const tagService = {
     const { canDelete } = await response.json();
     return canDelete;
   },
-}; 
+};

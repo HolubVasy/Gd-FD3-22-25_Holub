@@ -7,8 +7,11 @@ export const CategoryService = {
     return response.data;
   },
 
-  async searchCategories(name: string, pageNumber = 1, pageSize = 10): 
-  Promise<PagedList<Category>> {
+  async searchCategories(
+    name: string,
+    pageNumber = 1,
+    pageSize = 10
+  ): Promise<PagedList<Category>> {
     const response = await axiosClient.get<PagedList<Category>>('/Category/search', {
       params: { name, pageNumber, pageSize },
     });

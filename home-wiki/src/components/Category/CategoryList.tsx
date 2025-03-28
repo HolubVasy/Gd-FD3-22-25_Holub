@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { useCategories } from '../../hooks/useCategories';
 import {
   List,
@@ -12,11 +12,7 @@ import {
   Chip,
   CircularProgress,
 } from '@mui/material';
-import {
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  Search as SearchIcon,
-} from '@mui/icons-material';
+import { Delete as DeleteIcon, Edit as EditIcon, Search as SearchIcon } from '@mui/icons-material';
 import { Category } from '../../types/models';
 import CategoryEditDialog from './CategoryEditDialog';
 
@@ -94,10 +90,7 @@ const CategoryList: React.FC = () => {
       <List>
         {categories.map((category: Category) => (
           <ListItem key={category.id} divider>
-            <ListItemText
-              primary={category.name}
-              secondary={category.description}
-            />
+            <ListItemText primary={category.name} secondary={category.description} />
             <Box mr={2}>
               <Chip
                 label={`${category.articleCount} articles`}

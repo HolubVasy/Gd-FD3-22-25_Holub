@@ -39,9 +39,7 @@ const CategoryEditDialog: React.FC<CategoryEditDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        {category ? 'Edit Category' : 'Create New Category'}
-      </DialogTitle>
+      <DialogTitle>{category ? 'Edit Category' : 'Create New Category'}</DialogTitle>
       <DialogContent>
         <Box sx={{ pt: 2 }}>
           <TextField
@@ -50,7 +48,7 @@ const CategoryEditDialog: React.FC<CategoryEditDialogProps> = ({
             label="Name"
             fullWidth
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={e => setName(e.target.value)}
             required
           />
           <TextField
@@ -60,7 +58,7 @@ const CategoryEditDialog: React.FC<CategoryEditDialogProps> = ({
             multiline
             rows={3}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={e => setDescription(e.target.value)}
           />
         </Box>
       </DialogContent>
@@ -74,4 +72,4 @@ const CategoryEditDialog: React.FC<CategoryEditDialogProps> = ({
   );
 };
 
-export default CategoryEditDialog; 
+export default CategoryEditDialog;

@@ -4,9 +4,9 @@ export interface Article {
   id: number;
   name: string;
   description: string;
-  category: Category;  
+  category: Category;
   createdBy: string;
-  createdAt: string;  
+  createdAt: string;
   modifiedBy?: string;
   modifiedAt?: string;
 }
@@ -14,6 +14,8 @@ export interface Article {
 export interface Category {
   id: number;
   name: string;
+  articleCount: number;
+  description?: string;
   createdBy: string;
   createdAt: string;
   modifiedBy?: string;
@@ -30,11 +32,10 @@ export interface Tag {
 }
 
 export interface User {
-  
   id: string;
   email: string;
   displayName: string;
-  token?: string; 
+  token?: string;
 }
 
 export interface AuthState {
@@ -55,6 +56,8 @@ export interface CategoryState {
   list: Category[];
   loading: boolean;
   error: string | null;
+  searchQuery: string;
+  selectedCategory: Category | null;
 }
 
 export interface TagState {

@@ -1,4 +1,4 @@
-import { Category } from '../types/models';
+import { Category } from '#/types/models';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -14,7 +14,9 @@ export const categoryService = {
 
   // Search categories by keyword
   async searchCategories(keyword: string): Promise<Category[]> {
-    const response = await fetch(`${API_BASE_URL}/categories/search?keyword=${encodeURIComponent(keyword)}`);
+    const response = await fetch(
+      `${API_BASE_URL}/categories/search?keyword=${encodeURIComponent(keyword)}`
+    );
     if (!response.ok) {
       throw new Error('Failed to search categories');
     }
@@ -81,4 +83,4 @@ export const categoryService = {
     }
     return response.json();
   },
-}; 
+};

@@ -1,6 +1,13 @@
 // src/pages/Tag/Tags.tsx
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, CircularProgress, List, ListItem, ListItemText } from '@mui/material';
+import {
+  Container,
+  Typography,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Tag } from '../../types/models';
 import { TagService } from '../../api/TagService';
@@ -32,7 +39,7 @@ const Tags: React.FC = () => {
         Tags
       </Typography>
       <List>
-        {tags.map((tag) => (
+        {tags.map(tag => (
           <ListItem key={tag.id} component={Link} to={`/tags/${tag.id}`}>
             <ListItemText primary={tag.name} />
           </ListItem>

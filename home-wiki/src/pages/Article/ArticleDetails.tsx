@@ -9,13 +9,13 @@ import { setCurrentArticle } from '../../redux/slices/articleSlice';
 const ArticleDetails: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { currentArticle, loading } = useAppSelector((state) => state.articles);
+  const { currentArticle, loading } = useAppSelector(state => state.articles);
 
   useEffect(() => {
     if (id) {
       dispatch(setCurrentArticle(null));
       // Пример ручного вызова сервиса
-      ArticleService.getById(Number(id)).then((article) => {
+      ArticleService.getById(Number(id)).then(article => {
         dispatch(setCurrentArticle(article));
       });
     }
@@ -35,9 +35,7 @@ const ArticleDetails: React.FC = () => {
         {currentArticle.name}
       </Typography>
       <Typography sx={{ mt: 2 }}>{currentArticle.description}</Typography>
-      <Typography sx={{ mt: 2 }}>
-        Категория: {currentArticle.category?.name}
-      </Typography>
+      <Typography sx={{ mt: 2 }}>Категория: {currentArticle.category?.name}</Typography>
       {/* Можно добавить список тегов и т.д. */}
     </Container>
   );

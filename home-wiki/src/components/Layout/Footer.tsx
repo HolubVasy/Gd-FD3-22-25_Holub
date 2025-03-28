@@ -6,29 +6,29 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Box 
-      component="footer" 
-      sx={{ 
-        py: 3, 
-        px: 2, 
-        mt: 'auto', 
-        backgroundColor: (theme) => theme.palette.grey[100]
+    <Box
+      component="footer"
+      sx={{
+        py: 3,
+        px: 2,
+        mt: 'auto',
+        backgroundColor: theme => theme.palette.grey[100],
       }}
     >
       <Divider sx={{ mb: 3 }} />
       <Container maxWidth="lg">
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            flexDirection: { xs: 'column', sm: 'row' }, 
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
             justifyContent: 'space-between',
             alignItems: { xs: 'center', sm: 'flex-start' },
           }}
         >
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
               alignItems: { xs: 'center', sm: 'flex-start' },
               mb: { xs: 2, sm: 0 },
             }}
@@ -52,7 +52,13 @@ const Footer: React.FC = () => {
               alignItems: { xs: 'center', sm: 'flex-start' },
             }}
           >
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', sm: 'flex-start' } }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: { xs: 'center', sm: 'flex-start' },
+              }}
+            >
               <Typography variant="subtitle1" color="text.primary" gutterBottom>
                 Navigation
               </Typography>
@@ -67,7 +73,13 @@ const Footer: React.FC = () => {
               </Link>
             </Box>
 
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', sm: 'flex-start' } }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: { xs: 'center', sm: 'flex-start' },
+              }}
+            >
               <Typography variant="subtitle1" color="text.primary" gutterBottom>
                 Account
               </Typography>
@@ -88,4 +100,4 @@ const Footer: React.FC = () => {
   );
 };
 
-export default Footer; 
+export default Footer;

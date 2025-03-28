@@ -1,12 +1,12 @@
 // src/pages/Profile.tsx
 import React from 'react';
 import { Container, Typography, Button } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { logout } from '../../redux/slices/authSlice';
+import { useAppDispatch, useAppSelector } from '#/redux/hooks';
+import { logout } from '#/redux/slices/authSlice';
 
 const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector(state => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Articles: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { list, loading, error } = useAppSelector((state) => state.articles);
+  const { list, loading, error } = useAppSelector(state => state.articles);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const Articles: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filtered = list.filter((art) => art.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filtered = list.filter(art => art.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <Container>
@@ -36,7 +36,7 @@ const Articles: React.FC = () => {
       {loading && <CircularProgress />}
       {error && <Typography color="error">{error}</Typography>}
 
-      {filtered.map((article) => (
+      {filtered.map(article => (
         <Box key={article.id} sx={{ mb: 2 }}>
           <Typography variant="h6">
             <Link to={`/articles/${article.id}`}>{article.name}</Link>

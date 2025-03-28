@@ -21,11 +21,11 @@ const searchSlice = createSlice({
       // Keep only last 5 searches
       state.recentSearches = state.recentSearches.slice(0, 5);
     },
-    clearRecentSearches: (state) => {
+    clearRecentSearches: state => {
       state.recentSearches = [];
     },
   },
 });
 
 export const { setCurrentSearch, addRecentSearch, clearRecentSearches } = searchSlice.actions;
-export default searchSlice.reducer; 
+export default searchSlice.reducer;

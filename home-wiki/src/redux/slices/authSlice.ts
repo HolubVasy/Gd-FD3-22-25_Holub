@@ -1,7 +1,7 @@
 // src/redux/slices/authSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { AuthState, User } from '../../types/models';
-import { AuthService } from '../../api';
+import { AuthState, User } from '#/types/models';
+import { AuthService } from '#/api';
 
 const initialState: AuthState = {
   user: null,
@@ -23,17 +23,17 @@ export const login = createAsyncThunk<User, { email: string; password: string }>
   }
 );
 
-export const register = createAsyncThunk<User, { email: string; password: string; displayName: string }>(
-  'auth/register',
-  async ({ email, password, displayName }, { rejectWithValue }) => {
-    try {
-      const user = await AuthService.register(email, password);
-      return user;
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || 'Registration error');
-    }
+export const register = createAsyncThunk<
+  User,
+  { email: string; password: string; displayName: string }
+>('auth/register', async ({ email, password, displayName }, { rejectWithValue }) => {
+  try {
+    const user = await AuthService.register(email, password);
+    return user;
+  } catch (err: any) {
+    return rejectWithValue(err.response?.data?.message || 'Registration error');
   }
-);
+});
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -45,8 +45,8 @@ export const authSlice = createSlice({
       localStorage.removeItem('token');
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(login.pending, (state) => {
+  extraReducers: builder => {
+    builder.addCase(login.pending, state => {
       state.loading = true;
       state.error = null;
     });
@@ -66,7 +66,7 @@ export const authSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
     });
-    builder.addCase(register.pending, (state) => {
+    builder.addCase(register.pending, state => {
       state.loading = true;
       state.error = null;
     });

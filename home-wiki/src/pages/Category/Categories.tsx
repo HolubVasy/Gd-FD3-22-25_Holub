@@ -1,6 +1,13 @@
 // src/pages/Categories.tsx
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, CircularProgress, List, ListItem, ListItemText } from '@mui/material';
+import {
+  Container,
+  Typography,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Category } from '../types/models';
 import { CategoryService } from '../api/CategoryService';
@@ -13,8 +20,8 @@ const Categories: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     CategoryService.getCategories()
-      .then((data) => setCategories(data))
-      .catch((err) => setError(err.message))
+      .then(data => setCategories(data))
+      .catch(err => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
 
@@ -38,7 +45,7 @@ const Categories: React.FC = () => {
         Категории
       </Typography>
       <List>
-        {categories.map((cat) => (
+        {categories.map(cat => (
           <ListItem key={cat.id} button component={Link} to={`/categories/${cat.id}`}>
             <ListItemText primary={cat.name} />
           </ListItem>

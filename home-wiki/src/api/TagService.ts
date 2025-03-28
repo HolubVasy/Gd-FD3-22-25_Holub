@@ -50,8 +50,7 @@ export const TagService = {
     return response.data;
   },
 
-  async searchTags(name: string, pageNumber = 1, pageSize = 10): 
-  Promise<PagedList<Tag>> {
+  async searchTags(name: string, pageNumber = 1, pageSize = 10): Promise<PagedList<Tag>> {
     const response = await axiosClient.get<PagedList<Tag>>('/Tag/search', {
       params: { name, pageNumber, pageSize },
     });

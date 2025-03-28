@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
-  Button, 
-  Box, 
-  IconButton, 
-  Menu, 
-  MenuItem, 
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
   Avatar,
   Container,
   Drawer,
@@ -18,17 +18,17 @@ import {
   ListItemText,
   Divider,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from '@mui/material';
-import { 
-  Menu as MenuIcon, 
+import {
+  Menu as MenuIcon,
   Home as HomeIcon,
   Category as CategoryIcon,
   LibraryBooks as ArticlesIcon,
   Bookmark as BookmarkIcon,
   AccountCircle as AccountIcon,
   Login as LoginIcon,
-  Logout as LogoutIcon
+  Logout as LogoutIcon,
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
@@ -67,26 +67,34 @@ const Header: React.FC = () => {
       <List>
         <ListItem disablePadding>
           <ListItemButton onClick={() => navigateTo('/')}>
-            <ListItemIcon><HomeIcon /></ListItemIcon>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
           <ListItemButton onClick={() => navigateTo('/categories')}>
-            <ListItemIcon><CategoryIcon /></ListItemIcon>
+            <ListItemIcon>
+              <CategoryIcon />
+            </ListItemIcon>
             <ListItemText primary="Categories" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
           <ListItemButton onClick={() => navigateTo('/articles')}>
-            <ListItemIcon><ArticlesIcon /></ListItemIcon>
+            <ListItemIcon>
+              <ArticlesIcon />
+            </ListItemIcon>
             <ListItemText primary="Articles" />
           </ListItemButton>
         </ListItem>
         {isAuthenticated && (
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigateTo('/favorites')}>
-              <ListItemIcon><BookmarkIcon /></ListItemIcon>
+              <ListItemIcon>
+                <BookmarkIcon />
+              </ListItemIcon>
               <ListItemText primary="Favorites" />
             </ListItemButton>
           </ListItem>
@@ -98,13 +106,17 @@ const Header: React.FC = () => {
           <>
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigateTo('/profile')}>
-                <ListItemIcon><AccountIcon /></ListItemIcon>
+                <ListItemIcon>
+                  <AccountIcon />
+                </ListItemIcon>
                 <ListItemText primary="Profile" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton onClick={handleLogout}>
-                <ListItemIcon><LogoutIcon /></ListItemIcon>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
                 <ListItemText primary="Logout" />
               </ListItemButton>
             </ListItem>
@@ -112,7 +124,9 @@ const Header: React.FC = () => {
         ) : (
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigateTo('/auth/login')}>
-              <ListItemIcon><LoginIcon /></ListItemIcon>
+              <ListItemIcon>
+                <LoginIcon />
+              </ListItemIcon>
               <ListItemText primary="Login" />
             </ListItemButton>
           </ListItem>
@@ -148,7 +162,7 @@ const Header: React.FC = () => {
               fontWeight: 700,
               color: 'inherit',
               textDecoration: 'none',
-              flexGrow: isMobile ? 1 : 0
+              flexGrow: isMobile ? 1 : 0,
             }}
           >
             HomeWiki
@@ -182,9 +196,9 @@ const Header: React.FC = () => {
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                 >
-                  <Avatar 
-                    alt={user?.displayName || 'User'} 
-                    src={user?.photoURL || ''} 
+                  <Avatar
+                    alt={user?.displayName || 'User'}
+                    src={user?.photoURL || ''}
                     sx={{ width: 40, height: 40 }}
                   />
                 </IconButton>
@@ -203,10 +217,12 @@ const Header: React.FC = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={() => {
-                    handleClose();
-                    navigate('/profile');
-                  }}>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      navigate('/profile');
+                    }}
+                  >
                     Profile
                   </MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
@@ -222,11 +238,7 @@ const Header: React.FC = () => {
       </Container>
 
       {/* Mobile Navigation Drawer */}
-      <Drawer
-        anchor="left"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
+      <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         {drawerContent}
       </Drawer>
     </AppBar>

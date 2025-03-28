@@ -15,8 +15,8 @@ const TagDetails: React.FC = () => {
     if (id) {
       setLoading(true);
       TagService.getById(Number(id))
-        .then((data) => setTag(data))
-        .catch((err) => setError(err.message))
+        .then(data => setTag(data))
+        .catch(err => setError(err.message))
         .finally(() => setLoading(false));
     }
   }, [id]);

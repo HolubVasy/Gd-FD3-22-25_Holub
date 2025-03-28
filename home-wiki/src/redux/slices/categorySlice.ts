@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CategoryState, Category } from '../../types/models';
+import { CategoryState, Category } from '#/types/models';
 
 const initialState: CategoryState = {
-  categories: [],
+  list: [],
   loading: false,
   error: null,
   searchQuery: '',
@@ -14,19 +14,19 @@ const categorySlice = createSlice({
   initialState,
   reducers: {
     setCategories: (state, action: PayloadAction<Category[]>) => {
-      state.categories = action.payload;
+      state.list = action.payload;
     },
     addCategory: (state, action: PayloadAction<Category>) => {
-      state.categories.push(action.payload);
+      state.list.push(action.payload);
     },
     updateCategory: (state, action: PayloadAction<Category>) => {
-      const index = state.categories.findIndex(cat => cat.id === action.payload.id);
+      const index = state.list.findIndex(cat => cat.id === action.payload.id);
       if (index !== -1) {
-        state.categories[index] = action.payload;
+        state.list[index] = action.payload;
       }
     },
-    deleteCategory: (state, action: PayloadAction<string>) => {
-      state.categories = state.categories.filter(cat => cat.id !== action.payload);
+    deleteCategory: (state, action: PayloadAction<number>) => {
+      state.list = state.list.filter(cat => cat.id !== action.payload);
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
@@ -40,14 +40,14 @@ const categorySlice = createSlice({
     setSelectedCategory: (state, action: PayloadAction<Category | null>) => {
       state.selectedCategory = action.payload;
     },
-    incrementArticleCount: (state, action: PayloadAction<string>) => {
-      const category = state.categories.find(c => c.id === action.payload);
+    incrementArticleCount: (state, action: PayloadAction<number>) => {
+      const category = state.list.find(c => c.id === action.payload);
       if (category) {
         category.articleCount += 1;
       }
     },
-    decrementArticleCount: (state, action: PayloadAction<string>) => {
-      const category = state.categories.find(c => c.id === action.payload);
+    decrementArticleCount: (state, action: PayloadAction<number>) => {
+      const category = state.list.find(c => c.id === action.payload);
       if (category && category.articleCount > 0) {
         category.articleCount -= 1;
       }
@@ -68,4 +68,4 @@ export const {
   decrementArticleCount,
 } = categorySlice.actions;
 
-export default categorySlice.reducer; 
+export default categorySlice.reducer;

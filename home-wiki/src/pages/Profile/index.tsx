@@ -9,13 +9,11 @@ const Profile: React.FC = () => {
           Profile
         </Typography>
         <Paper sx={{ p: 3 }}>
-          <Typography variant="body1">
-            User profile information will be displayed here.
-          </Typography>
+          <Typography variant="body1">User profile information will be displayed here.</Typography>
         </Paper>
       </Box>
     </Container>
   );
 };
 
-export default Profile; 
+export default Profile;

@@ -8,22 +8,20 @@ import { useAuth } from '../../hooks/useAuth';
 const AuthPage: React.FC = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
-  
+
   // If user is already authenticated, redirect to home
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
-  
+
   // Determine which form to show based on the path
   const isLoginPath = location.pathname === '/auth/login';
-  
+
   return (
     <Container maxWidth="lg">
-      <Box sx={{ py: 4 }}>
-        {isLoginPath ? <Login /> : <Register />}
-      </Box>
+      <Box sx={{ py: 4 }}>{isLoginPath ? <Login /> : <Register />}</Box>
     </Container>
   );
 };
 
-export default AuthPage; 
+export default AuthPage;

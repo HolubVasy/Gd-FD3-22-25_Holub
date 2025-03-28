@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isAuthenticated, loading, error } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, loading, error } = useAppSelector(state => state.auth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,7 +33,7 @@ const Login: React.FC = () => {
           required
           sx={{ mt: 2 }}
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
         />
         <TextField
           label="Пароль"
@@ -42,7 +42,7 @@ const Login: React.FC = () => {
           required
           sx={{ mt: 2 }}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
         />
         {error && <Typography color="error">{error}</Typography>}
         <Button type="submit" variant="contained" sx={{ mt: 2 }} disabled={loading}>

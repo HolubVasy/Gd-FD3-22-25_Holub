@@ -15,20 +15,20 @@ const Layout: React.FC = () => {
     >
       <CssBaseline />
       <Header />
-      
-      <Box 
-        component="main" 
-        sx={{ 
+
+      <Box
+        component="main"
+        sx={{
           flexGrow: 1,
-          pb: 4
+          pb: 4,
         }}
       >
         <Outlet />
       </Box>
-      
+
       <Footer />
     </Box>
   );
 };
 
-export default Layout; 
+export default Layout;

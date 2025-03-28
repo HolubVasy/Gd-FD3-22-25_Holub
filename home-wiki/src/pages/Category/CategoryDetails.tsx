@@ -38,9 +38,7 @@ const CategoryDetails: React.FC = () => {
       <Typography variant="h4" sx={{ mt: 2 }}>
         {category.name}
       </Typography>
-      <Typography sx={{ mt: 2 }}>
-        {category.description}
-      </Typography>
+      <Typography sx={{ mt: 2 }}>{category.description}</Typography>
     </Container>
   );
 };
