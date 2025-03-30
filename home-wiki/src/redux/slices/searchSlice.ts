@@ -4,6 +4,8 @@ import { SearchState } from '../../types/models';
 const initialState: SearchState = {
   recentSearches: [],
   currentSearch: '',
+  loading: false,
+  error: null
 };
 
 const searchSlice = createSlice({

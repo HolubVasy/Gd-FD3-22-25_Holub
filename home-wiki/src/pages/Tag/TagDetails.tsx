@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, CircularProgress } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { Tag } from '../types/models';
-import { TagService } from '../api/TagService';
+import { Tag } from '#/types/models';
+import { TagService } from '#/api/TagService';
 
 const TagDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();

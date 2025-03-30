@@ -15,12 +15,36 @@ import {
   QueryDocumentSnapshot,
   Query,
 } from 'firebase/firestore';
-import { Article } from '../types/models';
+import { Article, Tag, Category } from '../types/models';
+import axios from 'axios';
 
 const ARTICLES_COLLECTION = 'articles';
 const PAGE_SIZE = 10;
+const BASE_API_URL = 'https://homewiki.azurewebsites.net/api';
 
 export const api = {
+  // Tags API
+  async getTags() {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/tag`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching tags:', error);
+      throw error;
+    }
+  },
+
+  // Categories API
+  async getCategories() {
+    try {
+      const response = await axios.get(`${BASE_API_URL}/Category`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      throw error;
+    }
+  },
+
   // Get articles with pagination and search
   async getArticles(page: number = 1, searchQuery: string = '', lastDoc?: QueryDocumentSnapshot) {
     try {
@@ -42,10 +66,19 @@ export const api = {
       }
 
       const snapshot = await getDocs(q);
-      const articles = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Article[];
+      const articles = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: Number(doc.id),
+          name: data.name || '',
+          description: data.description || '',
+          category: data.category || { id: 0, name: '', articleCount: 0, createdBy: '', createdAt: '' },
+          createdBy: data.createdBy || '',
+          createdAt: data.createdAt || new Date().toISOString(),
+          modifiedBy: data.modifiedBy,
+          modifiedAt: data.modifiedAt
+        } as Article;
+      });
 
       return {
         articles,
@@ -68,9 +101,16 @@ export const api = {
         throw new Error('Article not found');
       }
 
+      const data = docSnap.data();
       return {
-        id: docSnap.id,
-        ...docSnap.data(),
+        id: Number(docSnap.id),
+        name: data.name || '',
+        description: data.description || '',
+        category: data.category || { id: 0, name: '', articleCount: 0, createdBy: '', createdAt: '' },
+        createdBy: data.createdBy || '',
+        createdAt: data.createdAt || new Date().toISOString(),
+        modifiedBy: data.modifiedBy,
+        modifiedAt: data.modifiedAt
       } as Article;
     } catch (error) {
       console.error('Error fetching article:', error);

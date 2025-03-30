@@ -9,8 +9,8 @@ import {
   ListItemText,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Category } from '../types/models';
-import { CategoryService } from '../api/CategoryService';
+import { Category } from '#/types/models';
+import { CategoryService } from '#/api/CategoryService';
 
 const Categories: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -46,7 +46,7 @@ const Categories: React.FC = () => {
       </Typography>
       <List>
         {categories.map(cat => (
-          <ListItem key={cat.id} button component={Link} to={`/categories/${cat.id}`}>
+          <ListItem key={cat.id} component={Link} to={`/categories/${cat.id}`}>
             <ListItemText primary={cat.name} />
           </ListItem>
         ))}

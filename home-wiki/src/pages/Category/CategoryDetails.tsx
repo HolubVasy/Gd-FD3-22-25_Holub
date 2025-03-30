@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, CircularProgress } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { Category } from '../types/models';
-import { CategoryService } from '../api/CategoryService';
+import { Category } from '#/types/models';
+import { CategoryService } from '#/api/CategoryService';
 
 const CategoryDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useCategories } from '../../hooks/useCategories';
+import { useCategories } from '#/hooks/useCategories';
 import {
   List,
   ListItem,
@@ -13,7 +13,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { Delete as DeleteIcon, Edit as EditIcon, Search as SearchIcon } from '@mui/icons-material';
-import { Category } from '../../types/models';
+import { Category } from '#/types/models';
 import CategoryEditDialog from './CategoryEditDialog';
 
 const CategoryList: React.FC = () => {

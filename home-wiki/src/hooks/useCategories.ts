@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 
 export const useCategories = () => {
   const dispatch = useDispatch();
-  const { categories, loading, error, searchQuery, selectedCategory } = useSelector(
+  const { list: categories, loading, error, searchQuery, selectedCategory } = useSelector(
     (state: RootState) => state.categories
   );
 
@@ -69,7 +69,7 @@ export const useCategories = () => {
   );
 
   const updateCategoryName = useCallback(
-    async (id: string, name: string, description?: string) => {
+    async (id: number, name: string, description?: string) => {
       try {
         dispatch(setLoading(true));
         const updatedCategory = await categoryService.updateCategory(id, name, description);
@@ -86,7 +86,7 @@ export const useCategories = () => {
   );
 
   const removeCategory = useCallback(
-    async (id: string) => {
+    async (id: number) => {
       try {
         dispatch(setLoading(true));
         const canDelete = await categoryService.canDeleteCategory(id);

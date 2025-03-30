@@ -39,7 +39,7 @@ export const categoryService = {
   },
 
   // Update category
-  async updateCategory(id: string, name: string, description?: string): Promise<Category> {
+  async updateCategory(id: number, name: string, description?: string): Promise<Category> {
     const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
       method: 'PUT',
       headers: {
@@ -54,7 +54,7 @@ export const categoryService = {
   },
 
   // Delete category
-  async deleteCategory(id: string): Promise<void> {
+  async deleteCategory(id: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
       method: 'DELETE',
     });
@@ -64,7 +64,7 @@ export const categoryService = {
   },
 
   // Check if category can be deleted (no articles using it)
-  async canDeleteCategory(id: string): Promise<boolean> {
+  async canDeleteCategory(id: number): Promise<boolean> {
     const response = await fetch(`${API_BASE_URL}/categories/${id}/can-delete`);
     if (!response.ok) {
       throw new Error('Failed to check category deletion possibility');

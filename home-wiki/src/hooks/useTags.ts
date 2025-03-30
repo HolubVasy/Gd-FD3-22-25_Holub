@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { tagService } from '../services/tagService';
+import { RootState } from '#/redux/store';
+import { tagService } from '#/services/tagService';
 import {
   setTags,
   addTag,
@@ -10,12 +10,12 @@ import {
   setLoading,
   setError,
   setSearchQuery,
-} from '../redux/slices/tagSlice';
+} from '#/redux/slices/tagSlice';
 import { toast } from 'react-toastify';
 
 export const useTags = () => {
   const dispatch = useDispatch();
-  const { tags, loading, error, searchQuery } = useSelector((state: RootState) => state.tags);
+  const { list: tags, loading, error, searchQuery } = useSelector((state: RootState) => state.tags);
 
   const fetchTags = useCallback(async () => {
     try {
@@ -84,20 +84,15 @@ export const useTags = () => {
   const removeTag = useCallback(
     async (id: string) => {
       try {
-        dispatch(setLoading(true));
-        const canDelete = await tagService.canDeleteTag(id);
-        if (!canDelete) {
-          toast.error('Cannot delete tag: it is being used in articles');
+        if (!window.confirm('Are you sure you want to delete this tag?')) {
           return;
         }
         await tagService.deleteTag(id);
-        dispatch(deleteTag(id));
+        dispatch(deleteTag(Number(id)));
         toast.success('Tag deleted successfully');
       } catch (err) {
         dispatch(setError(err instanceof Error ? err.message : 'Failed to delete tag'));
         toast.error('Failed to delete tag');
-      } finally {
-        dispatch(setLoading(false));
       }
     },
     [dispatch]

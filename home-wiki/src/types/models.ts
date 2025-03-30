@@ -29,13 +29,17 @@ export interface Tag {
   createdAt: string;
   modifiedBy?: string;
   modifiedAt?: string;
+  usageCount: number;
 }
 
 export interface User {
   id: string;
   email: string;
   displayName: string;
+  photoURL: string;
   token?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AuthState {
@@ -62,6 +66,14 @@ export interface CategoryState {
 
 export interface TagState {
   list: Tag[];
+  loading: boolean;
+  error: string | null;
+  searchQuery: string;
+}
+
+export interface SearchState {
+  recentSearches: string[];
+  currentSearch: string;
   loading: boolean;
   error: string | null;
 }

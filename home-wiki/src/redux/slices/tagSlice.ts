@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TagState, Tag } from '../../types/models';
 
 const initialState: TagState = {
-  tags: [],
+  list: [],
   loading: false,
   error: null,
   searchQuery: '',
@@ -13,19 +13,19 @@ const tagSlice = createSlice({
   initialState,
   reducers: {
     setTags: (state, action: PayloadAction<Tag[]>) => {
-      state.tags = action.payload;
+      state.list = action.payload;
     },
     addTag: (state, action: PayloadAction<Tag>) => {
-      state.tags.push(action.payload);
+      state.list.push(action.payload);
     },
     updateTag: (state, action: PayloadAction<Tag>) => {
-      const index = state.tags.findIndex(tag => tag.id === action.payload.id);
+      const index = state.list.findIndex(tag => tag.id === action.payload.id);
       if (index !== -1) {
-        state.tags[index] = action.payload;
+        state.list[index] = action.payload;
       }
     },
-    deleteTag: (state, action: PayloadAction<string>) => {
-      state.tags = state.tags.filter(tag => tag.id !== action.payload);
+    deleteTag: (state, action: PayloadAction<number>) => {
+      state.list = state.list.filter(tag => tag.id !== action.payload);
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
@@ -36,16 +36,16 @@ const tagSlice = createSlice({
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
-    incrementTagUsage: (state, action: PayloadAction<string>) => {
-      const tag = state.tags.find(t => t.id === action.payload);
+    incrementTagUsage: (state, action: PayloadAction<number>) => {
+      const tag = state.list.find(t => t.id === action.payload);
       if (tag) {
-        tag.usageCount += 1;
+        tag.usageCount = (tag.usageCount || 0) + 1;
       }
     },
-    decrementTagUsage: (state, action: PayloadAction<string>) => {
-      const tag = state.tags.find(t => t.id === action.payload);
-      if (tag && tag.usageCount > 0) {
-        tag.usageCount -= 1;
+    decrementTagUsage: (state, action: PayloadAction<number>) => {
+      const tag = state.list.find(t => t.id === action.payload);
+      if (tag) {
+        tag.usageCount = Math.max(0, (tag.usageCount || 0) - 1);
       }
     },
   },
