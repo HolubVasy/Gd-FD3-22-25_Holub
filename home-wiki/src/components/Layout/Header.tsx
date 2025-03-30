@@ -4,7 +4,13 @@ import { Link as RouterLink } from 'react-router-dom';
 
 const Header = () => {
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: '#1976d2' }}>
+    <AppBar 
+      position="sticky" 
+      sx={{ 
+        backgroundColor: '#1976d2',
+        borderRadius: 0
+      }}
+    >
       <Toolbar>
         <Typography
           variant="h6"

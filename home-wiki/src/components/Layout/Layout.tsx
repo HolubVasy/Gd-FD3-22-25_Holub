@@ -13,16 +13,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
       <Header />
       <Box component="main" sx={{ flex: 1, py: 3 }}>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item xs={2}>
             <Box sx={{ 
               backgroundColor: 'white',
               borderRight: '1px solid #e0e0e0',
-              position: 'fixed',
-              width: '16.666%',
-              overflowY: 'auto',
-              top: '64px', // Header height
-              bottom: '200px', // Footer height + some padding
+              height: '100%',
+              borderRadius: '0 8px 8px 0',
               '&::-webkit-scrollbar': {
                 width: '8px',
               },
@@ -41,9 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Container maxWidth="xl" sx={{ 
               backgroundColor: 'white',
               borderRadius: 1,
-              p: 3,
-              ml: 2,
-              mb: 3 // Add bottom margin
+              p: 3
             }}>
               {children}
             </Container>
