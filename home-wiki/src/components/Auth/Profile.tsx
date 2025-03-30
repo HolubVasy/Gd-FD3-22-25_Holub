@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -10,71 +10,43 @@ import {
   Divider,
 } from '@mui/material';
 import { useAuth } from '#/hooks/useAuth';
-import { storage } from '#/services/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const Profile: React.FC = () => {
-  const { user, isAuthenticated, loading, updateUserProfile, logout } = useAuth();
-
-  const [displayName, setDisplayName] = useState('');
+  const { user, loading, updateUserProfile, logout } = useAuth();
+  const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [formChanged, setFormChanged] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (user) {
-      setDisplayName(user.displayName);
-    }
-  }, [user]);
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
       setAvatarFile(file);
-      setAvatarPreview(URL.createObjectURL(file));
-      setFormChanged(true);
+      
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayName(e.target.value);
-    setFormChanged(true);
-  };
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!user) return;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    let photoURL = user?.photoURL;
-
-    if (avatarFile) {
-      try {
-        setUploadingImage(true);
-
-        // Create a unique file name
-        const fileName = `avatars/${user?.id}_${new Date().getTime()}`;
-        const storageRef = ref(storage, fileName);
-
-        // Upload the file
-        await uploadBytes(storageRef, avatarFile);
-
-        // Get download URL
-        photoURL = await getDownloadURL(storageRef);
-      } catch (error) {
-        console.error('Error uploading avatar:', error);
-      } finally {
-        setUploadingImage(false);
-      }
+    try {
+      // For now, just use the preview URL as the avatar URL
+      await updateUserProfile(displayName, previewUrl || undefined);
+    } catch (error) {
+      console.error('Error updating profile:', error);
     }
-
-    await updateUserProfile(displayName, photoURL || undefined);
-    setFormChanged(false);
   };
 
-  if (!isAuthenticated) {
+  if (loading) {
     return (
-      <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Typography variant="h5">Please sign in to view your profile</Typography>
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+        <CircularProgress />
       </Box>
     );
   }
@@ -96,7 +68,7 @@ const Profile: React.FC = () => {
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
           <Avatar
-            src={avatarPreview || user?.photoURL || ''}
+            src={previewUrl || user?.photoURL}
             alt={user?.displayName || 'User avatar'}
             sx={{ width: 100, height: 100 }}
           />
@@ -109,7 +81,7 @@ const Profile: React.FC = () => {
               style={{ display: 'none' }}
               id="avatar-upload"
               type="file"
-              onChange={handleImageChange}
+              onChange={handleAvatarChange}
             />
             <label htmlFor="avatar-upload">
               <Button variant="outlined" component="span">
@@ -133,7 +105,7 @@ const Profile: React.FC = () => {
             fullWidth
             margin="normal"
             value={displayName}
-            onChange={handleDisplayNameChange}
+            onChange={(e) => setDisplayName(e.target.value)}
             required
           />
 
@@ -143,10 +115,10 @@ const Profile: React.FC = () => {
             color="primary"
             fullWidth
             size="large"
-            disabled={loading || uploadingImage || !formChanged}
+            disabled={loading}
             sx={{ mt: 3 }}
           >
-            {loading || uploadingImage ? <CircularProgress size={24} /> : 'Update Profile'}
+            Update Profile
           </Button>
         </Box>
 

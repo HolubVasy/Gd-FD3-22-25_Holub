@@ -1,57 +1,37 @@
 import React from 'react';
-import { Container, Typography, Paper, Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
-const MainPage: React.FC = () => {
+const MainPage = () => {
   return (
-    <Container maxWidth="lg">
-      <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Welcome to Home Wiki
-        </Typography>
-        
-        <Typography variant="body1" paragraph>
-          This is an internal wiki project for families that will collect all the necessary information 
-          for home maintenance and care. In this wiki, we collect instructions for maintaining household 
-          appliances so that it would be clear to every family member how to properly use and maintain devices.
-        </Typography>
+    <Box>
+      <Typography variant="h4" gutterBottom sx={{ color: 'text.primary' }}>
+        Добро пожаловать в HomeWiki!
+      </Typography>
+      
+      <Typography variant="body1" sx={{ mb: 2, color: 'text.secondary' }}>
+        Это главная страница (статическая).
+      </Typography>
 
-        <Typography variant="body1" paragraph>
-          The project includes sections on:
-        </Typography>
+      <Typography variant="body1" paragraph sx={{ color: 'text.primary' }}>
+        Мой проект — это внутреннее вики-приложение для семьи, которое будет собирать всю необходимую информацию для обслуживания и ухода за домом. В этом вики мы собираем инструкции по уходу за бытовой техникой, чтобы каждому члену семьи было понятно, как правильно использовать и обслуживать устройства.
+      </Typography>
 
-        <Box component="ul" sx={{ pl: 4 }}>
-          <Typography component="li">
-            Plants and gardening - from planting to caring for indoor plants and garden maintenance
-          </Typography>
-          <Typography component="li">
-            Household appliance maintenance and care instructions
-          </Typography>
-          <Typography component="li">
-            Home decoration and interior design tips
-          </Typography>
-          <Typography component="li">
-            Cleaning and organization guides
-          </Typography>
-          <Typography component="li">
-            Family event planning and organization
-          </Typography>
-          <Typography component="li">
-            Home repair and maintenance guides
-          </Typography>
-        </Box>
+      <Typography variant="body1" paragraph sx={{ color: 'text.primary' }}>
+        Также будет раздел, посвященный растениям — от полива и пересадки комнатных цветов до ухода за садовыми растениями в сезон. Важной частью проекта станет создание удобных уголков для отдыха в доме: советы по выбору мебели, организации пространства и декорированию.
+      </Typography>
 
-        <Typography variant="body1" paragraph sx={{ mt: 2 }}>
-          All information is organized with categories and tags for easy navigation. You can browse 
-          articles by category or search for specific topics using tags. Each article provides clear, 
-          step-by-step instructions with photos and diagrams where necessary.
-        </Typography>
+      <Typography variant="body1" paragraph sx={{ color: 'text.primary' }}>
+        Также будет раздел с рекомендациями по организации питания: рецепты, хранение продуктов, советы по поддержанию порядка на кухне. Для каждого члена семьи будут доступны инструкции по очистке, уходу за мебелью и коврами, а также по поддержанию чистоты в ванной и других комнатах.
+      </Typography>
 
-        <Typography variant="body1">
-          Start exploring by selecting a category from the sidebar or using the search function to 
-          find specific information.
-        </Typography>
-      </Paper>
-    </Container>
+      <Typography variant="body1" paragraph sx={{ color: 'text.primary' }}>
+        Вики также включает раздел с рекомендациями по проведению досуга и созданию уютной атмосферы, будь то организация семейных праздников или создание зоны для вечерних посиделок. Вся информация будет собрана в доступной и понятной форме с шаг за шагом инструкциями, схемами и фотографиями.
+      </Typography>
+
+      <Typography variant="body1" sx={{ color: 'text.primary' }}>
+        Проект будет регулярно обновляться, добавляя новые советы и идеи. Также можно будет создавать заметки и дополнения, чтобы все члены семьи могли обмениваться полезной информацией и опытом. Вики будет иметь раздел с контактной информацией на случай экстренных ситуаций, таких как вызов мастера или службы ремонта. Всё это поможет семье поддерживать порядок и уют в доме с минимальными усилиями.
+      </Typography>
+    </Box>
   );
 };
 

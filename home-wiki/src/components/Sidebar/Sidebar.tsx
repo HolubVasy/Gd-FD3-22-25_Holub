@@ -1,109 +1,133 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemText,
-  Collapse,
-  IconButton,
-  Typography,
-  CircularProgress,
-  ListItemButton,
-} from '@mui/material';
+import { Box, Typography, List, ListItemButton, ListItemText, Collapse, CircularProgress } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { api } from '#/services/api';
+import { useAppSelector, useAppDispatch } from '#/redux/hooks';
+import { Link as RouterLink } from 'react-router-dom';
 import { Category, Tag } from '#/types/models';
+import { setCategories, setLoading as setCategoriesLoading } from '#/redux/slices/categorySlice';
+import { setTags, setLoading as setTagsLoading } from '#/redux/slices/tagSlice';
+import axios from 'axios';
 
-const Sidebar: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [openCategories, setOpenCategories] = useState(true);
-  const [openTags, setOpenTags] = useState(false);
+const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
+
+const Sidebar = () => {
+  const [categoriesOpen, setCategoriesOpen] = useState(true);
+  const [tagsOpen, setTagsOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  
+  const categories = useAppSelector((state) => state.categories.list);
+  const tags = useAppSelector((state) => state.tags.list);
+  const loading = useAppSelector((state) => state.categories.loading || state.tags.loading);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const [categoriesData, tagsData] = await Promise.all([
-          api.getCategories(),
-          api.getTags(),
+        dispatch(setCategoriesLoading(true));
+        dispatch(setTagsLoading(true));
+
+        const [categoriesResponse, tagsResponse] = await Promise.all([
+          axios.get(`${API_BASE_URL}/category`),
+          axios.get(`${API_BASE_URL}/tag`)
         ]);
-        setCategories(categoriesData);
-        setTags(tagsData);
-      } catch (err) {
-        setError('Failed to fetch data');
-        console.error(err);
+
+        dispatch(setCategories(categoriesResponse.data));
+        dispatch(setTags(tagsResponse.data));
+      } catch (error) {
+        console.error('Error fetching data:', error);
       } finally {
-        setLoading(false);
+        dispatch(setCategoriesLoading(false));
+        dispatch(setTagsLoading(false));
       }
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   const handleCategoriesClick = () => {
-    setOpenCategories(!openCategories);
-    setOpenTags(false);
+    setCategoriesOpen(!categoriesOpen);
   };
 
   const handleTagsClick = () => {
-    setOpenTags(!openTags);
-    setOpenCategories(false);
+    setTagsOpen(!tagsOpen);
   };
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" p={2}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
         <CircularProgress />
       </Box>
     );
   }
 
-  if (error) {
-    return (
-      <Box p={2}>
-        <Typography color="error">{error}</Typography>
-      </Box>
-    );
-  }
-
   return (
-    <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      <List component="nav">
+    <Box sx={{ 
+      backgroundColor: 'white',
+      borderRadius: 1,
+      boxShadow: '0 1px 3px rgba(0,0,0,0.12)'
+    }}>
+      <List component="nav" sx={{ p: 0 }}>
         {/* Categories Section */}
         <ListItemButton onClick={handleCategoriesClick}>
-          <ListItemText primary="Categories" />
-          {openCategories ? <ExpandLess /> : <ExpandMore />}
+          <ListItemText 
+            primary="Categories" 
+            primaryTypographyProps={{
+              sx: { fontWeight: categoriesOpen ? 'bold' : 'normal' }
+            }}
+          />
+          {categoriesOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
-        <Collapse in={openCategories} timeout="auto" unmountOnExit>
+        <Collapse in={categoriesOpen} timeout="auto">
           <List component="div" disablePadding>
-            {categories.map((category) => (
-              <ListItem key={category.id} sx={{ pl: 4 }}>
+            {categories.map((category: Category) => (
+              <ListItemButton 
+                key={category.id}
+                component={RouterLink}
+                to={`/categories/${category.id}`}
+                sx={{ pl: 4 }}
+              >
                 <ListItemText 
                   primary={category.name}
-                  secondary={`Articles: ${category.articleCount}`}
+                  sx={{
+                    '& .MuiTypography-root': {
+                      fontSize: '0.9rem',
+                      color: '#666'
+                    }
+                  }}
                 />
-              </ListItem>
+              </ListItemButton>
             ))}
           </List>
         </Collapse>
 
         {/* Tags Section */}
         <ListItemButton onClick={handleTagsClick}>
-          <ListItemText primary="Tags" />
-          {openTags ? <ExpandLess /> : <ExpandMore />}
+          <ListItemText 
+            primary="Tags" 
+            primaryTypographyProps={{
+              sx: { fontWeight: tagsOpen ? 'bold' : 'normal' }
+            }}
+          />
+          {tagsOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
-        <Collapse in={openTags} timeout="auto" unmountOnExit>
+        <Collapse in={tagsOpen} timeout="auto">
           <List component="div" disablePadding>
-            {tags.map((tag) => (
-              <ListItem key={tag.id} sx={{ pl: 4 }}>
+            {tags.map((tag: Tag) => (
+              <ListItemButton 
+                key={tag.id}
+                component={RouterLink}
+                to={`/tags/${tag.id}`}
+                sx={{ pl: 4 }}
+              >
                 <ListItemText 
                   primary={tag.name}
-                  secondary={`Usage: ${tag.usageCount}`}
+                  sx={{
+                    '& .MuiTypography-root': {
+                      fontSize: '0.9rem',
+                      color: '#666'
+                    }
+                  }}
                 />
-              </ListItem>
+              </ListItemButton>
             ))}
           </List>
         </Collapse>

@@ -1,98 +1,142 @@
 import React from 'react';
-import { Box, Container, Typography, Link, Divider } from '@mui/material';
+import { Box, Container, Link, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
-const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
-
+const Footer = () => {
   return (
-    <Box
-      component="footer"
-      sx={{
-        py: 3,
-        px: 2,
-        mt: 'auto',
-        backgroundColor: theme => theme.palette.grey[100],
+    <Box 
+      component="footer" 
+      sx={{ 
+        backgroundColor: '#607d8b',
+        color: 'white',
+        py: 2
       }}
     >
-      <Divider sx={{ mb: 3 }} />
       <Container maxWidth="lg">
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            justifyContent: 'space-between',
-            alignItems: { xs: 'center', sm: 'flex-start' },
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: { xs: 'center', sm: 'flex-start' },
-              mb: { xs: 2, sm: 0 },
-            }}
-          >
-            <Typography variant="h6" color="text.primary" gutterBottom>
-              HomeWiki
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Your personal knowledge base
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              &copy; {currentYear} HomeWiki. All rights reserved.
-            </Typography>
+        <Box sx={{ 
+          display: 'flex',
+          gap: 4
+        }}>
+          {/* Documents section */}
+          <Box>
+            <Typography sx={{ fontWeight: 'bold', mb: 1 }}>Documents</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+              <Link 
+                component={RouterLink} 
+                to="/articles" 
+                sx={{ 
+                  color: 'white', 
+                  textDecoration: 'none',
+                  '&:hover': { textDecoration: 'underline' }
+                }}
+              >
+                Article
+              </Link>
+              <Link 
+                component={RouterLink} 
+                to="/categories" 
+                sx={{ 
+                  color: 'white', 
+                  textDecoration: 'none',
+                  '&:hover': { textDecoration: 'underline' }
+                }}
+              >
+                Category
+              </Link>
+              <Link 
+                component={RouterLink} 
+                to="/tags" 
+                sx={{ 
+                  color: 'white', 
+                  textDecoration: 'none',
+                  '&:hover': { textDecoration: 'underline' }
+                }}
+              >
+                Tag
+              </Link>
+            </Box>
           </Box>
 
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
-              gap: { xs: 1, sm: 4 },
-              alignItems: { xs: 'center', sm: 'flex-start' },
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: { xs: 'center', sm: 'flex-start' },
-              }}
-            >
-              <Typography variant="subtitle1" color="text.primary" gutterBottom>
-                Navigation
-              </Typography>
-              <Link component={RouterLink} to="/" color="inherit" underline="hover">
-                Home
-              </Link>
-              <Link component={RouterLink} to="/categories" color="inherit" underline="hover">
-                Categories
-              </Link>
-              <Link component={RouterLink} to="/articles" color="inherit" underline="hover">
-                Articles
+          {/* Infor section */}
+          <Box>
+            <Typography sx={{ fontWeight: 'bold', mb: 1 }}>Infor</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+              <Link 
+                component={RouterLink} 
+                to="/" 
+                sx={{ 
+                  color: 'white',
+                  textDecoration: 'none',
+                  '&:hover': { textDecoration: 'underline' }
+                }}
+              >
+                Main
               </Link>
             </Box>
+          </Box>
+        </Box>
 
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: { xs: 'center', sm: 'flex-start' },
+        {/* Bottom section */}
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mt: 2,
+          pt: 2,
+          borderTop: '1px solid rgba(255,255,255,0.1)'
+        }}>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Link 
+              component={RouterLink} 
+              to="/contact" 
+              sx={{ 
+                color: 'white', 
+                textDecoration: 'none',
+                '&:hover': { textDecoration: 'underline' }
               }}
             >
-              <Typography variant="subtitle1" color="text.primary" gutterBottom>
-                Account
-              </Typography>
-              <Link component={RouterLink} to="/auth/login" color="inherit" underline="hover">
-                Login
-              </Link>
-              <Link component={RouterLink} to="/auth/register" color="inherit" underline="hover">
-                Register
-              </Link>
-              <Link component={RouterLink} to="/profile" color="inherit" underline="hover">
-                Profile
-              </Link>
-            </Box>
+              Contact us
+            </Link>
+            <Link 
+              component={RouterLink} 
+              to="/privacy" 
+              sx={{ 
+                color: 'white', 
+                textDecoration: 'none',
+                '&:hover': { textDecoration: 'underline' }
+              }}
+            >
+              Privacy & cookies
+            </Link>
+            <Link 
+              component={RouterLink} 
+              to="/terms" 
+              sx={{ 
+                color: 'white', 
+                textDecoration: 'none',
+                '&:hover': { textDecoration: 'underline' }
+              }}
+            >
+              Terms of use
+            </Link>
+          </Box>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <Typography>2025 Vasili Holub</Typography>
+            <Link 
+              component={RouterLink} 
+              to="/language" 
+              sx={{ 
+                color: 'white', 
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.5,
+                '&:hover': { textDecoration: 'underline' }
+              }}
+            >
+              <span>🌐</span>
+              English
+            </Link>
           </Box>
         </Box>
       </Container>
