@@ -86,6 +86,69 @@ export const fetchTagById = createAsyncThunk<
   }
 );
 
+export const addTag = createAsyncThunk<
+  Tag,
+  Omit<Tag, 'id'>,
+  { rejectValue: string }
+>(
+  'tags/addTag',
+  async (tag, { rejectWithValue }) => {
+    try {
+      const response = await axios.post<Tag>(
+        `${API_BASE_URL}/tag`,
+        tag
+      );
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to add tag'
+      );
+    }
+  }
+);
+
+export const updateTag = createAsyncThunk<
+  Tag,
+  Tag,
+  { rejectValue: string }
+>(
+  'tags/updateTag',
+  async (tag, { rejectWithValue }) => {
+    try {
+      const response = await axios.put<Tag>(
+        `${API_BASE_URL}/tag/${tag.id}`,
+        tag
+      );
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to update tag'
+      );
+    }
+  }
+);
+
+export const deleteTag = createAsyncThunk<
+  number,
+  number,
+  { rejectValue: string }
+>(
+  'tags/deleteTag',
+  async (id: number, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/tag/${id}`);
+      return id;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to delete tag'
+      );
+    }
+  }
+);
+
 const tagSlice = createSlice({
   name: 'tags',
   initialState,
@@ -139,6 +202,54 @@ const tagSlice = createSlice({
       state.loading = false;
       state.error = action.payload ?? 'Failed to fetch tag';
       state.currentTag = null;
+    });
+
+    // Add tag
+    builder.addCase(addTag.pending, state => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(addTag.fulfilled, (state, action) => {
+      state.loading = false;
+      state.list.push(action.payload);
+      state.error = null;
+    });
+    builder.addCase(addTag.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload ?? 'Failed to add tag';
+    });
+
+    // Update tag
+    builder.addCase(updateTag.pending, state => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(updateTag.fulfilled, (state, action) => {
+      state.loading = false;
+      const index = state.list.findIndex(tag => tag.id === action.payload.id);
+      if (index !== -1) {
+        state.list[index] = action.payload;
+      }
+      state.error = null;
+    });
+    builder.addCase(updateTag.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload ?? 'Failed to update tag';
+    });
+
+    // Delete tag
+    builder.addCase(deleteTag.pending, state => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteTag.fulfilled, (state, action) => {
+      state.loading = false;
+      state.list = state.list.filter(tag => tag.id !== action.payload);
+      state.error = null;
+    });
+    builder.addCase(deleteTag.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload ?? 'Failed to delete tag';
     });
   },
 });

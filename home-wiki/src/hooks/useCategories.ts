@@ -1,85 +1,65 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { categoryService } from '../services/categoryService';
+import { AppDispatch, RootState } from '../redux/store';
 import { Category } from '../types/models';
 import {
   setCategories,
-  addCategory,
-  updateCategory,
-  deleteCategory,
   setLoading,
   setError,
-  setSearchQuery,
-  setSelectedCategory,
+  setCurrentPage,
+  setCurrentCategory,
+  fetchCategories as fetchCategoriesThunk,
+  addCategory as addCategoryThunk,
+  updateCategory as updateCategoryThunk,
+  deleteCategory as deleteCategoryThunk,
 } from '../redux/slices/categorySlice';
 import { toast } from 'react-toastify';
 
 export const useCategories = () => {
-  const dispatch = useDispatch();
-  const { list: categories, loading, error, searchQuery, selectedCategory } = useSelector(
-    (state: RootState) => state.categories
-  );
+  const dispatch = useDispatch<AppDispatch>();
+  const { 
+    list: categories, 
+    loading, 
+    error, 
+    currentPage,
+    currentCategory,
+    totalPages,
+    totalItems 
+  } = useSelector((state: RootState) => state.categories);
 
-  const fetchCategories = useCallback(async () => {
+  const fetchCategories = useCallback(async (page: number = 1, search: string = '') => {
     try {
-      dispatch(setLoading(true));
-      const data = await categoryService.getCategories();
-      dispatch(setCategories(data));
+      const result = await dispatch(fetchCategoriesThunk({ pageNumber: page, pageSize: 10, search })).unwrap();
+      return result;
     } catch (err) {
-      dispatch(setError(err instanceof Error ? err.message : 'Failed to fetch categories'));
       toast.error('Failed to fetch categories');
-    } finally {
-      dispatch(setLoading(false));
+      return null;
     }
   }, [dispatch]);
 
-  const searchCategoriesByKeyword = useCallback(
-    async (keyword: string) => {
-      try {
-        dispatch(setLoading(true));
-        dispatch(setSearchQuery(keyword));
-        const data = await categoryService.searchCategories(keyword);
-        dispatch(setCategories(data));
-      } catch (err) {
-        dispatch(setError(err instanceof Error ? err.message : 'Failed to search categories'));
-        toast.error('Failed to search categories');
-      } finally {
-        dispatch(setLoading(false));
-      }
-    },
-    [dispatch]
-  );
-
   const createCategory = useCallback(
-    async (name: string, description?: string) => {
+    async (category: Omit<Category, 'id'>) => {
       try {
-        dispatch(setLoading(true));
-        const newCategory = await categoryService.createCategory(name, description);
-        dispatch(addCategory(newCategory));
+        const result = await dispatch(addCategoryThunk(category)).unwrap();
         toast.success('Category created successfully');
+        return result;
       } catch (err) {
-        dispatch(setError(err instanceof Error ? err.message : 'Failed to create category'));
         toast.error('Failed to create category');
-      } finally {
-        dispatch(setLoading(false));
+        return null;
       }
     },
     [dispatch]
   );
 
-  const updateCategoryName = useCallback(
-    async (id: number, name: string, description?: string) => {
+  const updateCategoryData = useCallback(
+    async (category: Category) => {
       try {
-        dispatch(setLoading(true));
-        const updatedCategory = await categoryService.updateCategory(id, name, description);
-        dispatch(updateCategory(updatedCategory));
+        const result = await dispatch(updateCategoryThunk(category)).unwrap();
         toast.success('Category updated successfully');
+        return result;
       } catch (err) {
-        dispatch(setError(err instanceof Error ? err.message : 'Failed to update category'));
         toast.error('Failed to update category');
-      } finally {
-        dispatch(setLoading(false));
+        return null;
       }
     },
     [dispatch]
@@ -88,20 +68,12 @@ export const useCategories = () => {
   const removeCategory = useCallback(
     async (id: number) => {
       try {
-        dispatch(setLoading(true));
-        const canDelete = await categoryService.canDeleteCategory(id);
-        if (!canDelete) {
-          toast.error('Cannot delete category: it contains articles');
-          return;
-        }
-        await categoryService.deleteCategory(id);
-        dispatch(deleteCategory(id));
+        await dispatch(deleteCategoryThunk(id)).unwrap();
         toast.success('Category deleted successfully');
+        return true;
       } catch (err) {
-        dispatch(setError(err instanceof Error ? err.message : 'Failed to delete category'));
         toast.error('Failed to delete category');
-      } finally {
-        dispatch(setLoading(false));
+        return false;
       }
     },
     [dispatch]
@@ -109,7 +81,14 @@ export const useCategories = () => {
 
   const selectCategory = useCallback(
     (category: Category | null) => {
-      dispatch(setSelectedCategory(category));
+      dispatch(setCurrentCategory(category));
+    },
+    [dispatch]
+  );
+
+  const setPage = useCallback(
+    (page: number) => {
+      dispatch(setCurrentPage(page));
     },
     [dispatch]
   );
@@ -118,13 +97,15 @@ export const useCategories = () => {
     categories,
     loading,
     error,
-    searchQuery,
-    selectedCategory,
+    currentPage,
+    currentCategory,
+    totalPages,
+    totalItems,
     fetchCategories,
-    searchCategoriesByKeyword,
     createCategory,
-    updateCategoryName,
+    updateCategoryData,
     removeCategory,
     selectCategory,
+    setPage,
   };
 };

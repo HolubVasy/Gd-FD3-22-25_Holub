@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useCategories } from '#/hooks/useCategories';
+import { useTags } from '#/hooks/useTags';
 import {
   List,
   ListItem,
@@ -9,55 +9,53 @@ import {
   TextField,
   Box,
   Typography,
-  Chip,
   CircularProgress,
   Pagination,
 } from '@mui/material';
 import { Delete as DeleteIcon, Edit as EditIcon, Search as SearchIcon } from '@mui/icons-material';
-import { Category } from '#/types/models';
-import CategoryEditDialog from './CategoryEditDialog';
+import { Tag } from '#/types/models';
+import TagEditDialog from './TagEditDialog';
 
-const CategoryList: React.FC = () => {
+const TagList: React.FC = () => {
   const {
-    categories,
+    tags,
     loading,
     error,
     currentPage,
     totalPages,
-    fetchCategories,
-    removeCategory,
-    updateCategoryData,
+    fetchTags,
+    removeTag,
+    updateTagData,
     setPage,
-  } = useCategories();
+  } = useTags();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [editingTag, setEditingTag] = useState<Tag | null>(null);
 
   useEffect(() => {
-    fetchCategories(currentPage, searchTerm);
-  }, [fetchCategories, currentPage]);
+    fetchTags(currentPage, searchTerm);
+  }, [fetchTags, currentPage]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchTerm(value);
     setPage(1);
-    fetchCategories(1, value);
+    fetchTags(1, value);
   };
 
-  const handleEdit = (category: Category) => {
-    setEditingCategory(category);
+  const handleEdit = (tag: Tag) => {
+    setEditingTag(tag);
   };
 
   const handleEditClose = () => {
-    setEditingCategory(null);
+    setEditingTag(null);
   };
 
-  const handleEditSave = async (name: string, description?: string) => {
-    if (editingCategory) {
-      await updateCategoryData({
-        ...editingCategory,
+  const handleEditSave = async (name: string) => {
+    if (editingTag) {
+      await updateTagData({
+        ...editingTag,
         name,
-        description: description || editingCategory.description,
       });
       handleEditClose();
     }
@@ -67,7 +65,7 @@ const CategoryList: React.FC = () => {
     setPage(value);
   };
 
-  if (loading && !categories.length) {
+  if (loading && !tags.length) {
     return (
       <Box display="flex" justifyContent="center" p={3}>
         <CircularProgress />
@@ -89,7 +87,7 @@ const CategoryList: React.FC = () => {
         <TextField
           fullWidth
           variant="outlined"
-          placeholder="Search categories..."
+          placeholder="Search tags..."
           value={searchTerm}
           onChange={handleSearch}
           InputProps={{
@@ -99,22 +97,35 @@ const CategoryList: React.FC = () => {
       </Box>
 
       <List>
-        {categories.map((category: Category) => (
-          <ListItem key={category.id} divider>
-            <ListItemText primary={category.name} secondary={category.description} />
-            <Box mr={2}>
-              <Chip
-                label={`${category.articleCount} articles`}
-                size="small"
-                color="primary"
-                variant="outlined"
-              />
-            </Box>
+        {tags.map((tag: Tag) => (
+          <ListItem 
+            key={tag.id} 
+            divider
+            sx={{
+              backgroundColor: '#b9f6ca',
+              mb: 1,
+              borderRadius: 1,
+              '&:hover': {
+                backgroundColor: '#69f0ae',
+                transform: 'translateY(-2px)',
+                transition: 'all 0.2s ease-in-out',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }
+            }}
+          >
+            <ListItemText 
+              primary={tag.name}
+              sx={{ 
+                '& .MuiTypography-root': { 
+                  fontWeight: 500 
+                } 
+              }}
+            />
             <ListItemSecondaryAction>
               <IconButton
                 edge="end"
                 aria-label="edit"
-                onClick={() => handleEdit(category)}
+                onClick={() => handleEdit(tag)}
                 sx={{ mr: 1 }}
               >
                 <EditIcon />
@@ -122,7 +133,7 @@ const CategoryList: React.FC = () => {
               <IconButton
                 edge="end"
                 aria-label="delete"
-                onClick={() => removeCategory(category.id)}
+                onClick={() => removeTag(tag.id)}
               >
                 <DeleteIcon />
               </IconButton>
@@ -142,9 +153,9 @@ const CategoryList: React.FC = () => {
         </Box>
       )}
 
-      <CategoryEditDialog
-        open={!!editingCategory}
-        category={editingCategory}
+      <TagEditDialog
+        open={!!editingTag}
+        tag={editingTag}
         onClose={handleEditClose}
         onSave={handleEditSave}
       />
@@ -152,4 +163,4 @@ const CategoryList: React.FC = () => {
   );
 };
 
-export default CategoryList;
+export default TagList; 

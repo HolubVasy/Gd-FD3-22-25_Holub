@@ -8,6 +8,9 @@ interface ArticleState {
   currentArticle: Article | null;
   loading: boolean;
   error: string | null;
+  totalPages: number;
+  currentPage: number;
+  totalItems: number;
 }
 
 interface ErrorResponse {
@@ -38,10 +41,13 @@ const initialState: ArticleState = {
   currentArticle: null,
   loading: false,
   error: null,
+  totalPages: 1,
+  currentPage: 1,
+  totalItems: 0,
 };
 
 export const fetchArticles = createAsyncThunk<
-  Article[],
+  ApiResponse<Article>,
   FetchArticlesParams,
   { rejectValue: string }
 >(
@@ -52,7 +58,7 @@ export const fetchArticles = createAsyncThunk<
       const response = await axios.get<ApiResponse<Article>>(
         `${API_BASE_URL}/article/search?${searchParam}&pageNumber=${pageNumber}&pageSize=${pageSize}`
       );
-      return response.data.items;
+      return response.data;
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
       return rejectWithValue(
@@ -97,6 +103,9 @@ const articleSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
   },
   extraReducers: builder => {
     // Fetch articles
@@ -106,7 +115,10 @@ const articleSlice = createSlice({
     });
     builder.addCase(fetchArticles.fulfilled, (state, action) => {
       state.loading = false;
-      state.list = action.payload;
+      state.list = action.payload.items;
+      state.totalItems = action.payload.totalItemCount;
+      state.totalPages = action.payload.pageCount;
+      state.currentPage = action.payload.pageNumber;
       state.error = null;
     });
     builder.addCase(fetchArticles.rejected, (state, action) => {
@@ -132,5 +144,5 @@ const articleSlice = createSlice({
   },
 });
 
-export const { setArticles, setCurrentArticle, setLoading, setError } = articleSlice.actions;
+export const { setArticles, setCurrentArticle, setLoading, setError, setCurrentPage } = articleSlice.actions;
 export default articleSlice.reducer;

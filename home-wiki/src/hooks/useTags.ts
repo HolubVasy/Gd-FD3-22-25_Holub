@@ -1,99 +1,94 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '#/redux/store';
-import { tagService } from '#/services/tagService';
+import { AppDispatch, RootState } from '../redux/store';
+import { Tag } from '../types/models';
 import {
   setTags,
-  addTag,
-  updateTag,
-  deleteTag,
   setLoading,
   setError,
-  setSearchQuery,
-} from '#/redux/slices/tagSlice';
+  setCurrentPage,
+  setCurrentTag,
+  fetchTags as fetchTagsThunk,
+  addTag as addTagThunk,
+  updateTag as updateTagThunk,
+  deleteTag as deleteTagThunk,
+} from '../redux/slices/tagSlice';
 import { toast } from 'react-toastify';
 
 export const useTags = () => {
-  const dispatch = useDispatch();
-  const { list: tags, loading, error, searchQuery } = useSelector((state: RootState) => state.tags);
+  const dispatch = useDispatch<AppDispatch>();
+  const { 
+    list: tags, 
+    loading, 
+    error, 
+    currentPage,
+    currentTag,
+    totalPages,
+    totalItems 
+  } = useSelector((state: RootState) => state.tags);
 
-  const fetchTags = useCallback(async () => {
+  const fetchTags = useCallback(async (page: number = 1, search: string = '') => {
     try {
-      dispatch(setLoading(true));
-      const data = await tagService.getTags();
-      dispatch(setTags(data));
+      const result = await dispatch(fetchTagsThunk({ pageNumber: page, pageSize: 10, search })).unwrap();
+      return result;
     } catch (err) {
-      dispatch(setError(err instanceof Error ? err.message : 'Failed to fetch tags'));
       toast.error('Failed to fetch tags');
-    } finally {
-      dispatch(setLoading(false));
+      return null;
     }
   }, [dispatch]);
 
-  const searchTagsByKeyword = useCallback(
-    async (keyword: string) => {
-      try {
-        dispatch(setLoading(true));
-        dispatch(setSearchQuery(keyword));
-        const data = await tagService.searchTags(keyword);
-        dispatch(setTags(data));
-      } catch (err) {
-        dispatch(setError(err instanceof Error ? err.message : 'Failed to search tags'));
-        toast.error('Failed to search tags');
-      } finally {
-        dispatch(setLoading(false));
-      }
-    },
-    [dispatch]
-  );
-
   const createTag = useCallback(
-    async (name: string) => {
+    async (tag: Omit<Tag, 'id'>) => {
       try {
-        dispatch(setLoading(true));
-        const newTag = await tagService.createTag(name);
-        dispatch(addTag(newTag));
+        const result = await dispatch(addTagThunk(tag)).unwrap();
         toast.success('Tag created successfully');
+        return result;
       } catch (err) {
-        dispatch(setError(err instanceof Error ? err.message : 'Failed to create tag'));
         toast.error('Failed to create tag');
-      } finally {
-        dispatch(setLoading(false));
+        return null;
       }
     },
     [dispatch]
   );
 
-  const updateTagName = useCallback(
-    async (id: string, name: string) => {
+  const updateTagData = useCallback(
+    async (tag: Tag) => {
       try {
-        dispatch(setLoading(true));
-        const updatedTag = await tagService.updateTag(id, name);
-        dispatch(updateTag(updatedTag));
+        const result = await dispatch(updateTagThunk(tag)).unwrap();
         toast.success('Tag updated successfully');
+        return result;
       } catch (err) {
-        dispatch(setError(err instanceof Error ? err.message : 'Failed to update tag'));
         toast.error('Failed to update tag');
-      } finally {
-        dispatch(setLoading(false));
+        return null;
       }
     },
     [dispatch]
   );
 
   const removeTag = useCallback(
-    async (id: string) => {
+    async (id: number) => {
       try {
-        if (!window.confirm('Are you sure you want to delete this tag?')) {
-          return;
-        }
-        await tagService.deleteTag(id);
-        dispatch(deleteTag(Number(id)));
+        await dispatch(deleteTagThunk(id)).unwrap();
         toast.success('Tag deleted successfully');
+        return true;
       } catch (err) {
-        dispatch(setError(err instanceof Error ? err.message : 'Failed to delete tag'));
         toast.error('Failed to delete tag');
+        return false;
       }
+    },
+    [dispatch]
+  );
+
+  const selectTag = useCallback(
+    (tag: Tag | null) => {
+      dispatch(setCurrentTag(tag));
+    },
+    [dispatch]
+  );
+
+  const setPage = useCallback(
+    (page: number) => {
+      dispatch(setCurrentPage(page));
     },
     [dispatch]
   );
@@ -102,11 +97,15 @@ export const useTags = () => {
     tags,
     loading,
     error,
-    searchQuery,
+    currentPage,
+    currentTag,
+    totalPages,
+    totalItems,
     fetchTags,
-    searchTagsByKeyword,
     createTag,
-    updateTagName,
+    updateTagData,
     removeTag,
+    selectTag,
+    setPage,
   };
 };

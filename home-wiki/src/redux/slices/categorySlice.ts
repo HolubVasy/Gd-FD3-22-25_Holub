@@ -86,6 +86,69 @@ export const fetchCategoryById = createAsyncThunk<
   }
 );
 
+export const addCategory = createAsyncThunk<
+  Category,
+  Omit<Category, 'id'>,
+  { rejectValue: string }
+>(
+  'categories/addCategory',
+  async (category, { rejectWithValue }) => {
+    try {
+      const response = await axios.post<Category>(
+        `${API_BASE_URL}/category`,
+        category
+      );
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to add category'
+      );
+    }
+  }
+);
+
+export const updateCategory = createAsyncThunk<
+  Category,
+  Category,
+  { rejectValue: string }
+>(
+  'categories/updateCategory',
+  async (category, { rejectWithValue }) => {
+    try {
+      const response = await axios.put<Category>(
+        `${API_BASE_URL}/category/${category.id}`,
+        category
+      );
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to update category'
+      );
+    }
+  }
+);
+
+export const deleteCategory = createAsyncThunk<
+  number,
+  number,
+  { rejectValue: string }
+>(
+  'categories/deleteCategory',
+  async (id: number, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/category/${id}`);
+      return id;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to delete category'
+      );
+    }
+  }
+);
+
 const categorySlice = createSlice({
   name: 'categories',
   initialState,
@@ -139,6 +202,54 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = action.payload ?? 'Failed to fetch category';
       state.currentCategory = null;
+    });
+
+    // Add category
+    builder.addCase(addCategory.pending, state => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(addCategory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.list.push(action.payload);
+      state.error = null;
+    });
+    builder.addCase(addCategory.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload ?? 'Failed to add category';
+    });
+
+    // Update category
+    builder.addCase(updateCategory.pending, state => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(updateCategory.fulfilled, (state, action) => {
+      state.loading = false;
+      const index = state.list.findIndex(cat => cat.id === action.payload.id);
+      if (index !== -1) {
+        state.list[index] = action.payload;
+      }
+      state.error = null;
+    });
+    builder.addCase(updateCategory.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload ?? 'Failed to update category';
+    });
+
+    // Delete category
+    builder.addCase(deleteCategory.pending, state => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteCategory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.list = state.list.filter(cat => cat.id !== action.payload);
+      state.error = null;
+    });
+    builder.addCase(deleteCategory.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload ?? 'Failed to delete category';
     });
   },
 });
