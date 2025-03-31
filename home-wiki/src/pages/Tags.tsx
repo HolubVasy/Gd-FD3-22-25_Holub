@@ -9,7 +9,9 @@ import {
   InputAdornment,
   IconButton,
   Pagination,
-  Fab
+  Fab,
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import { Search as SearchIcon, Add as AddIcon } from '@mui/icons-material';
 import axios from 'axios';
@@ -17,7 +19,7 @@ import { Tag } from '#/types/models';
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
-const Tags = () => {
+export default function Tags() {
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,10 +52,14 @@ const Tags = () => {
   }, [page]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchQuery(value);
-    setPage(1);
-    fetchTags(1, value);
+    setSearchQuery(event.target.value);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setPage(1);
+      fetchTags(1, searchQuery);
+    }
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -63,7 +69,7 @@ const Tags = () => {
   if (loading && !tags.length) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <Typography>Loading tags...</Typography>
+        <CircularProgress />
       </Box>
     );
   }
@@ -71,7 +77,7 @@ const Tags = () => {
   if (error) {
     return (
       <Box p={3}>
-        <Typography color="error">{error}</Typography>
+        <Alert severity="error">{error}</Alert>
       </Box>
     );
   }
@@ -80,85 +86,96 @@ const Tags = () => {
     <Box sx={{ 
       position: 'relative', 
       minHeight: '100%',
-      backgroundColor: '#f1f8e9', // Салатовый фон
+      backgroundColor: 'white',
       borderRadius: 1,
       p: 3
     }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" component="h1" sx={{ mb: 3 }}>
-          Tags
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <Typography sx={{ mr: 2 }}>Search by name:</Typography>
-          <TextField
-            size="small"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            placeholder="Search..."
-            sx={{ width: 300 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton size="small">
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
+      <Typography variant="h5" component="h1" gutterBottom>
+        Tags
+      </Typography>
+
+      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+        <Typography sx={{ mr: 2 }}>Search by name:</Typography>
+        <TextField
+          size="small"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          onKeyPress={handleKeyPress}
+          placeholder="Search..."
+          sx={{ width: 300 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton 
+                  size="small"
+                  onClick={() => {
+                    setPage(1);
+                    fetchTags(1, searchQuery);
+                  }}
+                >
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
       </Box>
 
-      {tags.length === 0 ? (
-        <Typography>No tags found</Typography>
-      ) : (
-        <>
-          <Box sx={{ width: '100%' }}>
-            <Grid container spacing={2}>
-              {tags.map((tag) => (
-                <Grid item xs={12} sm={6} md={3} key={tag.id}>
-                  <Card 
-                    sx={{ 
-                      height: '100%',
-                      backgroundColor: '#ffffff',
-                      borderRadius: 1,
-                      '&:hover': {
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                        transform: 'translateY(-2px)',
-                        transition: 'all 0.2s ease-in-out'
-                      }
-                    }}
-                  >
-                    <CardContent>
-                      <Typography variant="h6" component="h2">
-                        {tag.name}
-                      </Typography>
-                      <Typography 
-                        variant="body2" 
-                        color="text.secondary"
-                      >
-                        Usage count: {tag.usageCount}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
+      <Grid container spacing={2}>
+        {tags.map((tag) => (
+          <Grid item xs={12} sm={6} md={3} key={tag.id}>
+            <Card 
+              sx={{ 
+                height: '100%',
+                backgroundColor: '#fffde7',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: 4
+                }
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" component="h2">
+                  {tag.name}
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
+                  Usage count: {tag.usageCount}
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
+                  Created by: {tag.createdBy}
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary"
+                >
+                  Created at: {new Date(tag.createdAt).toLocaleDateString()}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
 
-          {totalPages > 1 && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Pagination 
-                count={totalPages} 
-                page={page} 
-                onChange={handlePageChange}
-                color="primary"
-                showFirstButton
-                showLastButton
-              />
-            </Box>
-          )}
-        </>
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <Pagination 
+            count={totalPages} 
+            page={page} 
+            onChange={handlePageChange}
+            color="primary"
+            showFirstButton
+            showLastButton
+          />
+        </Box>
       )}
 
       <Fab 
@@ -173,6 +190,4 @@ const Tags = () => {
       </Fab>
     </Box>
   );
-};
-
-export default Tags; 
+} 

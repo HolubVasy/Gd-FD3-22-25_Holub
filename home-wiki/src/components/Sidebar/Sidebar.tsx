@@ -7,7 +7,8 @@ import {
   Typography,
   Box,
   Collapse,
-  CircularProgress
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import axios from 'axios';
@@ -15,7 +16,7 @@ import { Category, Tag } from '#/types/models';
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
-const Sidebar = () => {
+export default function Sidebar() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,16 +28,16 @@ const Sidebar = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        setError(null);
         const [categoriesResponse, tagsResponse] = await Promise.all([
-          axios.get(`${API_BASE_URL}/category`),
-          axios.get(`${API_BASE_URL}/tag`)
+          axios.get(`${API_BASE_URL}/category/search?name=&pageNumber=1&pageSize=100`),
+          axios.get(`${API_BASE_URL}/tag/search?name=&pageNumber=1&pageSize=100`)
         ]);
         
-        console.log('Categories response:', categoriesResponse.data);
-        console.log('Tags response:', tagsResponse.data);
-        
-        setCategories(categoriesResponse.data);
-        setTags(tagsResponse.data);
+        if (categoriesResponse.data?.items && tagsResponse.data?.items) {
+          setCategories(categoriesResponse.data.items);
+          setTags(tagsResponse.data.items);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Failed to load data');
@@ -69,7 +70,7 @@ const Sidebar = () => {
   if (error) {
     return (
       <Box p={3}>
-        <Typography color="error">{error}</Typography>
+        <Alert severity="error">{error}</Alert>
       </Box>
     );
   }
@@ -127,7 +128,7 @@ const Sidebar = () => {
             <ListItemButton
               key={tag.id}
               component={Link}
-              to={`/tag/${tag.id}`}
+              to={`/tags/${tag.id}`}
               sx={{
                 pl: 4,
                 '&:hover': {
@@ -147,6 +148,4 @@ const Sidebar = () => {
       </Collapse>
     </List>
   );
-};
-
-export default Sidebar; 
+} 

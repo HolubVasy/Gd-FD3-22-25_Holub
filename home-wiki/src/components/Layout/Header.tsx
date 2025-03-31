@@ -1,76 +1,49 @@
 import React from 'react';
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-const Header = () => {
+export default function Header() {
   return (
-    <AppBar 
-      position="sticky" 
-      sx={{ 
-        backgroundColor: '#1976d2',
-        borderRadius: 0
-      }}
-    >
+    <AppBar position="static">
       <Toolbar>
-        <Typography
-          variant="h6"
-          component={RouterLink}
-          to="/"
-          sx={{
-            color: 'white',
+        <Typography 
+          variant="h6" 
+          component={Link} 
+          to="/" 
+          sx={{ 
+            flexGrow: 1,
             textDecoration: 'none',
-            fontSize: '1.5rem',
-            flexGrow: 1
+            color: 'inherit'
           }}
         >
           Home wiki
         </Typography>
         <Box sx={{ display: 'flex', gap: 3 }}>
-          <Button
-            component={RouterLink}
+          <Button 
+            color="inherit" 
+            component={Link} 
             to="/"
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)'
-              }
-            }}
           >
             Main
           </Button>
-          <Button
-            component={RouterLink}
+          <Button 
+            color="inherit" 
+            component={Link} 
             to="/articles"
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)'
-              }
-            }}
           >
             Articles
           </Button>
-          <Button
-            component={RouterLink}
+          <Button 
+            color="inherit" 
+            component={Link} 
             to="/categories"
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)'
-              }
-            }}
           >
             Categories
           </Button>
-          <Button
-            component={RouterLink}
+          <Button 
+            color="inherit" 
+            component={Link} 
             to="/tags"
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)'
-              }
-            }}
           >
             Tags
           </Button>
@@ -78,6 +51,4 @@ const Header = () => {
       </Toolbar>
     </AppBar>
   );
-};
-
-export default Header;
+}

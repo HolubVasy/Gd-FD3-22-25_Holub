@@ -10,7 +10,6 @@ import {
   IconButton,
   Pagination,
   Fab,
-  Container,
   CircularProgress,
   Alert,
   Button,
@@ -23,7 +22,7 @@ import { Link } from 'react-router-dom';
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
-const Categories = () => {
+export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,10 +55,14 @@ const Categories = () => {
   }, [page]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchQuery(value);
-    setPage(1);
-    fetchCategories(1, value);
+    setSearchQuery(event.target.value);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setPage(1);
+      fetchCategories(1, searchQuery);
+    }
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -69,7 +72,7 @@ const Categories = () => {
   if (loading && !categories.length) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <Typography>Loading categories...</Typography>
+        <CircularProgress />
       </Box>
     );
   }
@@ -77,7 +80,7 @@ const Categories = () => {
   if (error) {
     return (
       <Box p={3}>
-        <Typography color="error">{error}</Typography>
+        <Alert severity="error">{error}</Alert>
       </Box>
     );
   }
@@ -90,106 +93,117 @@ const Categories = () => {
       borderRadius: 1,
       p: 3
     }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" component="h1" sx={{ mb: 3 }}>
-          Categories
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <Typography sx={{ mr: 2 }}>Search by name:</Typography>
-          <TextField
-            size="small"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            placeholder="Search..."
-            sx={{ width: 300 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton size="small">
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
+      <Typography variant="h5" component="h1" gutterBottom>
+        Categories
+      </Typography>
+
+      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+        <Typography sx={{ mr: 2 }}>Search by name:</Typography>
+        <TextField
+          size="small"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          onKeyPress={handleKeyPress}
+          placeholder="Search..."
+          sx={{ width: 300 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton 
+                  size="small"
+                  onClick={() => {
+                    setPage(1);
+                    fetchCategories(1, searchQuery);
+                  }}
+                >
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
       </Box>
 
-      {categories.length === 0 ? (
-        <Typography>No categories found</Typography>
-      ) : (
-        <>
-          <Box sx={{ width: '100%' }}>
-            <Grid container spacing={2}>
-              {categories.map((category) => (
-                <Grid item xs={12} sm={6} md={4} key={category.id}>
-                  <Card 
-                    sx={{ 
-                      height: '100%',
-                      backgroundColor: '#fff9c4',
-                      transition: 'transform 0.2s, box-shadow 0.2s',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        boxShadow: 4
-                      }
+      <Grid container spacing={2}>
+        {categories.map((category) => (
+          <Grid item xs={12} sm={6} md={4} key={category.id}>
+            <Card 
+              sx={{ 
+                height: '100%',
+                backgroundColor: '#fffde7',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: 4
+                }
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" component="h2">
+                  {category.name}
+                </Typography>
+                {category.description && (
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary"
+                    sx={{
+                      mt: 1,
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
                     }}
                   >
-                    <CardContent>
-                      <Typography variant="h6" component="h2">
-                        {category.name}
-                      </Typography>
-                      {category.description && (
-                        <Typography 
-                          variant="body2" 
-                          color="text.secondary"
-                          sx={{
-                            mt: 1,
-                            display: '-webkit-box',
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                          }}
-                        >
-                          {category.description}
-                        </Typography>
-                      )}
-                      <Typography 
-                        variant="body2" 
-                        color="text.secondary"
-                        sx={{ mt: 1 }}
-                      >
-                        Articles: {category.articleCount}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button 
-                        size="small" 
-                        component={Link} 
-                        to={`/categories/${category.id}`}
-                      >
-                        View Articles
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
+                    {category.description}
+                  </Typography>
+                )}
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
+                  Articles: {category.articleCount}
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
+                  Created by: {category.createdBy}
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary"
+                >
+                  Created at: {new Date(category.createdAt).toLocaleDateString()}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button 
+                  size="small" 
+                  component={Link} 
+                  to={`/categories/${category.id}`}
+                >
+                  View Articles
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
 
-          {totalPages > 1 && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Pagination 
-                count={totalPages} 
-                page={page} 
-                onChange={handlePageChange}
-                color="primary"
-                showFirstButton
-                showLastButton
-              />
-            </Box>
-          )}
-        </>
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <Pagination 
+            count={totalPages} 
+            page={page} 
+            onChange={handlePageChange}
+            color="primary"
+            showFirstButton
+            showLastButton
+          />
+        </Box>
       )}
 
       <Fab 
@@ -204,6 +218,4 @@ const Categories = () => {
       </Fab>
     </Box>
   );
-};
-
-export default Categories; 
+} 

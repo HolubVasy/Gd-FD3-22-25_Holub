@@ -1,147 +1,93 @@
 import React from 'react';
-import { Box, Container, Link, Typography } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Box, Container, Grid, Typography, Link } from '@mui/material';
 
-const Footer = () => {
+export default function Footer() {
   return (
     <Box 
       component="footer" 
       sx={{ 
-        backgroundColor: '#607d8b',
+        backgroundColor: '#1976d2',
         color: 'white',
-        py: 2
+        py: 3,
+        mt: 'auto'
       }}
     >
       <Container maxWidth="lg">
-        <Box sx={{ 
-          display: 'flex',
-          gap: 4
-        }}>
-          {/* Documents section */}
-          <Box>
-            <Typography sx={{ fontWeight: 'bold', mb: 1 }}>Documents</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6" gutterBottom>
+              Documents
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <Link 
-                component={RouterLink} 
-                to="/articles" 
+                href="/articles" 
+                color="inherit" 
                 sx={{ 
-                  color: 'white', 
-                  textDecoration: 'none',
-                  '&:hover': { textDecoration: 'underline' }
+                  mb: 1,
+                  '&:hover': { 
+                    color: '#bbdefb' 
+                  } 
                 }}
               >
-                Article
+                Articles
               </Link>
               <Link 
-                component={RouterLink} 
-                to="/categories" 
+                href="/categories" 
+                color="inherit" 
                 sx={{ 
-                  color: 'white', 
-                  textDecoration: 'none',
-                  '&:hover': { textDecoration: 'underline' }
+                  mb: 1,
+                  '&:hover': { 
+                    color: '#bbdefb' 
+                  } 
                 }}
               >
-                Category
+                Categories
               </Link>
               <Link 
-                component={RouterLink} 
-                to="/tags" 
+                href="/tags" 
+                color="inherit" 
                 sx={{ 
-                  color: 'white', 
-                  textDecoration: 'none',
-                  '&:hover': { textDecoration: 'underline' }
+                  '&:hover': { 
+                    color: '#bbdefb' 
+                  } 
                 }}
               >
-                Tag
-              </Link>
-            </Box>
-          </Box>
-
-          {/* Infor section */}
-          <Box>
-            <Typography sx={{ fontWeight: 'bold', mb: 1 }}>Infor</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-              <Link 
-                component={RouterLink} 
-                to="/" 
-                sx={{ 
-                  color: 'white',
-                  textDecoration: 'none',
-                  '&:hover': { textDecoration: 'underline' }
-                }}
-              >
-                Main
+                Tags
               </Link>
             </Box>
-          </Box>
-        </Box>
-
-        {/* Bottom section */}
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          mt: 2,
-          pt: 2,
-          borderTop: '1px solid rgba(255,255,255,0.1)'
-        }}>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Link 
-              component={RouterLink} 
-              to="/contact" 
-              sx={{ 
-                color: 'white', 
-                textDecoration: 'none',
-                '&:hover': { textDecoration: 'underline' }
-              }}
-            >
-              Contact us
-            </Link>
-            <Link 
-              component={RouterLink} 
-              to="/privacy" 
-              sx={{ 
-                color: 'white', 
-                textDecoration: 'none',
-                '&:hover': { textDecoration: 'underline' }
-              }}
-            >
-              Privacy & cookies
-            </Link>
-            <Link 
-              component={RouterLink} 
-              to="/terms" 
-              sx={{ 
-                color: 'white', 
-                textDecoration: 'none',
-                '&:hover': { textDecoration: 'underline' }
-              }}
-            >
-              Terms of use
-            </Link>
-          </Box>
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-            <Typography>2025 Vasili Holub</Typography>
-            <Link 
-              component={RouterLink} 
-              to="/language" 
-              sx={{ 
-                color: 'white', 
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 0.5,
-                '&:hover': { textDecoration: 'underline' }
-              }}
-            >
-              <span>🌐</span>
-              English
-            </Link>
-          </Box>
-        </Box>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6" gutterBottom>
+              Info
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Link 
+                href="/contact" 
+                color="inherit" 
+                sx={{ 
+                  mb: 1,
+                  '&:hover': { 
+                    color: '#bbdefb' 
+                  } 
+                }}
+              >
+                Contact info
+              </Link>
+              <Link 
+                href="/terms" 
+                color="inherit" 
+                sx={{ 
+                  '&:hover': { 
+                    color: '#bbdefb' 
+                  } 
+                }}
+              >
+                Terms of use
+              </Link>
+            </Box>
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );
-};
-
-export default Footer;
+}
