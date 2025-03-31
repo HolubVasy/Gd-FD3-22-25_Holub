@@ -25,7 +25,7 @@ const Header = () => {
         >
           Home wiki
         </Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 3 }}>
           <Button
             component={RouterLink}
             to="/"
@@ -49,6 +49,30 @@ const Header = () => {
             }}
           >
             Articles
+          </Button>
+          <Button
+            component={RouterLink}
+            to="/categories"
+            sx={{
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.1)'
+              }
+            }}
+          >
+            Categories
+          </Button>
+          <Button
+            component={RouterLink}
+            to="/tags"
+            sx={{
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.1)'
+              }
+            }}
+          >
+            Tags
           </Button>
         </Box>
       </Toolbar>
