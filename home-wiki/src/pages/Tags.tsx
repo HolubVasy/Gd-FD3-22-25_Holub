@@ -123,11 +123,11 @@ export default function Tags() {
 
       <Grid container spacing={2}>
         {tags.map((tag) => (
-          <Grid item xs={12} sm={6} md={3} key={tag.id}>
+          <Grid item xs={12} sm={6} md={4} lg={3} key={tag.id}>
             <Card 
-              sx={{ 
+              sx={{
                 height: '100%',
-                backgroundColor: '#fffde7',
+                backgroundColor: '#b9f6ca',
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 '&:hover': {
                   transform: 'translateY(-4px)',

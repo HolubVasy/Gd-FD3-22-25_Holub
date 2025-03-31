@@ -139,7 +139,7 @@ export default function Categories() {
               }}
             >
               <CardContent>
-                <Typography variant="h6" component="h2">
+                <Typography variant="h6" component="h2" gutterBottom>
                   {category.name}
                 </Typography>
                 {category.description && (
@@ -158,26 +158,14 @@ export default function Categories() {
                     {category.description}
                   </Typography>
                 )}
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary"
-                  sx={{ mt: 1 }}
-                >
-                  Articles: {category.articleCount}
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary"
-                  sx={{ mt: 1 }}
-                >
-                  Created by: {category.createdBy}
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary"
-                >
-                  Created at: {new Date(category.createdAt).toLocaleDateString()}
-                </Typography>
+                <Box sx={{ mt: 'auto' }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Created by: {category.createdBy}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Created at: {new Date(category.createdAt).toLocaleDateString()}
+                  </Typography>
+                </Box>
               </CardContent>
               <CardActions>
                 <Button 
