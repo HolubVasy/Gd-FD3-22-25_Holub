@@ -12,13 +12,29 @@ import {
   Fab,
   CircularProgress,
   Alert,
-  Button,
-  CardActions
+  Button
 } from '@mui/material';
 import { Search as SearchIcon, Add as AddIcon } from '@mui/icons-material';
 import axios from 'axios';
-import { Category } from '#/types/models';
-import { Link } from 'react-router-dom';
+
+interface Category {
+  id: number;
+  name: string;
+  createdBy: string;
+  createdAt: string;
+  modifiedBy: string | null;
+  modifiedAt: string | null;
+}
+
+interface CategoryResponse {
+  pageCount: number;
+  totalItemCount: number;
+  pageNumber: number;
+  pageSize: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  items: Category[];
+}
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
@@ -31,16 +47,18 @@ export default function Categories() {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 10;
 
-  const fetchCategories = async (pageNumber: number, search?: string) => {
+  const fetchCategories = React.useCallback(async (pageNumber: number, search: string) => {
     try {
       setLoading(true);
       setError(null);
-      const searchParam = search ? `name=${encodeURIComponent(search)}` : 'name=';
-      const response = await axios.get(`${API_BASE_URL}/category/search?${searchParam}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
+      const searchParam = `name=${encodeURIComponent(search)}`;
+      const response = await axios.get<CategoryResponse>(
+        `${API_BASE_URL}/category/search?${searchParam}&pageNumber=${pageNumber}&pageSize=${pageSize}`
+      );
       
       if (response.data) {
         setCategories(response.data.items);
-        setTotalPages(response.data.pageCount);
+        setTotalPages(response.data.pageCount || 1);
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -48,25 +66,25 @@ export default function Categories() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
+  // Initial load
   useEffect(() => {
-    fetchCategories(page, searchQuery);
-  }, [page]);
+    fetchCategories(1, '');
+  }, [fetchCategories]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      setPage(1);
-      fetchCategories(1, searchQuery);
-    }
+  const handleSearch = () => {
+    setPage(1);
+    fetchCategories(1, searchQuery);
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
+    fetchCategories(value, searchQuery);
   };
 
   if (loading && !categories.length) {
@@ -103,7 +121,6 @@ export default function Categories() {
           size="small"
           value={searchQuery}
           onChange={handleSearchChange}
-          onKeyPress={handleKeyPress}
           placeholder="Search..."
           sx={{ width: 300 }}
           InputProps={{
@@ -111,10 +128,7 @@ export default function Categories() {
               <InputAdornment position="end">
                 <IconButton 
                   size="small"
-                  onClick={() => {
-                    setPage(1);
-                    fetchCategories(1, searchQuery);
-                  }}
+                  onClick={handleSearch}
                 >
                   <SearchIcon />
                 </IconButton>
@@ -122,15 +136,31 @@ export default function Categories() {
             ),
           }}
         />
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setSearchQuery('');
+            setPage(1);
+            fetchCategories(1, '');
+          }}
+          sx={{ 
+            ml: 2,
+            height: 40,
+            textTransform: 'none'
+          }}
+        >
+          Clear Search
+        </Button>
       </Box>
 
       <Grid container spacing={2}>
         {categories.map((category) => (
           <Grid item xs={12} sm={6} md={4} key={category.id}>
             <Card 
-              sx={{ 
+              sx={{
                 height: '100%',
-                backgroundColor: '#fffde7',
+                display: 'flex',
+                flexDirection: 'column',
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 '&:hover': {
                   transform: 'translateY(-4px)',
@@ -138,26 +168,10 @@ export default function Categories() {
                 }
               }}
             >
-              <CardContent>
+              <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h6" component="h2" gutterBottom>
                   {category.name}
                 </Typography>
-                {category.description && (
-                  <Typography 
-                    variant="body2" 
-                    color="text.secondary"
-                    sx={{
-                      mt: 1,
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis'
-                    }}
-                  >
-                    {category.description}
-                  </Typography>
-                )}
                 <Box sx={{ mt: 'auto' }}>
                   <Typography variant="body2" color="text.secondary">
                     Created by: {category.createdBy}
@@ -167,15 +181,6 @@ export default function Categories() {
                   </Typography>
                 </Box>
               </CardContent>
-              <CardActions>
-                <Button 
-                  size="small" 
-                  component={Link} 
-                  to={`/categories/${category.id}`}
-                >
-                  View Articles
-                </Button>
-              </CardActions>
             </Card>
           </Grid>
         ))}
@@ -195,7 +200,7 @@ export default function Categories() {
       )}
 
       <Fab 
-        color="success" 
+        color="primary" 
         sx={{ 
           position: 'fixed',
           bottom: 32,

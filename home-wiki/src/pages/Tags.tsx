@@ -11,11 +11,30 @@ import {
   Pagination,
   Fab,
   CircularProgress,
-  Alert
+  Alert,
+  Button
 } from '@mui/material';
 import { Search as SearchIcon, Add as AddIcon } from '@mui/icons-material';
 import axios from 'axios';
-import { Tag } from '#/types/models';
+
+interface Tag {
+  id: number;
+  name: string;
+  createdBy: string;
+  createdAt: string;
+  modifiedBy: string | null;
+  modifiedAt: string | null;
+}
+
+interface TagResponse {
+  pageCount: number;
+  totalItemCount: number;
+  pageNumber: number;
+  pageSize: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  items: Tag[];
+}
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
@@ -28,16 +47,18 @@ export default function Tags() {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 10;
 
-  const fetchTags = async (pageNumber: number, search?: string) => {
+  const fetchTags = React.useCallback(async (pageNumber: number, search: string) => {
     try {
       setLoading(true);
       setError(null);
-      const searchParam = search ? `name=${encodeURIComponent(search)}` : 'name=';
-      const response = await axios.get(`${API_BASE_URL}/tag/search?${searchParam}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
+      const searchParam = `name=${encodeURIComponent(search)}`;
+      const response = await axios.get<TagResponse>(
+        `${API_BASE_URL}/tag/search?${searchParam}&pageNumber=${pageNumber}&pageSize=${pageSize}`
+      );
       
       if (response.data) {
         setTags(response.data.items);
-        setTotalPages(response.data.pageCount);
+        setTotalPages(response.data.pageCount || 1);
       }
     } catch (error) {
       console.error('Error fetching tags:', error);
@@ -45,25 +66,25 @@ export default function Tags() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
+  // Initial load
   useEffect(() => {
-    fetchTags(page, searchQuery);
-  }, [page]);
+    fetchTags(1, '');
+  }, [fetchTags]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      setPage(1);
-      fetchTags(1, searchQuery);
-    }
+  const handleSearch = () => {
+    setPage(1);
+    fetchTags(1, searchQuery);
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
+    fetchTags(value, searchQuery);
   };
 
   if (loading && !tags.length) {
@@ -100,7 +121,6 @@ export default function Tags() {
           size="small"
           value={searchQuery}
           onChange={handleSearchChange}
-          onKeyPress={handleKeyPress}
           placeholder="Search..."
           sx={{ width: 300 }}
           InputProps={{
@@ -108,10 +128,7 @@ export default function Tags() {
               <InputAdornment position="end">
                 <IconButton 
                   size="small"
-                  onClick={() => {
-                    setPage(1);
-                    fetchTags(1, searchQuery);
-                  }}
+                  onClick={handleSearch}
                 >
                   <SearchIcon />
                 </IconButton>
@@ -119,14 +136,31 @@ export default function Tags() {
             ),
           }}
         />
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setSearchQuery('');
+            setPage(1);
+            fetchTags(1, '');
+          }}
+          sx={{ 
+            ml: 2,
+            height: 40,
+            textTransform: 'none'
+          }}
+        >
+          Clear Search
+        </Button>
       </Box>
 
       <Grid container spacing={2}>
         {tags.map((tag) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={tag.id}>
+          <Grid item xs={12} sm={6} md={3} key={tag.id}>
             <Card 
               sx={{
                 height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
                 backgroundColor: '#b9f6ca',
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 '&:hover': {
@@ -135,30 +169,18 @@ export default function Tags() {
                 }
               }}
             >
-              <CardContent>
-                <Typography variant="h6" component="h2">
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" component="h2" gutterBottom>
                   {tag.name}
                 </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary"
-                  sx={{ mt: 1 }}
-                >
-                  Usage count: {tag.usageCount}
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary"
-                  sx={{ mt: 1 }}
-                >
-                  Created by: {tag.createdBy}
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary"
-                >
-                  Created at: {new Date(tag.createdAt).toLocaleDateString()}
-                </Typography>
+                <Box sx={{ mt: 'auto' }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Created by: {tag.createdBy}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Created at: {new Date(tag.createdAt).toLocaleDateString()}
+                  </Typography>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
@@ -179,7 +201,7 @@ export default function Tags() {
       )}
 
       <Fab 
-        color="success" 
+        color="primary" 
         sx={{ 
           position: 'fixed',
           bottom: 32,
