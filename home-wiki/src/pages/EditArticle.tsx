@@ -82,37 +82,34 @@ const EditArticle = () => {
         const tagsResponse = await axios.get('https://homewiki.azurewebsites.net/api/tag/search?name=&pageNumber=1&pageSize=100');
         const tagsData = tagsResponse.data.items;
 
-        // Extract category ID correctly from the article response
-        const categoryId = article.category?.id || 0;
-        
-        console.log('Article category:', article.category);
-        console.log('Extracted category ID:', categoryId);
-
-        // Verify if the category exists in the categories list
-        const categoryExists = categoriesData.some((cat: Category) => cat.id === categoryId);
-        console.log('Category exists in list:', categoryExists);
-
         setCategories(categoriesData);
         setTags(tagsData);
         setFormData({
           id: article.id,
           name: article.name,
           description: article.description,
-          categoryId: categoryId,
+          categoryId: article.category?.id || 0,
           tagIds: article.tags?.map((tag: Tag) => tag.id) || [],
         });
-
-        // Log the form data being set
-        console.log('Setting form data:', {
-          id: article.id,
-          name: article.name,
-          description: article.description,
-          categoryId: categoryId,
-          tagIds: article.tags?.map((tag: Tag) => tag.id) || [],
-        });
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching data:', error);
-        setError('Failed to load data');
+        if (error.response) {
+          switch (error.response.status) {
+            case 404:
+              navigate('/404');
+              break;
+            case 400:
+              navigate('/400');
+              break;
+            case 500:
+              navigate('/500');
+              break;
+            default:
+              setError('Failed to load data');
+          }
+        } else {
+          navigate('/500');
+        }
       } finally {
         setLoading(false);
       }
@@ -135,6 +132,8 @@ const EditArticle = () => {
         description: formData.description,
         categoryId: formData.categoryId === 0 ? null : formData.categoryId,
         tagIds: formData.tagIds,
+        createdBy: 'system',
+        modifiedBy: 'system'
       };
 
       console.log('Sending update request:', requestData);
@@ -142,9 +141,22 @@ const EditArticle = () => {
       await axios.put('https://homewiki.azurewebsites.net/api/article', requestData);
 
       navigate(`/articles/${id}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating article:', error);
-      setError('Failed to update article');
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            setError('Ошибка валидации: ' + JSON.stringify(error.response.data.errors));
+            break;
+          case 500:
+            navigate('/500');
+            break;
+          default:
+            setError('Failed to update article');
+        }
+      } else {
+        navigate('/500');
+      }
     } finally {
       setSaving(false);
     }
