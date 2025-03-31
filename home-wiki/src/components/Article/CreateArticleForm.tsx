@@ -19,6 +19,15 @@ interface CreateArticleFormProps {
   initialTagId?: string;
 }
 
+interface ArticleRequestDto {
+  name: string;
+  description: string;
+  categoryId: number;
+  tagIds: number[];
+  createdBy: string;
+  modifiedBy: string;
+}
+
 const CreateArticleForm: React.FC<CreateArticleFormProps> = ({ 
   onClose,
   initialCategoryId,
@@ -67,14 +76,21 @@ const CreateArticleForm: React.FC<CreateArticleFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!selectedCategory) {
+      return;
+    }
+
     try {
-      const articleData = {
+      const articleData: ArticleRequestDto = {
         name,
         description,
-        categoryId: selectedCategory?.id,
-        tagIds: selectedTags.map(tag => tag.id)
+        categoryId: selectedCategory.id,
+        tagIds: selectedTags.map(tag => tag.id),
+        createdBy: 'User',
+        modifiedBy: 'User'
       };
 
+      console.log('Sending article data:', articleData); // Для отладки
       await axios.post(`${API_BASE_URL}/article`, articleData);
       onClose();
     } catch (error) {
