@@ -10,10 +10,12 @@ import {
   IconButton,
   Pagination,
   InputAdornment,
+  Fab
 } from '@mui/material';
-import { Search as SearchIcon, MoreVert as MoreVertIcon } from '@mui/icons-material';
+import { Search as SearchIcon, MoreVert as MoreVertIcon, Add as AddIcon } from '@mui/icons-material';
 import axios from 'axios';
 import { Article, Tag } from '#/types/models';
+import CreateArticleForm from '../Article/CreateArticleForm';
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
@@ -26,6 +28,7 @@ const TagArticles = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const pageSize = 10;
 
   const fetchArticles = async (pageNumber: number, search?: string) => {
@@ -98,6 +101,16 @@ const TagArticles = () => {
     setPage(value);
   };
 
+  const handleCreateClick = () => {
+    setShowCreateForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowCreateForm(false);
+    // Refresh articles list after creating a new one
+    fetchArticles(page, searchQuery);
+  };
+
   if (loading && !articles.length) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
@@ -115,120 +128,141 @@ const TagArticles = () => {
   }
 
   return (
-    <Box>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" component="h1" sx={{ mb: 3 }}>
-          {tag?.name || 'Loading tag...'}
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <Typography sx={{ mr: 2 }}>Search by name:</Typography>
-          <TextField
-            size="small"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            placeholder="Search..."
-            sx={{ width: 300 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton size="small">
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
-      </Box>
-
-      {articles.length === 0 ? (
-        <Typography>No articles found</Typography>
+    <Box sx={{ position: 'relative', minHeight: '100%' }}>
+      {showCreateForm ? (
+        <CreateArticleForm 
+          onClose={handleCloseForm} 
+          initialTagId={id}
+        />
       ) : (
         <>
-          <Box sx={{ width: '100%' }}>
-            <Grid container spacing={2} columns={25}>
-              {articles.map((article) => (
-                <Grid item xs={25} sm={12.5} md={5} key={article.id}>
-                  <Card 
-                    sx={{ 
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      backgroundColor: '#e0f2f1',
-                      borderRadius: 1,
-                      '&:hover': {
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                        transform: 'translateY(-2px)',
-                        transition: 'all 0.2s ease-in-out'
-                      }
-                    }}
-                  >
-                    <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
-                        <Typography 
-                          variant="h6" 
-                          component="h2" 
-                          sx={{ 
-                            fontSize: '1rem',
-                            fontWeight: 'bold',
-                            mb: 1,
-                            flex: 1,
-                            pr: 1
-                          }}
-                        >
-                          {article.name}
-                        </Typography>
-                        <IconButton 
-                          size="small" 
-                          sx={{ 
-                            p: 0.5,
-                            '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' }
-                          }}
-                        >
-                          <MoreVertIcon fontSize="small" />
-                        </IconButton>
-                      </Box>
-                      <Typography 
-                        variant="body2" 
-                        color="text.secondary"
-                        sx={{
-                          display: '-webkit-box',
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          height: '4.5em',
-                          mb: 1
-                        }}
-                      >
-                        {article.description}
-                      </Typography>
-                      <Typography 
-                        variant="caption" 
-                        color="text.secondary"
-                        sx={{ display: 'block', mt: 'auto' }}
-                      >
-                        {new Date(article.createdAt).toLocaleDateString()}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-
-          {totalPages > 1 && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Pagination 
-                count={totalPages} 
-                page={page} 
-                onChange={handlePageChange}
-                color="primary"
-                showFirstButton
-                showLastButton
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h5" component="h1" sx={{ mb: 3 }}>
+              {tag?.name || 'Loading tag...'}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <Typography sx={{ mr: 2 }}>Search by name:</Typography>
+              <TextField
+                size="small"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search..."
+                sx={{ width: 300 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton size="small">
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Box>
+          </Box>
+
+          {articles.length === 0 ? (
+            <Typography>No articles found</Typography>
+          ) : (
+            <>
+              <Box sx={{ width: '100%' }}>
+                <Grid container spacing={2} columns={25}>
+                  {articles.map((article) => (
+                    <Grid item xs={25} sm={12.5} md={5} key={article.id}>
+                      <Card 
+                        sx={{ 
+                          height: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          backgroundColor: '#e0f2f1',
+                          borderRadius: 1,
+                          '&:hover': {
+                            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                            transform: 'translateY(-2px)',
+                            transition: 'all 0.2s ease-in-out'
+                          }
+                        }}
+                      >
+                        <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                            <Typography 
+                              variant="h6" 
+                              component="h2" 
+                              sx={{ 
+                                fontSize: '1rem',
+                                fontWeight: 'bold',
+                                mb: 1,
+                                flex: 1,
+                                pr: 1
+                              }}
+                            >
+                              {article.name}
+                            </Typography>
+                            <IconButton 
+                              size="small" 
+                              sx={{ 
+                                p: 0.5,
+                                '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' }
+                              }}
+                            >
+                              <MoreVertIcon fontSize="small" />
+                            </IconButton>
+                          </Box>
+                          <Typography 
+                            variant="body2" 
+                            color="text.secondary"
+                            sx={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 3,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              height: '4.5em',
+                              mb: 1
+                            }}
+                          >
+                            {article.description}
+                          </Typography>
+                          <Typography 
+                            variant="caption" 
+                            color="text.secondary"
+                            sx={{ display: 'block', mt: 'auto' }}
+                          >
+                            {new Date(article.createdAt).toLocaleDateString()}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+
+              {totalPages > 1 && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                  <Pagination 
+                    count={totalPages} 
+                    page={page} 
+                    onChange={handlePageChange}
+                    color="primary"
+                    showFirstButton
+                    showLastButton
+                  />
+                </Box>
+              )}
+            </>
           )}
+
+          <Fab 
+            color="success" 
+            sx={{ 
+              position: 'fixed',
+              bottom: 32,
+              right: 32
+            }}
+            onClick={handleCreateClick}
+          >
+            <AddIcon />
+          </Fab>
         </>
       )}
     </Box>
