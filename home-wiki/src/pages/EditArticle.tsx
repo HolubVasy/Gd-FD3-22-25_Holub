@@ -68,13 +68,29 @@ const EditArticle = () => {
         const articleResponse = await axios.get(`https://homewiki.azurewebsites.net/api/article/${id}`);
         const article = articleResponse.data;
 
+        // Log the received article data for debugging
+        console.log('Received article data:', article);
+
         // Fetch categories
         const categoriesResponse = await axios.get('https://homewiki.azurewebsites.net/api/category/search?name=&pageNumber=1&pageSize=100');
         const categoriesData = categoriesResponse.data.items;
 
+        // Log categories for debugging
+        console.log('Received categories:', categoriesData);
+
         // Fetch tags
         const tagsResponse = await axios.get('https://homewiki.azurewebsites.net/api/tag/search?name=&pageNumber=1&pageSize=100');
         const tagsData = tagsResponse.data.items;
+
+        // Extract category ID correctly from the article response
+        const categoryId = article.category?.id || 0;
+        
+        console.log('Article category:', article.category);
+        console.log('Extracted category ID:', categoryId);
+
+        // Verify if the category exists in the categories list
+        const categoryExists = categoriesData.some((cat: Category) => cat.id === categoryId);
+        console.log('Category exists in list:', categoryExists);
 
         setCategories(categoriesData);
         setTags(tagsData);
@@ -82,7 +98,16 @@ const EditArticle = () => {
           id: article.id,
           name: article.name,
           description: article.description,
-          categoryId: article.category?.id || 0,
+          categoryId: categoryId,
+          tagIds: article.tags?.map((tag: Tag) => tag.id) || [],
+        });
+
+        // Log the form data being set
+        console.log('Setting form data:', {
+          id: article.id,
+          name: article.name,
+          description: article.description,
+          categoryId: categoryId,
           tagIds: article.tags?.map((tag: Tag) => tag.id) || [],
         });
       } catch (error) {
@@ -104,13 +129,17 @@ const EditArticle = () => {
       setSaving(true);
       setError(null);
 
-      await axios.put('https://homewiki.azurewebsites.net/api/article', {
+      const requestData = {
         id: formData.id,
         name: formData.name,
         description: formData.description,
-        categoryId: formData.categoryId || null,
+        categoryId: formData.categoryId === 0 ? null : formData.categoryId,
         tagIds: formData.tagIds,
-      });
+      };
+
+      console.log('Sending update request:', requestData);
+
+      await axios.put('https://homewiki.azurewebsites.net/api/article', requestData);
 
       navigate(`/articles/${id}`);
     } catch (error) {
@@ -208,8 +237,13 @@ const EditArticle = () => {
           <FormControl fullWidth>
             <InputLabel>Category</InputLabel>
             <Select
-              value={formData.categoryId}
-              onChange={(e) => setFormData({ ...formData, categoryId: e.target.value as number })}
+              value={formData.categoryId || 0}
+              onChange={(e) => {
+                const newValue = e.target.value as number;
+                console.log('Selected category:', newValue);
+                console.log('Available categories:', categories);
+                setFormData({ ...formData, categoryId: newValue });
+              }}
               label="Category"
             >
               <MenuItem value={0}>

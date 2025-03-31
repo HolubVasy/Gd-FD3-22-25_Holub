@@ -9,12 +9,11 @@ import {
   InputAdornment,
   IconButton,
   Pagination,
-  Fab,
   CircularProgress,
   Alert,
   Button
 } from '@mui/material';
-import { Search as SearchIcon, Add as AddIcon } from '@mui/icons-material';
+import { Search as SearchIcon } from '@mui/icons-material';
 import axios from 'axios';
 
 interface Tag {
@@ -199,17 +198,6 @@ export default function Tags() {
           />
         </Box>
       )}
-
-      <Fab 
-        color="primary" 
-        sx={{ 
-          position: 'fixed',
-          bottom: 32,
-          right: 32
-        }}
-      >
-        <AddIcon />
-      </Fab>
     </Box>
   );
 } 
