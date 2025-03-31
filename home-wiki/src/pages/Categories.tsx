@@ -9,11 +9,17 @@ import {
   InputAdornment,
   IconButton,
   Pagination,
-  Fab
+  Fab,
+  Container,
+  CircularProgress,
+  Alert,
+  Button,
+  CardActions
 } from '@mui/material';
 import { Search as SearchIcon, Add as AddIcon } from '@mui/icons-material';
 import axios from 'axios';
 import { Category } from '#/types/models';
+import { Link } from 'react-router-dom';
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
@@ -30,12 +36,12 @@ const Categories = () => {
     try {
       setLoading(true);
       setError(null);
-      const searchParam = search ? `&name=${encodeURIComponent(search)}` : '';
-      const response = await axios.get(`${API_BASE_URL}/category?pageNumber=${pageNumber}&pageSize=${pageSize}${searchParam}`);
+      const searchParam = search ? `name=${encodeURIComponent(search)}` : 'name=';
+      const response = await axios.get(`${API_BASE_URL}/category/search?${searchParam}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
       
-      if (response.data && Array.isArray(response.data.items)) {
+      if (response.data) {
         setCategories(response.data.items);
-        setTotalPages(Math.ceil(response.data.totalItemCount / pageSize));
+        setTotalPages(response.data.pageCount);
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -80,7 +86,7 @@ const Categories = () => {
     <Box sx={{ 
       position: 'relative', 
       minHeight: '100%',
-      backgroundColor: '#fff9c4', // Желтый фон
+      backgroundColor: 'white',
       borderRadius: 1,
       p: 3
     }}>
@@ -120,12 +126,11 @@ const Categories = () => {
                   <Card 
                     sx={{ 
                       height: '100%',
-                      backgroundColor: '#ffffff',
-                      borderRadius: 1,
+                      backgroundColor: '#fff9c4',
+                      transition: 'transform 0.2s, box-shadow 0.2s',
                       '&:hover': {
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                        transform: 'translateY(-2px)',
-                        transition: 'all 0.2s ease-in-out'
+                        transform: 'translateY(-4px)',
+                        boxShadow: 4
                       }
                     }}
                   >
@@ -133,20 +138,39 @@ const Categories = () => {
                       <Typography variant="h6" component="h2">
                         {category.name}
                       </Typography>
+                      {category.description && (
+                        <Typography 
+                          variant="body2" 
+                          color="text.secondary"
+                          sx={{
+                            mt: 1,
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                          }}
+                        >
+                          {category.description}
+                        </Typography>
+                      )}
                       <Typography 
                         variant="body2" 
                         color="text.secondary"
-                        sx={{
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis'
-                        }}
+                        sx={{ mt: 1 }}
                       >
-                        {category.description}
+                        Articles: {category.articleCount}
                       </Typography>
                     </CardContent>
+                    <CardActions>
+                      <Button 
+                        size="small" 
+                        component={Link} 
+                        to={`/categories/${category.id}`}
+                      >
+                        View Articles
+                      </Button>
+                    </CardActions>
                   </Card>
                 </Grid>
               ))}
