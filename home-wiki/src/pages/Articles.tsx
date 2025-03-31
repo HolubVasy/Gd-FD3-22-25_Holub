@@ -117,31 +117,24 @@ export default function Articles() {
     setSelectedArticle(null);
   };
 
-  const handleView = () => {
-    if (selectedArticle) {
-      navigate(`/articles/${selectedArticle.id}`);
-    }
+  const handleView = (article: Article) => {
     handleMenuClose();
+    navigate(`/articles/${article.id}`);
   };
 
-  const handleUpdate = () => {
-    if (selectedArticle) {
-      navigate(`/articles/${selectedArticle.id}/edit`);
-    }
+  const handleUpdate = (article: Article) => {
     handleMenuClose();
+    navigate(`/articles/${article.id}/edit`);
   };
 
-  const handleDelete = async () => {
-    if (selectedArticle) {
-      try {
-        await axios.delete(`${API_BASE_URL}/Article/${selectedArticle.id}`);
-        fetchArticles(page, searchQuery);
-      } catch (error) {
-        console.error('Error deleting article:', error);
-        setError('Failed to delete article');
-      }
-    }
+  const handleDelete = async (article: Article) => {
     handleMenuClose();
+    try {
+      await axios.delete(`https://homewiki.azurewebsites.net/api/article/${article.id}`);
+      setArticles(articles.filter(a => a.id !== article.id));
+    } catch (error) {
+      console.error('Error deleting article:', error);
+    }
   };
 
   if (loading && !articles.length) {
@@ -300,15 +293,15 @@ export default function Articles() {
           horizontal: 'right',
         }}
       >
-        <MenuItem onClick={handleView}>
+        <MenuItem onClick={() => handleView(selectedArticle!)}>
           <VisibilityIcon fontSize="small" sx={{ mr: 1 }} />
           View
         </MenuItem>
-        <MenuItem onClick={handleUpdate}>
+        <MenuItem onClick={() => handleUpdate(selectedArticle!)}>
           <EditIcon fontSize="small" sx={{ mr: 1 }} />
           Update
         </MenuItem>
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={() => handleDelete(selectedArticle!)} sx={{ color: 'error.main' }}>
           <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
           Delete
         </MenuItem>

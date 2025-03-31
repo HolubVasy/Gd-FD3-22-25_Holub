@@ -4,7 +4,8 @@ export interface Article {
   id: number;
   name: string;
   description: string;
-  category: Category;
+  category?: Category;
+  tags?: Tag[];
   createdBy: string;
   createdAt: string;
   modifiedBy?: string;

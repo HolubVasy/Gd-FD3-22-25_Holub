@@ -11,6 +11,8 @@ import TagArticles from './components/Tag/TagArticles';
 import ContactInfo from './pages/ContactInfo';
 import TermsOfUse from './pages/TermsOfUse';
 import CreateArticle from './pages/CreateArticle';
+import ArticleDetails from './pages/ArticleDetails';
+import EditArticle from './pages/EditArticle';
 
 const App = () => {
   return (
@@ -19,7 +21,9 @@ const App = () => {
         <Route element={<Layout><Outlet /></Layout>}>
           <Route path="/" element={<MainPage />} />
           <Route path="/articles" element={<Articles />} />
+          <Route path="/articles/:id" element={<ArticleDetails />} />
           <Route path="/articles/create" element={<CreateArticle />} />
+          <Route path="/articles/:id/edit" element={<EditArticle />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/tags" element={<Tags />} />
           <Route path="/contact" element={<ContactInfo />} />
