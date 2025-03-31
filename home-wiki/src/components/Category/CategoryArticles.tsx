@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Box, 
   Grid, 
@@ -10,9 +10,18 @@ import {
   IconButton,
   Pagination,
   InputAdornment,
-  Fab
+  Fab,
+  Menu,
+  MenuItem
 } from '@mui/material';
-import { Search as SearchIcon, MoreVert as MoreVertIcon, Add as AddIcon } from '@mui/icons-material';
+import { 
+  Search as SearchIcon, 
+  MoreVert as MoreVertIcon, 
+  Add as AddIcon,
+  Visibility as VisibilityIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon 
+} from '@mui/icons-material';
 import axios from 'axios';
 import { Article, Category } from '#/types/models';
 import CreateArticleForm from '../Article/CreateArticleForm';
@@ -21,6 +30,7 @@ const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
 const CategoryArticles = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [articles, setArticles] = useState<Article[]>([]);
   const [category, setCategory] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
@@ -29,6 +39,8 @@ const CategoryArticles = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const pageSize = 10;
 
   const fetchArticles = async (pageNumber: number, search?: string) => {
@@ -109,6 +121,43 @@ const CategoryArticles = () => {
     setShowCreateForm(false);
     // Refresh articles list after creating a new one
     fetchArticles(page, searchQuery);
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, article: Article) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedArticle(article);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedArticle(null);
+  };
+
+  const handleView = () => {
+    if (selectedArticle) {
+      navigate(`/articles/${selectedArticle.id}`);
+    }
+    handleMenuClose();
+  };
+
+  const handleUpdate = () => {
+    if (selectedArticle) {
+      navigate(`/articles/${selectedArticle.id}/edit`);
+    }
+    handleMenuClose();
+  };
+
+  const handleDelete = async () => {
+    if (selectedArticle) {
+      try {
+        await axios.delete(`${API_BASE_URL}/Article/${selectedArticle.id}`);
+        fetchArticles(page, searchQuery);
+      } catch (error) {
+        console.error('Error deleting article:', error);
+        setError('Failed to delete article');
+      }
+    }
+    handleMenuClose();
   };
 
   if (loading && !articles.length) {
@@ -200,6 +249,7 @@ const CategoryArticles = () => {
                             </Typography>
                             <IconButton 
                               size="small" 
+                              onClick={(e) => handleMenuOpen(e, article)}
                               sx={{ 
                                 p: 0.5,
                                 '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' }
@@ -236,6 +286,33 @@ const CategoryArticles = () => {
                   ))}
                 </Grid>
               </Box>
+
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                <MenuItem onClick={handleView}>
+                  <VisibilityIcon fontSize="small" sx={{ mr: 1 }} />
+                  View
+                </MenuItem>
+                <MenuItem onClick={handleUpdate}>
+                  <EditIcon fontSize="small" sx={{ mr: 1 }} />
+                  Update
+                </MenuItem>
+                <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+                  <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
+                  Delete
+                </MenuItem>
+              </Menu>
 
               {totalPages > 1 && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>

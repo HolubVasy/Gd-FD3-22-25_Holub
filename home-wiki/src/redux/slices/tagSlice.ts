@@ -254,10 +254,10 @@ const tagSlice = createSlice({
   },
 });
 
-export const { 
-  setTags, 
+export const {
+  setTags,
   setCurrentTag, 
-  setLoading, 
+  setLoading,
   setError,
   setCurrentPage 
 } = tagSlice.actions;

@@ -13,11 +13,20 @@ import {
   CircularProgress,
   Alert,
   CardActions,
-  Button
+  Button,
+  Menu,
+  MenuItem
 } from '@mui/material';
-import { Search as SearchIcon, Add as AddIcon } from '@mui/icons-material';
+import { 
+  Search as SearchIcon, 
+  Add as AddIcon,
+  MoreVert as MoreVertIcon,
+  Visibility as VisibilityIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon
+} from '@mui/icons-material';
 import axios from 'axios';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 interface Article {
   id: number;
@@ -54,6 +63,9 @@ export default function Articles() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 10;
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   const fetchArticles = React.useCallback(async (pageNumber: number, search: string) => {
     try {
@@ -95,6 +107,43 @@ export default function Articles() {
     fetchArticles(value, searchQuery);
   };
 
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, article: Article) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedArticle(article);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedArticle(null);
+  };
+
+  const handleView = () => {
+    if (selectedArticle) {
+      navigate(`/articles/${selectedArticle.id}`);
+    }
+    handleMenuClose();
+  };
+
+  const handleUpdate = () => {
+    if (selectedArticle) {
+      navigate(`/articles/${selectedArticle.id}/edit`);
+    }
+    handleMenuClose();
+  };
+
+  const handleDelete = async () => {
+    if (selectedArticle) {
+      try {
+        await axios.delete(`${API_BASE_URL}/Article/${selectedArticle.id}`);
+        fetchArticles(page, searchQuery);
+      } catch (error) {
+        console.error('Error deleting article:', error);
+        setError('Failed to delete article');
+      }
+    }
+    handleMenuClose();
+  };
+
   if (loading && !articles.length) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
@@ -125,10 +174,10 @@ export default function Articles() {
 
       <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
         <Typography sx={{ mr: 2 }}>Search by name:</Typography>
-        <TextField
+      <TextField
           size="small"
           value={searchQuery}
-          onChange={handleSearchChange}
+        onChange={handleSearchChange}
           placeholder="Search..."
           sx={{ width: 300 }}
           InputProps={{
@@ -177,9 +226,21 @@ export default function Articles() {
               }}
             >
               <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" component="h2" gutterBottom>
-                  {article.name}
-                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                  <Typography variant="h6" component="h2">
+                    {article.name}
+                  </Typography>
+                  <IconButton 
+                    size="small"
+                    onClick={(e) => handleMenuOpen(e, article)}
+                    sx={{ 
+                      ml: 1,
+                      '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' }
+                    }}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                </Box>
                 <Typography 
                   variant="body2" 
                   color="text.secondary" 
@@ -221,19 +282,37 @@ export default function Articles() {
                   </Typography>
                 </Box>
               </CardContent>
-              <CardActions>
-                <Button 
-                  size="small" 
-                  component={RouterLink} 
-                  to={`/articles/${article.id}`}
-                >
-                  Read More
-                </Button>
-              </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem onClick={handleView}>
+          <VisibilityIcon fontSize="small" sx={{ mr: 1 }} />
+          View
+        </MenuItem>
+        <MenuItem onClick={handleUpdate}>
+          <EditIcon fontSize="small" sx={{ mr: 1 }} />
+          Update
+        </MenuItem>
+        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+          <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
+          Delete
+        </MenuItem>
+      </Menu>
 
       {totalPages > 1 && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
