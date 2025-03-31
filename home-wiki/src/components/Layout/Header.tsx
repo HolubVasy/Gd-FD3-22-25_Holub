@@ -24,7 +24,7 @@ export default function Header() {
             component={Link} 
             to="/"
           >
-            Main
+            Home
           </Button>
           <Button 
             color="inherit" 

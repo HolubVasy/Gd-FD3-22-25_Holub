@@ -62,6 +62,18 @@ export default function Footer() {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <Link 
+                href="/" 
+                color="inherit" 
+                sx={{ 
+                  mb: 1,
+                  '&:hover': { 
+                    color: '#bbdefb' 
+                  } 
+                }}
+              >
+                Home
+              </Link>
+              <Link 
                 href="/contact" 
                 color="inherit" 
                 sx={{ 

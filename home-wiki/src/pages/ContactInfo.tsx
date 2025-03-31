@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Typography, Container, Grid, Paper } from '@mui/material';
+import { Box, Typography, Paper, Link, Container, Grid } from '@mui/material';
+import { Email as EmailIcon } from '@mui/icons-material';
 
-export default function MainPage() {
+export default function ContactInfo() {
   return (
     <Container>
       <Box sx={{ 
@@ -21,7 +22,7 @@ export default function MainPage() {
             color: '#1976d2'
           }}
         >
-          Добро пожаловать в Home Wiki!
+          Контактная информация
         </Typography>
 
         <Typography 
@@ -33,7 +34,7 @@ export default function MainPage() {
             maxWidth: 600
           }}
         >
-          Ваш личный путеводитель по домашней жизни - от DIY проектов до советов по садоводству, всё в одном месте.
+          Есть вопросы или предложения? Не стесняйтесь обращаться к нам!
         </Typography>
 
         <Grid container spacing={4} justifyContent="center">
@@ -60,16 +61,41 @@ export default function MainPage() {
                   fontWeight: 500
                 }}
               >
-                Что мы предлагаем
+                Разработчик
               </Typography>
-              <Typography variant="body1" paragraph>
-                Откройте для себя множество знаний об обслуживании дома, DIY проектах и улучшении образа жизни.
+              <Typography variant="h6" paragraph>
+                Василий Голуб
               </Typography>
-              <Typography variant="body1" paragraph>
-                Наши статьи тщательно подобраны, чтобы предоставить практические решения и творческие идеи для вашего дома.
-              </Typography>
-              <Typography variant="body1">
-                Просматривайте различные категории, чтобы найти именно то, что вам нужно.
+
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1,
+                mt: 3
+              }}>
+                <EmailIcon sx={{ color: '#1976d2' }} />
+                <Link 
+                  href="mailto:holubvasy@gmail.com"
+                  sx={{ 
+                    color: '#1976d2',
+                    textDecoration: 'none',
+                    '&:hover': {
+                      textDecoration: 'underline'
+                    }
+                  }}
+                >
+                  holubvasy@gmail.com
+                </Link>
+              </Box>
+
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  mt: 4,
+                  color: 'text.secondary'
+                }}
+              >
+                Я всегда открыт для обратной связи и предложений по улучшению Home Wiki. Ваш вклад помогает сделать эту платформу лучше для всех.
               </Typography>
             </Paper>
           </Grid>
@@ -97,16 +123,25 @@ export default function MainPage() {
                   fontWeight: 500
                 }}
               >
-                Как начать
+                Время ответа
               </Typography>
+              
               <Typography variant="body1" paragraph>
-                Переходите по категориям, чтобы найти интересующие вас статьи.
+                Я стараюсь отвечать на все запросы в течение 24-48 часов в рабочие дни.
               </Typography>
+
               <Typography variant="body1" paragraph>
-                Используйте теги для быстрого поиска конкретных тем.
+                Для срочных вопросов, пожалуйста, укажите "СРОЧНО" в теме письма.
               </Typography>
-              <Typography variant="body1">
-                Создавайте собственные статьи, чтобы делиться своими знаниями с сообществом.
+
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  mt: 'auto',
+                  color: 'text.secondary'
+                }}
+              >
+                Примечание: Эта контактная информация предназначена только для вопросов, связанных с приложением и бизнесом.
               </Typography>
             </Paper>
           </Grid>

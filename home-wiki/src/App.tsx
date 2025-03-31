@@ -8,6 +8,9 @@ import Categories from './pages/Categories';
 import Tags from './pages/Tags';
 import CategoryArticles from './components/Category/CategoryArticles';
 import TagArticles from './components/Tag/TagArticles';
+import ContactInfo from './pages/ContactInfo';
+import TermsOfUse from './pages/TermsOfUse';
+import CreateArticle from './pages/CreateArticle';
 
 const App = () => {
   return (
@@ -16,8 +19,11 @@ const App = () => {
         <Route element={<Layout><Outlet /></Layout>}>
           <Route path="/" element={<MainPage />} />
           <Route path="/articles" element={<Articles />} />
+          <Route path="/articles/create" element={<CreateArticle />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/tags" element={<Tags />} />
+          <Route path="/contact" element={<ContactInfo />} />
+          <Route path="/terms" element={<TermsOfUse />} />
           <Route path="/categories/:id" element={<CategoryArticles />} />
           <Route path="/tags/:id" element={<TagArticles />} />
         </Route>
