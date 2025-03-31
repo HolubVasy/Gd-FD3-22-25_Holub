@@ -6,9 +6,10 @@ import {
   Chip,
   Button,
   Typography,
-  Paper
+  Paper,
+  Alert
 } from '@mui/material';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Category, Tag } from '#/types/models';
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
@@ -28,11 +29,26 @@ interface ArticleRequestDto {
   modifiedBy: string;
 }
 
-const CreateArticleForm: React.FC<CreateArticleFormProps> = ({ 
+interface ErrorResponse {
+  message: string;
+  status: number;
+}
+
+interface ApiResponse<T> {
+  items: T[];
+  pageCount: number;
+  totalItemCount: number;
+  pageNumber: number;
+  pageSize: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+}
+
+export default function CreateArticleForm({ 
   onClose,
   initialCategoryId,
   initialTagId
-}) => {
+}: CreateArticleFormProps) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -40,47 +56,59 @@ const CreateArticleForm: React.FC<CreateArticleFormProps> = ({
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(null);
         const [categoriesResponse, tagsResponse] = await Promise.all([
-          axios.get(`${API_BASE_URL}/category`),
-          axios.get(`${API_BASE_URL}/tag`)
+          axios.get<ApiResponse<Category>>(`${API_BASE_URL}/category/search?name=&pageNumber=1&pageSize=100`),
+          axios.get<ApiResponse<Tag>>(`${API_BASE_URL}/tag/search?name=&pageNumber=1&pageSize=100`)
         ]);
 
-        setCategories(categoriesResponse.data);
-        setTags(tagsResponse.data);
+        if (categoriesResponse.data?.items && tagsResponse.data?.items) {
+          setCategories(categoriesResponse.data.items);
+          setTags(tagsResponse.data.items);
 
-        if (initialCategoryId) {
-          const categoryIdNumber = parseInt(initialCategoryId, 10);
-          const category = categoriesResponse.data.find((c: Category) => c.id === categoryIdNumber);
-          if (category) setSelectedCategory(category);
+          if (initialCategoryId) {
+            const categoryIdNumber = parseInt(initialCategoryId, 10);
+            const category = categoriesResponse.data.items.find(
+              (c: Category) => c.id === categoryIdNumber
+            );
+            if (category) setSelectedCategory(category);
+          }
+
+          if (initialTagId) {
+            const tagIdNumber = parseInt(initialTagId, 10);
+            const tag = tagsResponse.data.items.find(
+              (t: Tag) => t.id === tagIdNumber
+            );
+            if (tag) setSelectedTags([tag]);
+          }
         }
-
-        if (initialTagId) {
-          const tagIdNumber = parseInt(initialTagId, 10);
-          const tag = tagsResponse.data.find((t: Tag) => t.id === tagIdNumber);
-          if (tag) setSelectedTags([tag]);
-        }
-
-        setLoading(false);
-      } catch (error) {
+      } catch (err) {
+        const error = err as AxiosError<ErrorResponse>;
+        setError(error.response?.data?.message || 'Failed to load form data');
         console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [initialCategoryId, initialTagId]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!selectedCategory) {
+      setError('Please select a category');
       return;
     }
 
     try {
+      setError(null);
       const articleData: ArticleRequestDto = {
         name,
         description,
@@ -90,16 +118,21 @@ const CreateArticleForm: React.FC<CreateArticleFormProps> = ({
         modifiedBy: 'User'
       };
 
-      console.log('Sending article data:', articleData); // Для отладки
       await axios.post(`${API_BASE_URL}/article`, articleData);
       onClose();
-    } catch (error) {
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+      setError(error.response?.data?.message || 'Failed to create article');
       console.error('Error creating article:', error);
     }
   };
 
   if (loading) {
-    return <Typography>Loading form...</Typography>;
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+        <Typography>Loading form...</Typography>
+      </Box>
+    );
   }
 
   return (
@@ -116,11 +149,17 @@ const CreateArticleForm: React.FC<CreateArticleFormProps> = ({
         Create New Article
       </Typography>
 
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
       <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <TextField
           label="Article Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
           required
           fullWidth
         />
@@ -128,14 +167,14 @@ const CreateArticleForm: React.FC<CreateArticleFormProps> = ({
         <TextField
           label="Description"
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
           required
           fullWidth
           multiline
           rows={4}
         />
 
-        <Autocomplete
+        <Autocomplete<Category, false>
           value={selectedCategory}
           onChange={(_, newValue) => setSelectedCategory(newValue)}
           options={categories}
@@ -149,7 +188,7 @@ const CreateArticleForm: React.FC<CreateArticleFormProps> = ({
           )}
         />
 
-        <Autocomplete
+        <Autocomplete<Tag, true>
           multiple
           value={selectedTags}
           onChange={(_, newValue) => setSelectedTags(newValue)}
@@ -163,16 +202,19 @@ const CreateArticleForm: React.FC<CreateArticleFormProps> = ({
             />
           )}
           renderTags={(value, getTagProps) =>
-            value.map((option, index) => (
-              <Chip
-                label={option.name}
-                {...getTagProps({ index })}
-                sx={{ 
-                  backgroundColor: '#e0f2f1',
-                  '&:hover': { backgroundColor: '#b2dfdb' }
-                }}
-              />
-            ))
+            value.map((option, index) => {
+              const props = getTagProps({ index });
+              return (
+                <Chip
+                  label={option.name}
+                  {...props}
+                  sx={{ 
+                    backgroundColor: '#e0f2f1',
+                    '&:hover': { backgroundColor: '#b2dfdb' }
+                  }}
+                />
+              );
+            })
           }
         />
 
@@ -194,6 +236,4 @@ const CreateArticleForm: React.FC<CreateArticleFormProps> = ({
       </Box>
     </Paper>
   );
-};
-
-export default CreateArticleForm; 
+} 
