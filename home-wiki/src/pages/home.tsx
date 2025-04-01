@@ -2,7 +2,7 @@
 import React from 'react';
 import { Container, Typography } from '@mui/material';
 
-const Home: React.FC = () => {
+export default function Home() {
   return (
     <Container>
       <Typography variant="h4" sx={{ mt: 2 }}>
@@ -13,6 +13,4 @@ const Home: React.FC = () => {
       </Typography>
     </Container>
   );
-};
-
-export default Home;
+}

@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { ArticleService } from '../../api/ArticleService';
 import { setCurrentArticle } from '../../redux/slices/articleSlice';
 
-const ArticleDetails: React.FC = () => {
+export default function ArticleDetails() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { currentArticle, loading } = useAppSelector(state => state.articles);
@@ -39,6 +39,4 @@ const ArticleDetails: React.FC = () => {
       {/* Можно добавить список тегов и т.д. */}
     </Container>
   );
-};
-
-export default ArticleDetails;
+}

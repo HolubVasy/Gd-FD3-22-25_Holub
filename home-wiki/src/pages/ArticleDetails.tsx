@@ -18,7 +18,7 @@ import {
 import axios from 'axios';
 import { Article } from '#/types/models';
 
-const ArticleDetails = () => {
+export default function ArticleDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [article, setArticle] = useState<Article | null>(null);
@@ -184,6 +184,4 @@ const ArticleDetails = () => {
       </Paper>
     </Box>
   );
-};
-
-export default ArticleDetails;
+}

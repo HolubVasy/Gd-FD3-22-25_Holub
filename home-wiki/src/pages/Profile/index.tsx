@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Typography, Box, Paper } from '@mui/material';
 
-const Profile: React.FC = () => {
+export default function Profile() {
   return (
     <Container>
       <Box sx={{ mt: 4 }}>
@@ -14,6 +14,4 @@ const Profile: React.FC = () => {
       </Box>
     </Container>
   );
-};
-
-export default Profile;
+}

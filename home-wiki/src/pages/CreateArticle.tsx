@@ -13,7 +13,8 @@ import {
   Alert,
   Chip,
   SelectChangeEvent,
-  OutlinedInput
+  OutlinedInput,
+  Snackbar
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -36,6 +37,11 @@ export default function CreateArticle() {
   const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success' as 'success' | 'error'
+  });
 
   const [formData, setFormData] = useState({
     name: '',
@@ -75,17 +81,53 @@ export default function CreateArticle() {
       setLoading(true);
       setError(null);
 
-      await axios.post(`${API_BASE_URL}/article`, {
+      const response = await axios.post(`${API_BASE_URL}/article`, {
         name: formData.name,
         description: formData.description,
         categoryId: Number(formData.categoryId),
-        tagIds: formData.selectedTags
+        tagIds: formData.selectedTags,
+        createdBy: 'system',
+        modifiedBy: 'system'
       });
 
-      navigate('/articles');
-    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: 'Статья успешно создана',
+        severity: 'success'
+      });
+
+      setTimeout(() => {
+        navigate('/articles');
+      }, 1500);
+
+    } catch (error: any) {
       console.error('Error creating article:', error);
-      setError('Failed to create article');
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            setSnackbar({
+              open: true,
+              message: 'Ошибка валидации: ' + JSON.stringify(error.response.data.errors),
+              severity: 'error'
+            });
+            break;
+          case 500:
+            navigate('/500');
+            break;
+          default:
+            setSnackbar({
+              open: true,
+              message: 'Не удалось создать статью',
+              severity: 'error'
+            });
+        }
+      } else {
+        setSnackbar({
+          open: true,
+          message: 'Не удалось создать статью',
+          severity: 'error'
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -112,6 +154,10 @@ export default function CreateArticle() {
       ...prev,
       selectedTags: value
     }));
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
   };
 
   if (loading && !categories.length) {
@@ -221,6 +267,28 @@ export default function CreateArticle() {
           </Box>
         </form>
       </Paper>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert 
+          onClose={handleSnackbarClose} 
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ 
+            width: '100%',
+            borderRadius: 1,
+            '& .MuiAlert-message': {
+              fontSize: '1rem'
+            }
+          }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 } 

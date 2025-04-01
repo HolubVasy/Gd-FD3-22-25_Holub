@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Category } from '#/types/models';
 import { CategoryService } from '#/api/CategoryService';
 
-const CategoryDetails: React.FC = () => {
+export default function CategoryDetails() {
   const { id } = useParams<{ id: string }>();
   const [category, setCategory] = useState<Category | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,6 +41,4 @@ const CategoryDetails: React.FC = () => {
       <Typography sx={{ mt: 2 }}>{category.description}</Typography>
     </Container>
   );
-};
-
-export default CategoryDetails;
+}

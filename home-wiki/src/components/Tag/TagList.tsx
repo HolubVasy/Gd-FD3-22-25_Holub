@@ -16,7 +16,7 @@ import { Delete as DeleteIcon, Edit as EditIcon, Search as SearchIcon } from '@m
 import { Tag } from '#/types/models';
 import TagEditDialog from './TagEditDialog';
 
-const TagList: React.FC = () => {
+export default function TagList() {
   const {
     tags,
     loading,
@@ -161,6 +161,4 @@ const TagList: React.FC = () => {
       />
     </Box>
   );
-};
-
-export default TagList; 
+} 

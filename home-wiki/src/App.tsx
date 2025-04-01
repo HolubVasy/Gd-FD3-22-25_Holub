@@ -17,7 +17,7 @@ import TermsOfUse from './pages/TermsOfUse';
 import CategoryArticles from './components/Category/CategoryArticles';
 import TagArticles from './components/Tag/TagArticles';
 
-const App = () => {
+export default function App() {
   return (
     <Router>
       <Layout>
@@ -41,6 +41,4 @@ const App = () => {
       </Layout>
     </Router>
   );
-};
-
-export default App;
+}

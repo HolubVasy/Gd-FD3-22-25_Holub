@@ -4,7 +4,7 @@ import Profile from '../../components/Auth/Profile';
 import { useAuth } from '../../hooks/useAuth';
 import { Navigate } from 'react-router-dom';
 
-const ProfilePage: React.FC = () => {
+export default function ProfilePage() {
   const { isAuthenticated } = useAuth();
 
   // If user is not authenticated, redirect to login
@@ -19,6 +19,4 @@ const ProfilePage: React.FC = () => {
       </Box>
     </Container>
   );
-};
-
-export default ProfilePage;
+}

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Tag } from '#/types/models';
 import { TagService } from '#/api/TagService';
 
-const TagDetails: React.FC = () => {
+export default function TagDetails() {
   const { id } = useParams<{ id: string }>();
   const [tag, setTag] = useState<Tag | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -53,6 +53,4 @@ const TagDetails: React.FC = () => {
       {/* Дополнительная информация по необходимости */}
     </Container>
   );
-};
-
-export default TagDetails;
+}

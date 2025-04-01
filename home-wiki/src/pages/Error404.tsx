@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HomeIcon from '@mui/icons-material/Home';
 
-const Error404 = () => {
+export default function Error404() {
   const navigate = useNavigate();
 
   return (
@@ -40,6 +40,4 @@ const Error404 = () => {
       </Box>
     </Container>
   );
-};
-
-export default Error404; 
+} 

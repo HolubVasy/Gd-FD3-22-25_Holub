@@ -5,7 +5,7 @@ import Login from '../../components/Auth/Login';
 import Register from '../../components/Auth/Register';
 import { useAuth } from '../../hooks/useAuth';
 
-const AuthPage: React.FC = () => {
+export default function AuthPage() {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
 
@@ -22,6 +22,4 @@ const AuthPage: React.FC = () => {
       <Box sx={{ py: 4 }}>{isLoginPath ? <Login /> : <Register />}</Box>
     </Container>
   );
-};
-
-export default AuthPage;
+}

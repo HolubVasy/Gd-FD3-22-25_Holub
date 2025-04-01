@@ -16,6 +16,7 @@ import {
   Alert,
   Breadcrumbs,
   Link,
+  Snackbar,
 } from '@mui/material';
 import {
   Save as SaveIcon,
@@ -36,7 +37,7 @@ const MenuProps = {
   },
 };
 
-const EditArticle = () => {
+export default function EditArticle() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -56,6 +57,11 @@ const EditArticle = () => {
     description: '',
     categoryId: 0,
     tagIds: [],
+  });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success' as 'success' | 'error'
   });
 
   useEffect(() => {
@@ -136,26 +142,46 @@ const EditArticle = () => {
         modifiedBy: 'system'
       };
 
-      console.log('Sending update request:', requestData);
-
       await axios.put('https://homewiki.azurewebsites.net/api/article', requestData);
 
-      navigate(`/articles/${id}`);
+      setSnackbar({
+        open: true,
+        message: 'Статья успешно обновлена',
+        severity: 'success'
+      });
+
+      // Задержка перед переходом
+      setTimeout(() => {
+        navigate(`/articles/${id}`);
+      }, 1500);
+
     } catch (error: any) {
       console.error('Error updating article:', error);
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            setError('Ошибка валидации: ' + JSON.stringify(error.response.data.errors));
+            setSnackbar({
+              open: true,
+              message: 'Ошибка валидации: ' + JSON.stringify(error.response.data.errors),
+              severity: 'error'
+            });
             break;
           case 500:
             navigate('/500');
             break;
           default:
-            setError('Failed to update article');
+            setSnackbar({
+              open: true,
+              message: 'Не удалось обновить статью',
+              severity: 'error'
+            });
         }
       } else {
-        navigate('/500');
+        setSnackbar({
+          open: true,
+          message: 'Не удалось обновить статью',
+          severity: 'error'
+        });
       }
     } finally {
       setSaving(false);
@@ -323,8 +349,28 @@ const EditArticle = () => {
           </Button>
         </Box>
       </Paper>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert 
+          onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ 
+            width: '100%',
+            borderRadius: 1,
+            '& .MuiAlert-message': {
+              fontSize: '1rem'
+            }
+          }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
-};
-
-export default EditArticle; 
+} 

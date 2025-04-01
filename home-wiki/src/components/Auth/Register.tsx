@@ -3,7 +3,7 @@ import { Box, Button, TextField, Typography, Link } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '#/hooks/useAuth';
 
-const Register = () => {
+export default function Register() {
   const navigate = useNavigate();
   const { register, loading, error } = useAuth();
   const [email, setEmail] = useState('');
@@ -79,6 +79,4 @@ const Register = () => {
       </Typography>
     </Box>
   );
-};
-
-export default Register;
+}

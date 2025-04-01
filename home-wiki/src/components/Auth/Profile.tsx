@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { useAuth } from '#/hooks/useAuth';
 
-const Profile: React.FC = () => {
+export default function Profile() {
   const { user, loading, updateUserProfile, logout } = useAuth();
   const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -132,6 +132,4 @@ const Profile: React.FC = () => {
       </Paper>
     </Box>
   );
-};
-
-export default Profile;
+}

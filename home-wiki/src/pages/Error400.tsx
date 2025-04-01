@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HomeIcon from '@mui/icons-material/Home';
 
-const Error400 = () => {
+export default function Error400() {
   const navigate = useNavigate();
 
   return (
@@ -40,6 +40,4 @@ const Error400 = () => {
       </Box>
     </Container>
   );
-};
-
-export default Error400; 
+} 

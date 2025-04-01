@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { register } from '../../redux/slices/authSlice'; // аналогичный thunk, надо написать
 import { Navigate } from 'react-router-dom';
 
-const Register: React.FC = () => {
+export default function Register() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, loading, error } = useAppSelector(state => state.auth);
   const [email, setEmail] = useState('');
@@ -60,6 +60,4 @@ const Register: React.FC = () => {
       </form>
     </Container>
   );
-};
-
-export default Register;
+}

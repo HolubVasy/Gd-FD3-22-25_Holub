@@ -2,7 +2,7 @@
 import React from 'react';
 import { Container, Typography } from '@mui/material';
 
-const About: React.FC = () => {
+export default function About() {
   return (
     <Container>
       <Typography variant="h4" sx={{ mt: 2 }}>
@@ -13,6 +13,4 @@ const About: React.FC = () => {
       </Typography>
     </Container>
   );
-};
-
-export default About;
+}

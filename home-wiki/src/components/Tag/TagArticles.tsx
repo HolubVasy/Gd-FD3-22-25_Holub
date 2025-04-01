@@ -28,7 +28,7 @@ import CreateArticleForm from '../Article/CreateArticleForm';
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
-const TagArticles = () => {
+export default function TagArticles() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [articles, setArticles] = useState<Article[]>([]);
@@ -329,6 +329,4 @@ const TagArticles = () => {
       )}
     </Box>
   );
-};
-
-export default TagArticles; 
+} 

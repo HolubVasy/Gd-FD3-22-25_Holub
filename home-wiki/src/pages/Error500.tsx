@@ -5,7 +5,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HomeIcon from '@mui/icons-material/Home';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-const Error500 = () => {
+export default function Error500() {
   const navigate = useNavigate();
 
   return (
@@ -49,6 +49,4 @@ const Error500 = () => {
       </Box>
     </Container>
   );
-};
-
-export default Error500; 
+} 

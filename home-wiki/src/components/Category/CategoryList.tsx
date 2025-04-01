@@ -17,7 +17,7 @@ import { Delete as DeleteIcon, Edit as EditIcon, Search as SearchIcon } from '@m
 import { Category } from '#/types/models';
 import CategoryEditDialog from './CategoryEditDialog';
 
-const CategoryList: React.FC = () => {
+export default function CategoryList() {
   const {
     categories,
     loading,
@@ -150,6 +150,4 @@ const CategoryList: React.FC = () => {
       />
     </Box>
   );
-};
-
-export default CategoryList;
+}

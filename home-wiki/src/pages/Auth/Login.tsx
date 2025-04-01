@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { login } from '../../redux/slices/authSlice';
 import { Navigate } from 'react-router-dom';
 
-const Login: React.FC = () => {
+export default function Login() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, loading, error } = useAppSelector(state => state.auth);
   const [email, setEmail] = useState('');
@@ -51,6 +51,4 @@ const Login: React.FC = () => {
       </form>
     </Container>
   );
-};
-
-export default Login;
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
-const PrivateRoute: React.FC = () => {
+export default function PrivateRoute() {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
@@ -13,6 +13,4 @@ const PrivateRoute: React.FC = () => {
 
   // If authenticated, render the child routes
   return <Outlet />;
-};
-
-export default PrivateRoute;
+}

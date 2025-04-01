@@ -3,7 +3,7 @@ import { Box, Button, TextField, Typography, Link } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '#/hooks/useAuth';
 
-const Login = () => {
+export default function Login() {
   const navigate = useNavigate();
   const { login, loading, error } = useAuth();
   const [email, setEmail] = useState('');
@@ -69,6 +69,4 @@ const Login = () => {
       </Typography>
     </Box>
   );
-};
-
-export default Login; 
+} 

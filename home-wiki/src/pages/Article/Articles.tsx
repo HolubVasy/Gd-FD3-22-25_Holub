@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { fetchArticles } from '../../redux/slices/articleSlice';
 import { Link } from 'react-router-dom';
 
-const Articles: React.FC = () => {
+export default function Articles() {
   const dispatch = useAppDispatch();
   const { list, loading, error, totalPages, currentPage } = useAppSelector(state => state.articles);
   const [searchTerm, setSearchTerm] = useState('');
@@ -103,6 +103,4 @@ const Articles: React.FC = () => {
       )}
     </Container>
   );
-};
-
-export default Articles;
+}
