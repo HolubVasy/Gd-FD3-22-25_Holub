@@ -66,10 +66,24 @@ export default function ArticleDetails() {
       try {
         setLoading(true);
         setError(null);
-        const response = await axios.get(`https://homewiki.azurewebsites.net/api/article/${id}`);
+        
+        const response = await axios.get(`https://homewiki.azurewebsites.net/api/Article/${id}`);
+        
+        if (!response.data) {
+          navigate('/404');
+          return;
+        }
+        
         setArticle(response.data);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching article:', error);
+        
+        // Check if it's a 404 error
+        if (error.response && error.response.status === 404) {
+          navigate('/404');
+          return;
+        }
+        
         setError('Failed to load article');
       } finally {
         setLoading(false);
@@ -79,7 +93,7 @@ export default function ArticleDetails() {
     if (id) {
       fetchArticle();
     }
-  }, [id]);
+  }, [id, navigate]);
 
   const handleEdit = () => {
     navigate(`/articles/${id}/edit`);
