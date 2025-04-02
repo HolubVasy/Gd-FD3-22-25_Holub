@@ -12,7 +12,8 @@ import {
   InputAdornment,
   Fab,
   Menu,
-  MenuItem
+  MenuItem,
+  CircularProgress
 } from '@mui/material';
 import { 
   Search as SearchIcon, 
@@ -155,8 +156,18 @@ export default function CategoryArticles() {
 
   if (loading && !articles.length) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <Typography>Loading articles...</Typography>
+      <Box 
+        display="flex" 
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="400px"
+        flexDirection="column"
+        gap={2}
+      >
+        <CircularProgress size={60} />
+        <Typography color="text.secondary">
+          Loading articles...
+        </Typography>
       </Box>
     );
   }

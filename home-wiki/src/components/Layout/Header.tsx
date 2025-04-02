@@ -1,6 +1,7 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Search as SearchIcon } from '@mui/icons-material';
 
 export default function Header() {
   return (
@@ -18,7 +19,7 @@ export default function Header() {
         >
           Home wiki
         </Typography>
-        <Box sx={{ display: 'flex', gap: 3 }}>
+        <Box sx={{ display: 'flex', gap: 3, alignItems: 'center' }}>
           <Button 
             color="inherit" 
             component={Link} 
@@ -47,6 +48,14 @@ export default function Header() {
           >
             Tags
           </Button>
+          <IconButton 
+            color="inherit"
+            component={Link}
+            to="/search"
+            sx={{ ml: 1 }}
+          >
+            <SearchIcon />
+          </IconButton>
         </Box>
       </Toolbar>
     </AppBar>
