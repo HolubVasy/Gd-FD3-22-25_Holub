@@ -15,7 +15,8 @@ import {
   CardActions,
   Button,
   Menu,
-  MenuItem
+  MenuItem,
+  Snackbar
 } from '@mui/material';
 import { 
   Search as SearchIcon, 
@@ -27,8 +28,11 @@ import {
 } from '@mui/icons-material';
 import axios from 'axios';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import DeleteArticleDialog from '../components/Article/DeleteArticleDialog';
+import { ArticleService } from '../api/ArticleService';
 
-interface Article {
+// Define the API response type
+interface ApiArticle {
   id: number;
   name: string;
   description: string;
@@ -43,20 +47,20 @@ interface Article {
   modifiedAt: string | null;
 }
 
-interface ArticleResponse {
+interface ApiArticleResponse {
   pageCount: number;
   totalItemCount: number;
   pageNumber: number;
   pageSize: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
-  items: Article[];
+  items: ApiArticle[];
 }
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 
 export default function Articles() {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<ApiArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -65,14 +69,25 @@ export default function Articles() {
   const pageSize = 10;
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<ApiArticle | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [articleToDelete, setArticleToDelete] = useState<ApiArticle | null>(null);
+  const [notification, setNotification] = useState<{
+    open: boolean;
+    message: string;
+    severity: 'success' | 'error';
+  }>({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
   const fetchArticles = React.useCallback(async (pageNumber: number, search: string) => {
     try {
       setLoading(true);
       setError(null);
       const searchParam = `name=${encodeURIComponent(search)}`;
-      const response = await axios.get<ArticleResponse>(
+      const response = await axios.get<ApiArticleResponse>(
         `${API_BASE_URL}/Article/search?${searchParam}&pageNumber=${pageNumber}&pageSize=${pageSize}`
       );
       
@@ -107,7 +122,7 @@ export default function Articles() {
     fetchArticles(value, searchQuery);
   };
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, article: Article) => {
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, article: ApiArticle) => {
     setAnchorEl(event.currentTarget);
     setSelectedArticle(article);
   };
@@ -117,24 +132,55 @@ export default function Articles() {
     setSelectedArticle(null);
   };
 
-  const handleView = (article: Article) => {
+  const handleView = (article: ApiArticle) => {
     handleMenuClose();
     navigate(`/articles/${article.id}`);
   };
 
-  const handleUpdate = (article: Article) => {
+  const handleUpdate = (article: ApiArticle) => {
     handleMenuClose();
     navigate(`/articles/${article.id}/edit`);
   };
 
-  const handleDelete = async (article: Article) => {
+  const handleDeleteClick = (article: ApiArticle) => {
+    setArticleToDelete(article);
+    setDeleteDialogOpen(true);
     handleMenuClose();
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!articleToDelete) return;
+    
     try {
-      await axios.delete(`https://homewiki.azurewebsites.net/api/article/${article.id}`);
-      setArticles(articles.filter(a => a.id !== article.id));
+      await axios.delete(`https://homewiki.azurewebsites.net/api/Article/${articleToDelete.id}`);
+      console.log(`Deleting article with ID: ${articleToDelete.id}`);
+      
+      setArticles(articles.filter(a => a.id !== articleToDelete.id));
+      setDeleteDialogOpen(false);
+      setArticleToDelete(null);
+      
+      setNotification({
+        open: true,
+        message: 'Статья успешно удалена',
+        severity: 'success'
+      });
     } catch (error) {
       console.error('Error deleting article:', error);
+      setNotification({
+        open: true,
+        message: 'Ошибка при удалении статьи',
+        severity: 'error'
+      });
     }
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+    setArticleToDelete(null);
+  };
+
+  const handleCloseNotification = () => {
+    setNotification(prev => ({ ...prev, open: false }));
   };
 
   if (loading && !articles.length) {
@@ -251,21 +297,25 @@ export default function Articles() {
                 <Box sx={{ mt: 'auto' }}>
                   <Typography variant="body2" color="primary">
                     Category: {' '}
-                    <RouterLink 
-                      to={`/categories/${article.category.name.toLowerCase()}`}
-                      style={{ 
-                        color: 'inherit',
-                        textDecoration: 'none'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.textDecoration = 'underline';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.textDecoration = 'none';
-                      }}
-                    >
-                      {article.category.name}
-                    </RouterLink>
+                    {article.category ? (
+                      <RouterLink 
+                        to={`/categories/${article.category.name.toLowerCase()}`}
+                        style={{ 
+                          color: 'inherit',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.textDecoration = 'underline';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.textDecoration = 'none';
+                        }}
+                      >
+                        {article.category.name}
+                      </RouterLink>
+                    ) : (
+                      'Uncategorized'
+                    )}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Created by: {article.createdBy}
@@ -301,7 +351,7 @@ export default function Articles() {
           <EditIcon fontSize="small" sx={{ mr: 1 }} />
           Update
         </MenuItem>
-        <MenuItem onClick={() => handleDelete(selectedArticle!)} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={() => handleDeleteClick(selectedArticle!)} sx={{ color: 'error.main' }}>
           <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
           Delete
         </MenuItem>
@@ -332,6 +382,35 @@ export default function Articles() {
       >
         <AddIcon />
       </Fab>
+
+      <DeleteArticleDialog
+        open={deleteDialogOpen}
+        article={articleToDelete}
+        onClose={handleDeleteDialogClose}
+        onConfirm={handleDeleteConfirm}
+      />
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={3000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert 
+          onClose={handleCloseNotification} 
+          severity={notification.severity}
+          variant="filled"
+          sx={{ 
+            width: '100%',
+            '& .MuiAlert-message': {
+              fontSize: '0.875rem',
+              fontWeight: 500
+            }
+          }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

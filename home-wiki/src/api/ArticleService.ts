@@ -32,6 +32,7 @@ export const ArticleService = {
   },
 
   async delete(id: number): Promise<void> {
+    console.log(`Deleting article with ID: ${id}`);
     await axiosClient.delete(`/Article/${id}`);
   },
 };

@@ -13,7 +13,9 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Divider
+  Divider,
+  Snackbar,
+  Alert
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -23,14 +25,41 @@ import {
   MoreVert as MoreVertIcon
 } from '@mui/icons-material';
 import axios from 'axios';
-import { Article } from '../types';
+import DeleteArticleDialog from '../components/Article/DeleteArticleDialog';
+import { ArticleService } from '../api/ArticleService';
+
+// Define the API article type
+interface ApiArticle {
+  id: number;
+  name: string;
+  description: string;
+  category: {
+    id: number;
+    name: string;
+  };
+  tags: any[];
+  createdBy: string;
+  createdAt: string;
+  modifiedBy: string | null;
+  modifiedAt: string | null;
+}
 
 export default function ArticleDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [article, setArticle] = useState<Article | null>(null);
+  const [article, setArticle] = useState<ApiArticle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [notification, setNotification] = useState<{
+    open: boolean;
+    message: string;
+    severity: 'success' | 'error';
+  }>({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -56,18 +85,44 @@ export default function ArticleDetails() {
     navigate(`/articles/${id}/edit`);
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete this article?')) {
-      return;
-    }
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true);
+  };
 
+  const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`https://homewiki.azurewebsites.net/api/article/${id}`);
-      navigate('/articles');
+      // Use a direct axios call with the exact URL format from the example
+      await axios.delete(`https://homewiki.azurewebsites.net/api/Article/${id}`);
+      console.log(`Deleting article with ID: ${id}`);
+      
+      // Show success notification
+      setNotification({
+        open: true,
+        message: 'Статья успешно удалена',
+        severity: 'success'
+      });
+      
+      // Navigate back to articles list after a short delay
+      setTimeout(() => {
+        navigate('/articles');
+      }, 1500);
     } catch (error) {
       console.error('Error deleting article:', error);
       setError('Failed to delete article');
+      setNotification({
+        open: true,
+        message: 'Ошибка при удалении статьи',
+        severity: 'error'
+      });
     }
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleCloseNotification = () => {
+    setNotification(prev => ({ ...prev, open: false }));
   };
 
   if (loading) {
@@ -132,7 +187,7 @@ export default function ArticleDetails() {
               variant="contained"
               color="error"
               startIcon={<DeleteIcon />}
-              onClick={handleDelete}
+              onClick={handleDeleteClick}
             >
               Delete
             </Button>
@@ -189,6 +244,35 @@ export default function ArticleDetails() {
           )}
         </Box>
       </Paper>
+
+      <DeleteArticleDialog
+        open={deleteDialogOpen}
+        article={article}
+        onClose={handleDeleteDialogClose}
+        onConfirm={handleDeleteConfirm}
+      />
+      
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={3000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert 
+          onClose={handleCloseNotification} 
+          severity={notification.severity}
+          variant="filled"
+          sx={{ 
+            width: '100%',
+            '& .MuiAlert-message': {
+              fontSize: '0.875rem',
+              fontWeight: 500
+            }
+          }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
