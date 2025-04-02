@@ -16,6 +16,7 @@ import ContactInfo from './pages/ContactInfo';
 import TermsOfUse from './pages/TermsOfUse';
 import CategoryArticles from './components/Category/CategoryArticles';
 import TagArticles from './components/Tag/TagArticles';
+import Search from './pages/Search';
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/articles/create" element={<CreateArticle />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/tags" element={<Tags />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/400" element={<Error400 />} />
           <Route path="/500" element={<Error500 />} />
           <Route path="/404" element={<Error404 />} />

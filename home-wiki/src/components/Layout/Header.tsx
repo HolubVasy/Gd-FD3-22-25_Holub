@@ -1,9 +1,15 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search as SearchIcon } from '@mui/icons-material';
 
 export default function Header() {
+  const navigate = useNavigate();
+
+  const handleSearchClick = () => {
+    navigate('/search');
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -50,8 +56,7 @@ export default function Header() {
           </Button>
           <IconButton 
             color="inherit"
-            component={Link}
-            to="/search"
+            onClick={handleSearchClick}
             sx={{ ml: 1 }}
           >
             <SearchIcon />

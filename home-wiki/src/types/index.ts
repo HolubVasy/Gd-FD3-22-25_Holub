@@ -4,11 +4,11 @@ export interface Article {
   name: string;
   description: string;
   category?: Category;
-  tags?: Tag[];
+  tags?: Tag[] | null;
   createdBy: string;
   createdAt: string;
-  modifiedBy?: string;
-  modifiedAt?: string;
+  modifiedBy?: string | null;
+  modifiedAt?: string | null;
 }
 
 export interface Category {
