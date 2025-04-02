@@ -1,4 +1,4 @@
-import { Article, Category } from '#/types/models';
+import { Article, Category } from '../types/interfaces';
 import { getDocs, Query } from 'firebase/firestore';
 
 export const getArticles = async (q: Query) => {

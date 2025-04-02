@@ -15,8 +15,8 @@ import {
   QueryDocumentSnapshot,
   Query,
 } from 'firebase/firestore';
-import { Article, Tag, Category } from '../types/models';
 import axios from 'axios';
+import { Article, Tag, Category } from '../types/interfaces';
 
 const ARTICLES_COLLECTION = 'articles';
 const PAGE_SIZE = 10;

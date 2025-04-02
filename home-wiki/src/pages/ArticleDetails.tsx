@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
+  Container,
   Paper,
   Typography,
   Button,
@@ -9,14 +10,20 @@ import {
   Link,
   Chip,
   CircularProgress,
+  IconButton,
+  Menu,
+  MenuItem,
+  Divider
 } from '@mui/material';
 import {
+  ArrowBack as ArrowBackIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   NavigateNext as NavigateNextIcon,
+  MoreVert as MoreVertIcon
 } from '@mui/icons-material';
 import axios from 'axios';
-import { Article } from '#/types/models';
+import { Article } from '../types';
 
 export default function ArticleDetails() {
   const { id } = useParams<{ id: string }>();

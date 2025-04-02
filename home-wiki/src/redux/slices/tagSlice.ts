@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Tag } from '../../types/models';
+import { Tag } from '../../types';
 import axios, { AxiosError } from 'axios';
 
 interface TagState {

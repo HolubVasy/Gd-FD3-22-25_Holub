@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
-import { Tag } from '../types/models';
+import { Tag } from '../types/interfaces';
 import {
   setTags,
   setLoading,

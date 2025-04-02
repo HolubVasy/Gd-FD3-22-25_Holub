@@ -1,5 +1,5 @@
 import axiosClient from './axiosClient';
-import { Article, PagedList } from '../types/models';
+import { Article, PagedList } from '../types/interfaces';
 
 export const ArticleService = {
   async getArticles(pageNumber = 1, pageSize = 10): Promise<PagedList<Article>> {

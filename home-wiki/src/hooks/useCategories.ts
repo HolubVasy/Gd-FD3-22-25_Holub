@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
-import { Category } from '../types/models';
+import { Category } from '../types/interfaces';
 import {
   setCategories,
   setLoading,

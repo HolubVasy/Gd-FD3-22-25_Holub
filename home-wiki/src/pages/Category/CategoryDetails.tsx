@@ -1,8 +1,8 @@
 // src/pages/CategoryDetails.tsx
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, CircularProgress } from '@mui/material';
+import { Container, Typography, Box, CircularProgress } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { Category } from '#/types/models';
+import { Category } from '../../types';
 import { CategoryService } from '#/api/CategoryService';
 
 export default function CategoryDetails() {

@@ -24,7 +24,7 @@ import {
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
-import { Article, Category, Tag } from '#/types/models';
+import { Article, Category, Tag } from '../types';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

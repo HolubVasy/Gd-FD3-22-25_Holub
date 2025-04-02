@@ -1,5 +1,5 @@
 import axiosClient from './axiosClient';
-import { Tag, PagedList } from '../types/models';
+import { Tag, PagedList } from '../types/interfaces';
 
 export const TagService = {
   async getTags(): Promise<Tag[]> {

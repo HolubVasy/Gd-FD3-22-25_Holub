@@ -1,6 +1,6 @@
 // src/api/AuthService.ts
 import axiosClient from './axiosClient';
-import { User } from '../types/models';
+import { User } from '../types/interfaces';
 
 const AuthService = {
   async login(email: string, password: string): Promise<User> {

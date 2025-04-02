@@ -12,9 +12,15 @@ import {
   Chip,
   CircularProgress,
   Pagination,
+  InputAdornment,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 } from '@mui/material';
 import { Delete as DeleteIcon, Edit as EditIcon, Search as SearchIcon } from '@mui/icons-material';
-import { Category } from '#/types/models';
+import { Category } from '../../types';
 import CategoryEditDialog from './CategoryEditDialog';
 
 export default function CategoryList() {

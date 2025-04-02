@@ -6,8 +6,9 @@ import {
   DialogActions,
   TextField,
   Button,
+  CircularProgress
 } from '@mui/material';
-import { Tag } from '#/types/models';
+import { Tag } from '../../types';
 
 interface TagEditDialogProps {
   open: boolean;

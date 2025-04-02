@@ -23,7 +23,7 @@ import {
   Delete as DeleteIcon 
 } from '@mui/icons-material';
 import axios from 'axios';
-import { Article, Tag } from '#/types/models';
+import { Article, Tag } from '../../types';
 import CreateArticleForm from '../Article/CreateArticleForm';
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';

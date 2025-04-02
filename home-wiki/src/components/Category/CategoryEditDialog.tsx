@@ -7,8 +7,9 @@ import {
   TextField,
   Button,
   Box,
+  CircularProgress
 } from '@mui/material';
-import { Category } from '../../types/models';
+import { Category } from '../../types';
 
 interface CategoryEditDialogProps {
   open: boolean;

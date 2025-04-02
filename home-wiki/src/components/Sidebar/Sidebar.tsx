@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   List,
   ListItemButton,
@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import axios from 'axios';
-import { Category, Tag } from '#/types/models';
+import { Category, Tag } from '../../types';
 
 const API_BASE_URL = 'https://homewiki.azurewebsites.net/api';
 

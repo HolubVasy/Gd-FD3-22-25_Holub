@@ -1,8 +1,8 @@
 // src/pages/TagDetails.tsx
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, CircularProgress } from '@mui/material';
+import { Container, Typography, Box, CircularProgress } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { Tag } from '#/types/models';
+import { Tag } from '../../types';
 import { TagService } from '#/api/TagService';
 
 export default function TagDetails() {

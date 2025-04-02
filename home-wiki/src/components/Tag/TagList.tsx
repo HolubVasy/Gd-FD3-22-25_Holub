@@ -11,9 +11,15 @@ import {
   Typography,
   CircularProgress,
   Pagination,
+  InputAdornment,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 } from '@mui/material';
 import { Delete as DeleteIcon, Edit as EditIcon, Search as SearchIcon } from '@mui/icons-material';
-import { Tag } from '#/types/models';
+import { Tag } from '../../types';
 import TagEditDialog from './TagEditDialog';
 
 export default function TagList() {

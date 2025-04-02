@@ -1,6 +1,6 @@
 // src/redux/slices/authSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { AuthState, User } from '#/types/models';
+import { AuthState, User } from '../../types';
 import { AuthService } from '#/api';
 import { AxiosError } from 'axios';
 

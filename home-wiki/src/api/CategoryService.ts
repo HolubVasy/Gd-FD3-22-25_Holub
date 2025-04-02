@@ -1,5 +1,5 @@
 import axiosClient from './axiosClient';
-import { Category, PagedList } from '../types/models';
+import { Category, PagedList } from '../types/interfaces';
 
 export const CategoryService = {
   async getCategories(): Promise<Category[]> {

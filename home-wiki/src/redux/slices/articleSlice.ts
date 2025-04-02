@@ -1,6 +1,6 @@
 // src/redux/slices/articleSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Article } from '../../types/models';
+import { Article } from '../../types';
 import axios, { AxiosError } from 'axios';
 
 interface ArticleState {
